@@ -4,7 +4,7 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master, dev ]
+    branches: [ master, dev , feature/VP-3649]
   pull_request:
     branches: [ master, dev ]
 
