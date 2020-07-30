@@ -16,6 +16,7 @@ using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.DynamicAssociationsModuleModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi;
@@ -149,6 +150,8 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddSingleton<IShippingModule>(sp => new ShippingModule(sp.GetRequiredService<ShippingModuleClient>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new TaxModuleClient(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<ITaxModule>(sp => new TaxModule(sp.GetRequiredService<TaxModuleClient>()));
+            services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new DynamicAssociationsModuleModuleApi(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
+            services.AddSingleton<IAssociations>(sp => new Associations(sp.GetRequiredService<DynamicAssociationsModuleModuleApi>()));
 
             if (setupAction != null)
             {
