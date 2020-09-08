@@ -42,7 +42,15 @@ namespace VirtoCommerce.Storefront.Domain.Security
             var result = ((UserRegistration)registerForm).ToUser();
             if (!string.IsNullOrEmpty(registerForm.Role))
             {
-                result.Roles = new[] { new Role { Id = registerForm.Role, Name = registerForm.Role } };
+                var role = SecurityConstants.Roles.AllRoles.FirstOrDefault(x => x.Id.EqualsInvariant(registerForm.Role));
+                if (role != null)
+                {
+                    result.Roles = new[] { role };
+                }
+                else
+                {
+                    result.Roles = new[] { new Role { Id = registerForm.Role, Name = registerForm.Role } };
+                }
             }
             return result;
         }
@@ -121,6 +129,7 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 LockoutEnabled = userDto.LockoutEnabled ?? false,
                 EmailConfirmed = userDto.EmailConfirmed ?? false,
                 LockoutEndDateUtc = userDto.LockoutEndDateUtc,
+                PasswordExpired = userDto.PasswordExpired ?? false,
                 PasswordHash = userDto.PasswordHash,
                 SecurityStamp = userDto.SecurityStamp,
                 UserState = EnumUtility.SafeParse(userDto.UserState, AccountState.Approved),
