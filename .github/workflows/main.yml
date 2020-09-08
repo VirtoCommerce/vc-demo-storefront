@@ -45,9 +45,9 @@ jobs:
       uses: VirtoCommerce/vc-github-actions/get-image-version@dev
       id: image
 
-    - name: Get changelog
-      id: changelog
-      uses: VirtoCommerce/vc-github-actions/changelog-generator@dev
+    #- name: Get changelog
+    #  id: changelog
+    #  uses: VirtoCommerce/vc-github-actions/changelog-generator@dev
 
     - name: Add version suffix
       uses: VirtoCommerce/vc-github-actions/add-version-suffix@dev
