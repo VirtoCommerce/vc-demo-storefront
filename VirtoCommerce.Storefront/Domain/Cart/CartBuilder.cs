@@ -76,13 +76,19 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var cacheKey = CacheKey.With(GetType(), "LoadOrCreateNewTransientCart", store.Id, cartName, user.Id, currency.Code, type);
             var needReevaluate = false;
+            var needSave = false;
             Cart = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 needReevaluate = true;
 
                 var cartSearchCriteria = CreateCartSearchCriteria(cartName, store, user, language, currency, type);
                 var cartSearchResult = await _cartService.SearchCartsAsync(cartSearchCriteria);
-                var cart = cartSearchResult.FirstOrDefault() ?? CreateCart(cartName, store, user, language, currency, type);
+                var cart = cartSearchResult.FirstOrDefault();
+                if (cart == null)
+                {
+                    cart = CreateCart(cartName, store, user, language, currency, type);
+                    needSave = true;
+                }
 
                 //Load cart dependencies
                 await PrepareCartAsync(cart, store);
@@ -97,6 +103,12 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 await EvaluatePromotionsAsync();
                 await EvaluateTaxesAsync();
+            }
+
+            if (needSave)
+            {
+                await SaveAsync();
+                await LoadOrCreateNewTransientCartAsync(cartName, store, user, language, currency, type);
             }
         }
 
