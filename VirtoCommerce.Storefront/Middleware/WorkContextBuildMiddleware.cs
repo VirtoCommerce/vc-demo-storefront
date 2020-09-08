@@ -75,7 +75,10 @@ namespace VirtoCommerce.Storefront.Middleware
                 await builder.WithUserQuotesAsync();
             }
             await builder.WithUserOrdersAsync();
-            await builder.WithUserSubscriptionsAsync();
+            if (workContext.CurrentStore.SubscriptionEnabled)
+            {
+                await builder.WithUserSubscriptionsAsync();
+            }
             await builder.WithVendorsAsync(workContext.CurrentStore, workContext.CurrentLanguage);
             await builder.WithFulfillmentCentersAsync();
 
@@ -87,6 +90,7 @@ namespace VirtoCommerce.Storefront.Middleware
                 workContext.ConsentCookie = consentFeature?.CreateConsentCookie();
             }
             workContext.AvailableRoles = SecurityConstants.Roles.AllRoles;
+            workContext.BusinessToBusinessRoles = SecurityConstants.Roles.B2BRoles;
             _workContextAccessor.WorkContext = workContext;
 
 
