@@ -79,7 +79,7 @@ namespace VirtoCommerce.Storefront.Controllers
             using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
                 var items = csv.Split(new string[] { Environment.NewLine }, StringSplitOptions.None)
-                               .Select(csvRecord => GetBulkOrderItemFromCsvRecord(csvRecord)).ToArray();
+                               .Select(csvRecord => GetBulkOrderItemFromCsvRecord(csvRecord)).Where(x => x != null).ToArray();
                 if (items.Length == 0)
                 {
                     return StoreFrontRedirect("~/bulkorder");
