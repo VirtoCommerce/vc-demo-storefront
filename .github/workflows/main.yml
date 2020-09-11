@@ -1,4 +1,4 @@
-name: CI
+name: Storefront CI
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -21,87 +21,83 @@ on:
       - 'LICENSE'
     branches: [ master, dev ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-
-  unit-tests:
-    name: Unit Tests
-    # The type of runner that the job will run on
-    runs-on: windows-latest
+  ci:
+    runs-on: ubuntu-latest
     env:
       SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      NUGET_KEY: ${{ secrets.NUGET_KEY }}
+      BLOB_SAS: ${{ secrets.BLOB_TOKEN }}
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
 
     - name: Install VirtoCommerce.GlobalTool
-      run: dotnet tool install --global VirtoCommerce.GlobalTool --version 1.0.0
+      run: dotnet tool install --global VirtoCommerce.GlobalTool
 
     - name: Install dotnet-sonarscanner
       run: dotnet tool install --global dotnet-sonarscanner
 
+    - name: Get Image Version
+      uses: VirtoCommerce/vc-github-actions/get-image-version@master
+      id: image
+
+    - name: Get changelog
+      id: changelog
+      uses: VirtoCommerce/vc-github-actions/changelog-generator@master
+
+    - name: Add version suffix
+      uses: VirtoCommerce/vc-github-actions/add-version-suffix@master
+
     - name: SonarCloud Begin
-      if: ${{ env.SONAR_TOKEN != 0 }}
-      shell: pwsh
-      env:
-        PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
-      run: |
-        $BRANCH='${{ github.ref }}'.Replace('refs/heads', '')
-        $CMD="dotnet sonarscanner begin /k:'VirtoCommerce_vc-demo-storefront'"
-        $CMD="$($CMD) /o:'virto-commerce'"
-        $CMD="$($CMD) /d:sonar.cs.opencover.reportsPaths='$PWD/.tmp/coverage.xml'"
-        $CMD="$($CMD) /d:sonar.host.url='https://sonarcloud.io'"
-        $CMD="$($CMD) /d:sonar.login='${{ secrets.SONAR_TOKEN }}'"
-        $CMD = "$($CMD) /d:sonar.branch='$($BRANCH)'"
-        if ('${{ github.event_name }}' -eq 'pull_request' ) {
-          $CMD="$($CMD) /d:sonar.pullrequest.base='$('${{ github.event.pull_request.base.ref }}')'"
-          $CMD="$($CMD) /d:sonar.pullrequest.branch='$($env:PULL_REQUEST_TITLE)'"
-          $CMD="$($CMD) /d:sonar.pullrequest.key=${{ github.event.number }}"
-        }
-        pwsh -command $CMD
+      uses: VirtoCommerce/vc-github-actions/sonar-scanner-begin@master
+
     - name: Build
       run: vc-build Compile
 
     - name: Unit Tests
-      run: vc-build Test -TestsFilter "Category=Unit|Category=CI" -skip Restore+Compile
+      run: vc-build Test -TestsFilter "Category=Unit|Category=CI" -skip
 
     - name: SonarCloud End
-      if: ${{ env.SONAR_TOKEN != 0 }}
-      run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+      uses: VirtoCommerce/vc-github-actions/sonar-scanner-end@master
 
-  build-package:
-    name: Build Package
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
+    - name: Packaging
+      run: vc-build Compress -skip Clean+Restore+Compile+Test
 
-    - name: Get Image Tag
-      uses: VirtoCommerce/vc-github-actions/get-image-tag@v2
-      id: image
-
-    - name: Install VirtoCommerce.GlobalTool
-      run: dotnet tool install --global VirtoCommerce.GlobalTool --version 1.0.0
-
-    - name: Build Package
-      run: vc-build Compress -skip Test
-
+    # Step runs only on commit to master or dev brunch
     - name: Build Docker Image
-      shell: pwsh
-      run: |
-        Invoke-WebRequest -Uri https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile -OutFile artifacts/Dockerfile
-        docker build artifacts --build-arg SOURCE=. --tag "docker.pkg.github.com/$('${{ github.repository }}'.ToLower())/demo-storefront:${{ steps.image.outputs.tag }}"
+      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' }}
+      id: dockerBuild
+      uses: VirtoCommerce/vc-github-actions/build-docker-image@dev
+      with:
+        imageName: "demo-storefront"
+        tag: ${{ steps.image.outputs.taggedVersion }}
+        dockerFiles: "https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile"
+
+    # Step runs only on commit to master or dev brunch
+    - name: Publish Github Release
+      with:
+        changelog: ${{ steps.changelog.outputs.changelog }}
+      uses: VirtoCommerce/vc-github-actions/publish-github-release@master
+
+    # Step runs only on commit to master or dev brunch
     - name: Docker Login
+      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' }}
       uses: azure/docker-login@v1
       with:
         login-server: docker.pkg.github.com
         username: $GITHUB_ACTOR
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Push Docker Image to GitHub
-      run: |
-        REPOSITORY=$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]') 
-        docker push "docker.pkg.github.com/$REPOSITORY/demo-storefront:${{ steps.image.outputs.tag }}"
+    # Step runs only on commit to master or dev brunch
+    - name: Publish Docker Image
+      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' }}
+      uses: VirtoCommerce/vc-github-actions/publish-docker-image@master
+      with:
+          image: ${{ steps.dockerBuild.outputs.imageName }}
+          tag: ${{ steps.image.outputs.taggedVersion }}
+          docker_user: ${{ secrets.DOCKER_USERNAME }}
+          docker_token: ${{ secrets.DOCKER_TOKEN }}
