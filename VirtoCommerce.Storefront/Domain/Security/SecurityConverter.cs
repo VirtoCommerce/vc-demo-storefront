@@ -143,7 +143,8 @@ namespace VirtoCommerce.Storefront.Domain.Security
                 result.Roles = userDto.Roles.Select(x => new Role
                 {
                     Id = x.Id,
-                    Name = x.Name
+                    Name = x.Name,
+                    Description = x.Description
                 });
             }
 

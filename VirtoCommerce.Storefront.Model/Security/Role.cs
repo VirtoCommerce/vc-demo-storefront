@@ -7,5 +7,6 @@ namespace VirtoCommerce.Storefront.Model.Security
     {
         public string Name { get; set; }
         public IList<string> Permissions { get; set; } = new List<string>();
+        public string Description { get; set; }
     }
 }
