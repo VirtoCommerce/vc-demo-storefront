@@ -289,6 +289,12 @@ namespace VirtoCommerce.Storefront.Domain
             await RemoveExistingShipmentAsync(shipment);
 
             shipment.Currency = Cart.Currency;
+            if (shipment.DeliveryAddress != null)
+            {
+                //Reset address key because it can equal a customer address from profile and if not do that it may cause
+                //address primary key duplication error for multiple carts with the same address 
+                shipment.DeliveryAddress.Key = null;
+            }
             Cart.Shipments.Add(shipment);
 
 
