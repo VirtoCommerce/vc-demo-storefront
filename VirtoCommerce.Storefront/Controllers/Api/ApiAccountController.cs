@@ -190,10 +190,32 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     return Unauthorized();
                 }
 
+                var user = await _userManager.FindByEmailAsync(registration.Email);
+                if (user != null)
+                {
+                    var error = new IdentityError
+                    {
+                        Description = $"Email '{registration.Email}' is already taken."
+                    };
+
+                    return UserActionIdentityResult.Failed(error);
+                }
+
+                user = await _userManager.FindByNameAsync(registration.UserName);
+                if (user != null)
+                {
+                    var error = new IdentityError
+                    {
+                        Description = $"User name '{registration.UserName}' is already taken."
+                    };
+
+                    return UserActionIdentityResult.Failed(error);
+                }
+
                 var contact = registration.ToContact();
                 contact.OrganizationId = registration.OrganizationId;
 
-                var user = registration.ToUser();
+                user = registration.ToUser();
                 user.Contact = contact;
                 user.StoreId = WorkContext.CurrentStore.Id;
 
@@ -327,7 +349,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             if (searchCriteria.OrganizationId != null)
             {
                 var contactsSearchResult = await _memberService.SearchOrganizationContactsAsync(searchCriteria);
-                var userIds = contactsSearchResult.Select(x => x.SecurityAccounts?.FirstOrDefault()).Where(x=>x!=null).Select(x => x.Id);
+                var userIds = contactsSearchResult.Select(x => x.SecurityAccounts?.FirstOrDefault()).Where(x => x != null).Select(x => x.Id);
                 var users = new List<User>();
                 foreach (var userId in userIds)
                 {
