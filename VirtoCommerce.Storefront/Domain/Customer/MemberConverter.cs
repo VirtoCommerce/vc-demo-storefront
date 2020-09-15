@@ -156,15 +156,17 @@ namespace VirtoCommerce.Storefront.Domain
             }
 
             result.DefaultBillingAddress = result.Addresses
-                .Where(a => contactDto.DefaultBillingAddressId != null ? a.Id == contactDto.DefaultBillingAddressId : (a.Type & AddressType.Billing) == AddressType.Billing)
-                // Stabilize order
-                .OrderBy(a => a.Id)
-                .FirstOrDefault();
+                                               .OrderBy(a => a.Id)
+                                               .FirstOrDefault(a => contactDto.DefaultBillingAddressId != null && a.Id == contactDto.DefaultBillingAddressId) ??
+                                           result.Addresses
+                                               .OrderBy(a => a.Id)
+                                               .FirstOrDefault(a => a.Type.HasFlag(AddressType.Billing));
             result.DefaultShippingAddress = result.Addresses
-                .Where(a => contactDto.DefaultShippingAddressId != null ? a.Id == contactDto.DefaultShippingAddressId : (a.Type & AddressType.Shipping) == AddressType.Shipping)
-                // Stabilize order
-                .OrderBy(a => a.Id)
-                .FirstOrDefault();
+                                                .OrderBy(a => a.Id)
+                                                .FirstOrDefault(a => contactDto.DefaultShippingAddressId != null && a.Id == contactDto.DefaultShippingAddressId) ??
+                                            result.Addresses
+                                                .OrderBy(a => a.Id)
+                                                .FirstOrDefault(a => a.Type.HasFlag(AddressType.Shipping));
 
             if (contactDto.Emails != null)
             {
