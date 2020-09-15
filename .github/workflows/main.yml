@@ -71,7 +71,7 @@ jobs:
     - name: Build Docker Image
       if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' }}
       id: dockerBuild
-      uses: VirtoCommerce/vc-github-actions/build-docker-image@dev
+      uses: VirtoCommerce/vc-github-actions/build-docker-image@master
       with:
         imageName: "demo-storefront"
         tag: ${{ steps.image.outputs.taggedVersion }}
