@@ -156,11 +156,22 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             var cartPagedList = await _cartService.SearchCartsAsync(searchCriteria);
 
-            return new ShoppingCartSearchResult
+
+            var result = new ShoppingCartSearchResult
             {
                 Results = cartPagedList.ToArray(),
                 TotalCount = cartPagedList.TotalItemCount
             };
+
+            var productIds = result.Results.SelectMany(x => x.Items).Select(x => x.ProductId).Distinct().ToArray();
+            var products = await _catalogService.GetProductsAsync(productIds, Model.Catalog.ItemResponseGroup.ItemSmall | Model.Catalog.ItemResponseGroup.ItemWithPrices | Model.Catalog.ItemResponseGroup.Inventory);
+
+            foreach (var item in result.Results.SelectMany(x => x.Items).ToArray())
+            {
+                item.Product = products.FirstOrDefault(x => x.Id == item.ProductId);
+            }
+
+            return result;
         }
 
         // POST: storefrontapi/lists/{listName}/{type}/create
