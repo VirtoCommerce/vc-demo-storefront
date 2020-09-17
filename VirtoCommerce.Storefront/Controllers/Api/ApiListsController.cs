@@ -164,7 +164,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             };
 
             var productIds = result.Results.SelectMany(x => x.Items).Select(x => x.ProductId).Distinct().ToArray();
-            var products = await _catalogService.GetProductsAsync(productIds, Model.Catalog.ItemResponseGroup.ItemSmall);
+            var products = await _catalogService.GetProductsAsync(productIds, Model.Catalog.ItemResponseGroup.ItemSmall | Model.Catalog.ItemResponseGroup.ItemWithPrices | Model.Catalog.ItemResponseGroup.Inventory);
 
             foreach (var item in result.Results.SelectMany(x => x.Items).ToArray())
             {
