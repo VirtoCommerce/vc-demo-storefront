@@ -171,7 +171,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var processingResult = await _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, paymentDto.Id, bankCardInfo.ToBankCardInfoDto());
                 if ((bool)processingResult.IsSuccess)
                 {
-                    orderDto.Status = "Paid";
+                    orderDto.Status = OrderStatuses.PaidOrderStatus;
                     await _orderApi.UpdateOrderAsync(orderDto);
                 }
                 var order = orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
