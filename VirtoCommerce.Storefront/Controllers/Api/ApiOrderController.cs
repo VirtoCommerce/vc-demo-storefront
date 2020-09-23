@@ -169,6 +169,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     throw new StorefrontException("payment " + paymentNumber + " not found");
                 }
                 var processingResult = await _orderApi.ProcessOrderPaymentsAsync(orderDto.Id, paymentDto.Id, bankCardInfo.ToBankCardInfoDto());
+                if ((bool)processingResult.IsSuccess)
+                {
+                    orderDto.Status = OrderStatuses.PaidOrderStatus;
+                    await _orderApi.UpdateOrderAsync(orderDto);
+                }
                 var order = orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
                 return new ProcessOrderPaymentResult
                 {
