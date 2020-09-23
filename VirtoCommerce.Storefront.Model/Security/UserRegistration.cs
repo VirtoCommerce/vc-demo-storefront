@@ -45,7 +45,9 @@ namespace VirtoCommerce.Storefront.Model.Security
         [FromForm(Name = "customer[birthDate]")]
         public DateTime? BirthDate { get; set; }
         [FromForm(Name = "customer[timeZone]")]
-        public string TimeZone { get; set; }     
-      
+        public string TimeZone { get; set; }
+
+        public string Title { get; set; }
+
     }
 }

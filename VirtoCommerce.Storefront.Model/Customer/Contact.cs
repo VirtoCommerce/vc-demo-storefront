@@ -27,6 +27,8 @@ namespace VirtoCommerce.Storefront.Model.Customer
         public string TimeZone { get; set; }
         public string DefaultLanguage { get; set; }
 
+        public string Title { get; set; }
+
         public Address DefaultBillingAddress { get; set; }
         public Address DefaultShippingAddress { get; set; }
 
