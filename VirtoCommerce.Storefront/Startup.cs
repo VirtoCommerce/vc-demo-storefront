@@ -342,6 +342,8 @@ namespace VirtoCommerce.Storefront
                 options.MaxAge = TimeSpan.FromDays(30);
             });
 
+            services.Configure<SwaggerOptions>(Configuration.GetSection("Swagger").Bind);
+
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
@@ -418,23 +420,28 @@ namespace VirtoCommerce.Storefront
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger(c => c.RouteTemplate = "docs/{documentName}/docs.json");
-            app.UseSwaggerUI(c =>
+
+            var swaggerOptions = app.ApplicationServices.GetService<IOptions<SwaggerOptions>>().Value;
+            if (swaggerOptions.UI.Enable)
             {
-                c.SwaggerEndpoint($"./{SwaggerDocName}/docs.json", SwaggerDocName);
-                c.RoutePrefix = "docs";
-                c.EnableValidator();
-                c.IndexStream = () =>
+                app.UseSwaggerUI(c =>
                 {
-                    var type = typeof(Startup).GetTypeInfo().Assembly
-                        .GetManifestResourceStream("VirtoCommerce.Storefront.wwwroot.swagger.index.html");
-                    return type;
-                };
-                c.DocumentTitle = "VirtoCommerce Storefront REST API documentation";
-                c.InjectStylesheet("/swagger/vc.css");
-                c.ShowExtensions();
-                c.DocExpansion(DocExpansion.None);
-                c.DefaultModelsExpandDepth(-1);
-            });
+                    c.SwaggerEndpoint($"./{SwaggerDocName}/docs.json", SwaggerDocName);
+                    c.RoutePrefix = "docs";
+                    c.EnableValidator();
+                    c.IndexStream = () =>
+                    {
+                        var type = typeof(Startup).GetTypeInfo().Assembly
+                            .GetManifestResourceStream("VirtoCommerce.Storefront.wwwroot.swagger.index.html");
+                        return type;
+                    };
+                    c.DocumentTitle = "VirtoCommerce Storefront REST API documentation";
+                    c.InjectStylesheet("/swagger/vc.css");
+                    c.ShowExtensions();
+                    c.DocExpansion(DocExpansion.None);
+                    c.DefaultModelsExpandDepth(-1);
+                });
+            }
 
             var rewriteOptions = new RewriteOptions();
             // Load IIS url rewrite rules from external file
