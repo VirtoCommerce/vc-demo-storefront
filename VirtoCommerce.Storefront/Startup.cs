@@ -101,7 +101,9 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IPaymentSearchService, PaymentSearchService>();
             services.AddSingleton<IQuoteService, QuoteService>();
             services.AddSingleton<ISubscriptionService, SubscriptionService>();
-            services.AddSingleton<ICatalogService, CatalogService>();
+            services.AddSingleton<DemoCatalogService>();
+            services.AddSingleton<ICatalogService>(x => x.GetRequiredService<DemoCatalogService>());
+            services.AddSingleton<IDemoCatalogService>(x => x.GetRequiredService<DemoCatalogService>());
             services.AddSingleton<IInventoryService, InventoryService>();
             services.AddSingleton<IPricingService, PricingService>();
             services.AddSingleton<ITaxEvaluator, TaxEvaluator>();
