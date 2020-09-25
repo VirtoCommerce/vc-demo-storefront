@@ -52,7 +52,7 @@ namespace VirtoCommerce.Storefront.Domain
                     Description = vendorDto.Description,
                     LogoUrl = vendorDto.LogoUrl,
                     SiteUrl = vendorDto.SiteUrl,
-                    GroupName = vendorDto.GroupName
+                    GroupName = vendorDto.GroupName,
                 };
 
                 if (!vendorDto.SeoInfos.IsNullOrEmpty())
@@ -114,7 +114,7 @@ namespace VirtoCommerce.Storefront.Domain
                 LastName = userRegistration.LastName,
                 Salutation = userRegistration.Salutation,
                 PhotoUrl = userRegistration.PhotoUrl,
-                Title = userRegistration.Title
+                Title = userRegistration.Title,
             };
             if (!string.IsNullOrEmpty(userRegistration.Email))
             {
@@ -149,7 +149,7 @@ namespace VirtoCommerce.Storefront.Domain
                 OrganizationsIds = contactDto.Organizations,
                 Salutation = contactDto.Salutation,
                 PhotoUrl = contactDto.PhotoUrl,
-                Title = contactDto.Title
+                Title = contactDto.Title,
             };
 
             if (contactDto.Addresses != null)
