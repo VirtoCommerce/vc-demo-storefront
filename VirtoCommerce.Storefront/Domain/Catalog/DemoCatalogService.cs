@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
 using VirtoCommerce.Storefront.Infrastructure;
