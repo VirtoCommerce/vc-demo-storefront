@@ -20,9 +20,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             _demoCatalogService = demoCatalogService;
         }
 
-        // storefrontapi/catalog/search
         [HttpGet("catalog/{productId}/configuration")]
-        public async Task<ActionResult<ProductPart[]>> SearchProducts(string productId)
+        public async Task<ActionResult<ProductPart[]>> GetProductConfiguration(string productId)
         {
             var result = await _demoCatalogService.GetProductPartsAsync(productId);
 
