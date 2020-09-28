@@ -100,6 +100,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
 
         [HttpPost("items")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult<AddItemsToCartResult>> AddItemsToCart([FromQuery] string[] productIds)
         {
             EnsureCartExists();
