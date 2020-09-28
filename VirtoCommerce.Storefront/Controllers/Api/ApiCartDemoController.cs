@@ -14,7 +14,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
     public partial class ApiCartController 
     {
         // POST: storefrontapi/cart/items/bulk
-        [HttpPost("items")]
+        [HttpPost("items/bulk")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<AddItemsToCartResult>> AddItemsToCart([FromBody] string[] productIds)
         {
@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             //Need lock to prevent concurrent access to same cart
             using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
-                var products = await _catalogService.GetProductsAsync(productIds, Model.Catalog.ItemResponseGroup.Inventory | Model.Catalog.ItemResponseGroup.ItemWithPrices);               
+                var products = await _catalogService.GetProductsAsync(productIds, Model.Catalog.ItemResponseGroup.ItemSmall | Model.Catalog.ItemResponseGroup.ItemWithPrices | Model.Catalog.ItemResponseGroup.Inventory);               
                 var cartBuilder = await LoadOrCreateCartAsync();
                 var cart = _cartBuilder.Cart;
 
