@@ -98,6 +98,49 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return cartBuilder.Cart.ItemsQuantity;
         }
 
+
+        [HttpPost("items")]
+        public async Task<ActionResult<AddItemsToCartResult>> AddItemsToCart([FromQuery] string[] productIds)
+        {
+            EnsureCartExists();
+
+            //Need lock to prevent concurrent access to same cart
+            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
+            {
+                var products = await _catalogService.GetProductsAsync(productIds, Model.Catalog.ItemResponseGroup.Inventory | Model.Catalog.ItemResponseGroup.ItemWithPrices);
+
+                var result = new AddItemsToCartResult
+                {
+                    IsSuccess = true
+                };
+
+                if(products.Any(x=>!x.IsActive || !x.IsBuyable))
+                {
+                    result.IsSuccess = false;
+                    result.ErrorCode = "UnavailableError";
+                }
+                else if (products.Any(x=>!x.IsInStock))
+                {
+                    result.IsSuccess = false;
+                    result.ErrorCode = "QuantityError";
+                }
+                else
+                {
+                    var cartBuilder = await LoadOrCreateCartAsync();
+
+                    foreach (var productId in productIds)
+                    {
+                        await cartBuilder.AddItemAsync(new AddCartItem { ProductId = productId, Quantity = 1 });
+                    }
+
+                    await cartBuilder.SaveAsync();
+                }
+
+                return result;
+            }
+        }
+
+
         // POST: storefrontapi/cart/items
         [HttpPost("items")]
         [ValidateAntiForgeryToken]
