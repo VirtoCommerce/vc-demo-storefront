@@ -455,6 +455,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         user.Contact.FullName = userUpdateInfo.FullName;
                         user.Contact.DefaultShippingAddress = userUpdateInfo.DefaultShippingAddress;
                         user.Contact.DefaultBillingAddress = userUpdateInfo.DefaultBillingAddress;
+                        user.Contact.Title = userUpdateInfo.Title;
                     }
 
                     user.Email = userUpdateInfo.Email;
