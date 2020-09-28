@@ -23,16 +23,18 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("cart")]
     [ResponseCache(CacheProfileName = "None")]
-    public class ApiCartController : StorefrontControllerBase
+    public partial class ApiCartController : StorefrontControllerBase
     {
         private readonly ICartBuilder _cartBuilder;
         private readonly IOrderModule _orderApi;
         private readonly ICatalogService _catalogService;
         private readonly IEventPublisher _publisher;
         private readonly ISubscriptionService _subscriptionService;
+        private readonly ICartService _cartService;
         public ApiCartController(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, ICartBuilder cartBuilder,
                                  IOrderModule orderApi, IStorefrontUrlBuilder urlBuilder,
-                                 IEventPublisher publisher, ISubscriptionService subscriptionService)
+                                 IEventPublisher publisher, ISubscriptionService subscriptionService,
+                                 ICartService cartService)
             : base(workContextAccessor, urlBuilder)
         {
             _cartBuilder = cartBuilder;
@@ -40,6 +42,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             _catalogService = catalogService;
             _publisher = publisher;
             _subscriptionService = subscriptionService;
+            _cartService = cartService;
         }
 
         // Get current user shopping cart
@@ -97,50 +100,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             return cartBuilder.Cart.ItemsQuantity;
         }
-
-
-        [HttpPost("items")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<AddItemsToCartResult>> AddItemsToCart([FromQuery] string[] productIds)
-        {
-            EnsureCartExists();
-
-            //Need lock to prevent concurrent access to same cart
-            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
-            {
-                var products = await _catalogService.GetProductsAsync(productIds, Model.Catalog.ItemResponseGroup.Inventory | Model.Catalog.ItemResponseGroup.ItemWithPrices);
-
-                var result = new AddItemsToCartResult
-                {
-                    IsSuccess = true
-                };
-
-                if(products.Any(x=>!x.IsActive || !x.IsBuyable))
-                {
-                    result.IsSuccess = false;
-                    result.ErrorCode = "UnavailableError";
-                }
-                else if (products.Any(x=>!x.IsInStock))
-                {
-                    result.IsSuccess = false;
-                    result.ErrorCode = "QuantityError";
-                }
-                else
-                {
-                    var cartBuilder = await LoadOrCreateCartAsync();
-
-                    foreach (var productId in productIds)
-                    {
-                        await cartBuilder.AddItemAsync(new AddCartItem { ProductId = productId, Quantity = 1 });
-                    }
-
-                    await cartBuilder.SaveAsync();
-                }
-
-                return result;
-            }
-        }
-
 
         // POST: storefrontapi/cart/items
         [HttpPost("items")]

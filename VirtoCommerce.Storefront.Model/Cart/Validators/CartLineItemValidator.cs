@@ -19,7 +19,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Validators
                     {
                         var unavailableError = new UnavailableError();
                         lineItem.ValidationErrors.Add(unavailableError);
-                        context.AddFailure(new ValidationFailure(nameof(lineItem.Product), "The product is not longer available for purchase"));
+                        context.AddFailure(new ValidationFailure(nameof(lineItem.Product), "The product is not longer available for purchase") { ErrorCode = unavailableError.ErrorCode });
                     }
                     else if (lineItem.Product.Price == null || lineItem.Product.Price.GetTierPrice(lineItem.Quantity).Price == 0)
                     {
@@ -34,7 +34,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Validators
                             var availableQuantity = lineItem.Product.AvailableQuantity;
                             var qtyError = new QuantityError(availableQuantity);
                             lineItem.ValidationErrors.Add(qtyError);
-                            context.AddFailure(new ValidationFailure(nameof(lineItem.Product.AvailableQuantity), "The product available qty is changed"));
+                            context.AddFailure(new ValidationFailure(nameof(lineItem.Product.AvailableQuantity), "The product available qty is changed") { ErrorCode = qtyError.ErrorCode });
                         }
 
                         var tierPrice = lineItem.Product.Price.GetTierPrice(lineItem.Quantity);
@@ -42,7 +42,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Validators
                         {
                             var priceError = new PriceError(lineItem.SalePrice, lineItem.SalePriceWithTax, tierPrice.Price, tierPrice.PriceWithTax);
                             lineItem.ValidationErrors.Add(priceError);
-                            context.AddFailure(new ValidationFailure(nameof(lineItem.SalePrice), "The product price is changed"));
+                            context.AddFailure(new ValidationFailure(nameof(lineItem.SalePrice), "The product price is changed") { ErrorCode = priceError.ErrorCode });
                         }
                     }
                 });
