@@ -34,11 +34,11 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var products = await GetProductsAsync(new[]
             {
-                "cbd8eab4f76b4e34b779d9c59dbc13fe",
-                "7ae66c41242c4020a3328d5e841bda49",
-                "8e3a763a3cff407b97e2a2f6390b4048",
-                "cb8b439491444dad94030be5f551901c",
-                "6e37b94d874247e4ab7469e8fefd247e"
+                "baa4931161214690ad51c50787b1ed94",
+                "e9de38b73c424db19f319c9538184d03",
+                "ec235043d51848249e90ef170c371a1c",
+                "dae730451bc745bfa642870bdf22f150",
+                "5512e3a5201541769e1d81fc5217490c"
             });
             var parts = new[]
             {
@@ -47,35 +47,35 @@ namespace VirtoCommerce.Storefront.Domain
                     Name = "Case",
                     Image = new Image { Url = "https://raw.githubusercontent.com/VirtoCommerce/vc-demo-theme-b2b/dev/assets/images/mock/case.svg" },
                     Items = products,
-                    SelectedItemId = "cbd8eab4f76b4e34b779d9c59dbc13fe"
+                    SelectedItemId = "baa4931161214690ad51c50787b1ed94"
                 },
                 new ProductPart
                 {
                     Name = "Motherboard",
                     Image = new Image { Url = "https://raw.githubusercontent.com/VirtoCommerce/vc-demo-theme-b2b/dev/assets/images/mock/motherboard.svg" },
                     Items = products,
-                    SelectedItemId = "7ae66c41242c4020a3328d5e841bda49"
+                    SelectedItemId = "e9de38b73c424db19f319c9538184d03"
                 },
                 new ProductPart
                 {
                     Name = "Processor",
                     Image = new Image { Url = "https://raw.githubusercontent.com/VirtoCommerce/vc-demo-theme-b2b/dev/assets/images/mock/processor.svg" },
                     Items = products,
-                    SelectedItemId = "8e3a763a3cff407b97e2a2f6390b4048"
+                    SelectedItemId = "ec235043d51848249e90ef170c371a1c"
                 },
                 new ProductPart
                 {
                     Name = "Memory",
                     Image = new Image { Url = "https://raw.githubusercontent.com/VirtoCommerce/vc-demo-theme-b2b/dev/assets/images/mock/memory.svg" },
                     Items = products,
-                    SelectedItemId = "cb8b439491444dad94030be5f551901c"
+                    SelectedItemId = "dae730451bc745bfa642870bdf22f150"
                 },
                 new ProductPart
                 {
                     Name = "Graphics",
                     Image = new Image { Url = "https://raw.githubusercontent.com/VirtoCommerce/vc-demo-theme-b2b/dev/assets/images/mock/graphics.svg" },
                     Items = products,
-                    SelectedItemId = "6e37b94d874247e4ab7469e8fefd247e"
+                    SelectedItemId = "5512e3a5201541769e1d81fc5217490c"
                 }
             };
             return parts;
