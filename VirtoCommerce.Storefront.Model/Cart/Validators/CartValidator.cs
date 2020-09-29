@@ -14,12 +14,8 @@ namespace VirtoCommerce.Storefront.Model.Cart.Validators
             RuleSet("strict", () =>
             {
                 RuleForEach(x => x.Items).SetValidator(cart => new CartLineItemValidator(cart));
-                RuleSet("shipment", () =>
-                {
-                    RuleForEach(x => x.Shipments).SetValidator(cart => new CartShipmentValidator(cart, cartService));
-                });
+                RuleForEach(x => x.Shipments).SetValidator(cart => new CartShipmentValidator(cart, cartService));
             });
-
         }
     }
 }
