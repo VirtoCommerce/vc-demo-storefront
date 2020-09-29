@@ -22,13 +22,13 @@ namespace VirtoCommerce.Storefront.Model.Cart.Validators
                     {
                         var unavailableError = new UnavailableError();
                         shipment.ValidationErrors.Add(unavailableError);
-                        context.AddFailure(new ValidationFailure(nameof(shipment.ShipmentMethodCode), "The shipment method is no longer available") { ErrorCode = unavailableError.ErrorCode });
+                        context.AddFailure(new ValidationFailure(nameof(shipment.ShipmentMethodCode), "The shipment method is no longer available"));
                     }
                     else if (shipmentShippingMethod.Price != shipment.Price)
                     {
                         var priceChangedError = new PriceError(shipment.Price, shipment.PriceWithTax, shipmentShippingMethod.Price, shipmentShippingMethod.PriceWithTax);
                         shipment.ValidationErrors.Add(priceChangedError);
-                        context.AddFailure(new ValidationFailure(nameof(shipment.Price), "The shipment method price is changed") { ErrorCode = priceChangedError.ErrorCode });
+                        context.AddFailure(new ValidationFailure(nameof(shipment.Price), "The shipment method price is changed"));
                     }
                 });
             });

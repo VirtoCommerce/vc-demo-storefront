@@ -23,18 +23,16 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("cart")]
     [ResponseCache(CacheProfileName = "None")]
-    public partial class ApiCartController : StorefrontControllerBase
+    public class ApiCartController : StorefrontControllerBase
     {
         private readonly ICartBuilder _cartBuilder;
         private readonly IOrderModule _orderApi;
         private readonly ICatalogService _catalogService;
         private readonly IEventPublisher _publisher;
         private readonly ISubscriptionService _subscriptionService;
-        private readonly ICartService _cartService;
         public ApiCartController(IWorkContextAccessor workContextAccessor, ICatalogService catalogService, ICartBuilder cartBuilder,
                                  IOrderModule orderApi, IStorefrontUrlBuilder urlBuilder,
-                                 IEventPublisher publisher, ISubscriptionService subscriptionService,
-                                 ICartService cartService)
+                                 IEventPublisher publisher, ISubscriptionService subscriptionService)
             : base(workContextAccessor, urlBuilder)
         {
             _cartBuilder = cartBuilder;
@@ -42,7 +40,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             _catalogService = catalogService;
             _publisher = publisher;
             _subscriptionService = subscriptionService;
-            _cartService = cartService;
         }
 
         // Get current user shopping cart
