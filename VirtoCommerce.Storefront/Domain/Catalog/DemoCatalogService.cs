@@ -46,45 +46,54 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 Outline = "bea69328-eb20-4da9-ac3d-52e9045c18d2", PageSize = 1000
             });
+
             var products = searchResult.Products;
+
+            var casesProducts = products.Where(x => x.CategoryId == categories["Cases"]).ToArray();
+            var motherboardsProducts = products.Where(x => x.CategoryId == categories["Motherboard"]).ToArray();
+            var processorProducts = products.Where(x => x.CategoryId == categories["CPU"]).ToArray();
+            var memoryProducts = products.Where(x => x.CategoryId == categories["Memory"]).ToArray();
+            var gpuProducts = products.Where(x => x.CategoryId == categories["GPU"]).ToArray();
+
             var parts = new[]
             {
                 new ProductPart
                 {
                     Name = "Case",
                     Image = new Image { Url = "https://raw.githubusercontent.com/VirtoCommerce/vc-demo-theme-b2b/dev/assets/images/mock/case.svg" },
-                    Items = products.Where(x => x.CategoryId == categories["Cases"]).ToArray(),
-                    SelectedItemId = "baa4931161214690ad51c50787b1ed94"
+                    Items = casesProducts,
+                    SelectedItemId = casesProducts.FirstOrDefault()?.Id,
                 },
                 new ProductPart
                 {
                     Name = "Motherboard",
                     Image = new Image { Url = "https://raw.githubusercontent.com/VirtoCommerce/vc-demo-theme-b2b/dev/assets/images/mock/motherboard.svg" },
-                    Items = products.Where(x => x.CategoryId == categories["Motherboard"]).ToArray(),
-                    SelectedItemId = "e9de38b73c424db19f319c9538184d03"
+                    Items = motherboardsProducts,
+                    SelectedItemId = motherboardsProducts.FirstOrDefault()?.Id,
                 },
                 new ProductPart
                 {
                     Name = "Processor",
                     Image = new Image { Url = "https://raw.githubusercontent.com/VirtoCommerce/vc-demo-theme-b2b/dev/assets/images/mock/processor.svg" },
-                    Items = products.Where(x => x.CategoryId == categories["CPU"]).ToArray(),
-                    SelectedItemId = "ec235043d51848249e90ef170c371a1c"
+                    Items = processorProducts,
+                    SelectedItemId = processorProducts.FirstOrDefault()?.Id,
                 },
                 new ProductPart
                 {
                     Name = "Memory",
                     Image = new Image { Url = "https://raw.githubusercontent.com/VirtoCommerce/vc-demo-theme-b2b/dev/assets/images/mock/memory.svg" },
-                    Items = products.Where(x => x.CategoryId == categories["Memory"]).ToArray(),
-                    SelectedItemId = "dae730451bc745bfa642870bdf22f150"
+                    Items = memoryProducts,
+                    SelectedItemId = memoryProducts.FirstOrDefault()?.Id,
                 },
                 new ProductPart
                 {
                     Name = "Graphics",
                     Image = new Image { Url = "https://raw.githubusercontent.com/VirtoCommerce/vc-demo-theme-b2b/dev/assets/images/mock/graphics.svg" },
-                    Items = products.Where(x => x.CategoryId == categories["GPU"]).ToArray(),
-                    SelectedItemId = "5512e3a5201541769e1d81fc5217490c"
-                }
+                    Items = gpuProducts,
+                    SelectedItemId = gpuProducts.FirstOrDefault()?.Id,
+                },
             };
+
             return parts;
         }
     }
