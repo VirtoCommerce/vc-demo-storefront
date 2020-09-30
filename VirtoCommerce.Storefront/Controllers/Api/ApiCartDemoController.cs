@@ -32,20 +32,22 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/cart/items/bulk
         [HttpPost("items/bulk")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<AddItemsToCartResult>> AddItemsToCart([FromBody] string[] productIds)
+        public async Task<ActionResult<AddItemsToCartResult>> AddItemsToCart([FromBody] AddCartItem[] items)
         {
             EnsureCartExists();
 
             //Need lock to prevent concurrent access to same cart
             using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
+                var productIds = items.Select(x => x.Id).ToArray();
                 var products = await _catalogService.GetProductsAsync(productIds, Model.Catalog.ItemResponseGroup.ItemSmall | Model.Catalog.ItemResponseGroup.ItemWithPrices | Model.Catalog.ItemResponseGroup.Inventory);               
                 var cartBuilder = await LoadOrCreateCartAsync();
                 var cart = _cartBuilder.Cart;
 
-                foreach (var productId in productIds)
+                foreach (var item in items)
                 {
-                    await cartBuilder.AddItemAsync(new AddCartItem { ProductId = productId, Quantity = 1, Product = products.First(x=>x.Id == productId) });
+                    item.Product = products.First(x => x.Id == item.ProductId);
+                    await cartBuilder.AddItemAsync(item);
                 }
 
                 var validationResult = await new CartDemoValidator().ValidateAsync(cart, ruleSet: "default,strict");
