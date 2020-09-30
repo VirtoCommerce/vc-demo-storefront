@@ -44,7 +44,7 @@ namespace VirtoCommerce.Storefront.Domain
             };
             var searchResult = await SearchProductsAsync(new ProductSearchCriteria
             {
-                Outline = "bea69328-eb20-4da9-ac3d-52e9045c18d2", PageSize = int.MaxValue
+                Outline = "bea69328-eb20-4da9-ac3d-52e9045c18d2", PageSize = 1000
             });
             var products = searchResult.Products;
             var parts = new[]
