@@ -365,12 +365,16 @@ namespace VirtoCommerce.Storefront.Model.Catalog
                 if (price == null)
                 {
                     price = new ProductPrice(currency);
+
                     //Convert exist price to new currency
                     if (Prices.Any())
                     {
                         price = Prices.First().ConvertTo(currency);
                         price.TierPrices.Add(new TierPrice(price.SalePrice, 1));
                     }
+
+                    // Product ID must exist in product price. TODO: Add it to product price constructor
+                    price.ProductId = Id;
                     Prices.Add(price);
                 }
             }
