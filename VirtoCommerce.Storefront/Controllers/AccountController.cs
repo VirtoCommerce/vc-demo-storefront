@@ -205,6 +205,13 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View("error", WorkContext);
             }
 
+            WorkContext.Form = Form.FromObject(new UserRegistrationByInvitation
+            {
+                Token = token,
+                Email = email,
+                OrganizationId = organizationId
+            });
+
             return View("customers/confirm_invitation", WorkContext);
         }
 
