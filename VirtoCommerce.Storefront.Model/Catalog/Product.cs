@@ -373,7 +373,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
                         price.TierPrices.Add(new TierPrice(price.SalePrice, 1));
                     }
 
-                    // Product ID must exist in product price. TODO: Add it to product price constructor
+                    // Product ID must exist in product price
                     price.ProductId = Id;
                     Prices.Add(price);
                 }
