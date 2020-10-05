@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Rest;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
@@ -11,7 +12,8 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly ICustomerModule _customerApi;
         private readonly string NO_CONTENT = "NoContent";
 
-        public DemoMemberService(ICustomerModule customerApi, IStorefrontMemoryCache memoryCache, IApiChangesWatcher changesWatcher) : base(customerApi, memoryCache, changesWatcher)
+        public DemoMemberService(ICustomerModule customerApi, IStorefrontMemoryCache memoryCache, IApiChangesWatcher changesWatcher)
+            : base(customerApi, memoryCache, changesWatcher)
         {
             _customerApi = customerApi;
         }
@@ -24,7 +26,11 @@ namespace VirtoCommerce.Storefront.Domain
             }
             catch (HttpOperationException ex)
             {
-                if (!ex.Message.Contains(NO_CONTENT))
+                /* Our AutoRestClient throws exception on NoContent status code.
+                In order not to touch the customer module, we check that the exception status is 'NoContent'
+                and in this case we continue execution
+                */
+                if (!ex.Message.Contains(NO_CONTENT, StringComparison.InvariantCulture))
                 {
                     throw;
                 }
