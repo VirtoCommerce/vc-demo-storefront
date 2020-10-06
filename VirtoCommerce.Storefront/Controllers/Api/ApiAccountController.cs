@@ -292,7 +292,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                             InviteUrl = callbackUrl,
                             Sender = WorkContext.CurrentStore.Email,
                             Recipient = user.Email,
-                            Message = invitation.Message
+                            Message = invitation.Message,
                         };
                         var sendingResult = await _platformNotificationApi.SendNotificationByRequestAsync(inviteNotification.ToNotificationDto());
                         if (sendingResult.IsSuccess != true)
