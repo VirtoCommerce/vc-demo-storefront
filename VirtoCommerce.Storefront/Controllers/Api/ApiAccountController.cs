@@ -271,7 +271,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                             StoreId = WorkContext.CurrentStore.Id,
                             Email = email,
                         };
-                        var roles = invitation.Roles?.Select(x => new Model.Security.Role { Id = x }).ToList();
+
+                        var roles = invitation.Roles?.Select(x => new Role { Id = x, Name = x }).ToList();
                         //Add default role for organization member invitation
                         if (roles.IsNullOrEmpty() && !string.IsNullOrEmpty(organizationId))
                         {
@@ -290,7 +291,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         {
                             InviteUrl = callbackUrl,
                             Sender = WorkContext.CurrentStore.Email,
-                            Recipient = user.Email
+                            Recipient = user.Email,
+                            Message = invitation.Message,
                         };
                         var sendingResult = await _platformNotificationApi.SendNotificationByRequestAsync(inviteNotification.ToNotificationDto());
                         if (sendingResult.IsSuccess != true)
@@ -455,6 +457,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         user.Contact.FullName = userUpdateInfo.FullName;
                         user.Contact.DefaultShippingAddress = userUpdateInfo.DefaultShippingAddress;
                         user.Contact.DefaultBillingAddress = userUpdateInfo.DefaultBillingAddress;
+                        user.Contact.Title = userUpdateInfo.Title;
                     }
 
                     user.Email = userUpdateInfo.Email;
