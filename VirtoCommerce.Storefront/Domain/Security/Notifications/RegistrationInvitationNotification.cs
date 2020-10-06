@@ -14,10 +14,13 @@ namespace VirtoCommerce.Storefront.Domain.Security.Notifications
 
         public string InviteUrl { get; set; }
 
+        public string Message { get; set; }
+
         public override IEnumerable<KeyValuePair<string, string>> GetNotificationParameters()
         {
             var result = base.GetNotificationParameters().ToList();
             result.Add(new KeyValuePair<string, string>(nameof(InviteUrl), InviteUrl));
+            result.Add(new KeyValuePair<string, string>(nameof(Message), Message));
             return result;
         }
     }
