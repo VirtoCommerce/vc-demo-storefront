@@ -96,7 +96,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IStoreService, StoreService>();
             services.AddSingleton<ICurrencyService, CurrencyService>();
             services.AddSingleton<ISlugRouteService, SlugRouteService>();
-            services.AddSingleton<IMemberService, MemberService>();
+            services.AddSingleton<IMemberService, DemoMemberService>();
             services.AddSingleton<ICustomerOrderService, CustomerOrderService>();
             services.AddSingleton<IPaymentSearchService, PaymentSearchService>();
             services.AddSingleton<IQuoteService, QuoteService>();
@@ -140,7 +140,7 @@ namespace VirtoCommerce.Storefront
             {
                 Configuration.GetSection("VirtoCommerce:Redis").Bind(o);
             });
-          
+
 
             //Register platform API clients
             services.AddPlatformEndpoint(options =>
