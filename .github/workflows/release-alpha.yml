@@ -1,0 +1,86 @@
+# v1
+name: Release alpha
+
+on:
+  workflow_dispatch:
+  pull_request_review:
+    types: 
+      - submitted
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
+      GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      NUGET_KEY: ${{ secrets.NUGET_KEY }}
+      BLOB_SAS: ${{ secrets.BLOB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install VirtoCommerce.GlobalTool
+        run: dotnet tool install --global VirtoCommerce.GlobalTool
+
+      - name: Install dotnet-sonarscanner
+        run: dotnet tool install --global dotnet-sonarscanner
+
+#      - name: Get changelog
+#        id: changelog
+#        uses: VirtoCommerce/vc-github-actions/changelog-generator@master
+
+      - name: Add version suffix
+        uses: VirtoCommerce/vc-github-actions/add-version-suffix@VP-5059
+
+      - name: SonarCloud Begin
+        uses: VirtoCommerce/vc-github-actions/sonar-scanner-begin@master
+
+      - name: Build
+        run: vc-build Compile
+
+      - name: Unit Tests
+        run: vc-build Test -skip
+
+      - name: SonarCloud End
+        uses: VirtoCommerce/vc-github-actions/sonar-scanner-end@master
+
+      - name: Packaging
+        run: vc-build Compress -skip Clean+Restore+Compile+Test
+
+      - name: Build Docker Image
+#        if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' }}
+        id: dockerBuild
+        uses: VirtoCommerce/vc-github-actions/build-docker-image@VP-5059
+        with:
+          imageName: "demo-storefront"
+          tag: ${{ steps.image.outputs.taggedVersion }}
+          dockerFiles: "https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile"
+      
+#      - name: Publish Nuget
+#        uses: VirtoCommerce/vc-github-actions/publish-nuget@master
+
+#      - name: Publish to Blob
+#        if: ${{ github.ref == 'refs/heads/dev' }}
+#        id: blobRelease
+#        uses: VirtoCommerce/vc-github-actions/publish-blob-release@VP-5059
+#        with:
+#          blobSAS: ${{ secrets.BLOB_TOKEN }}
+        
+#      - name: Publish Github Release
+#        if: ${{ github.ref == 'refs/heads/master' }}
+#        with:
+#          changelog: ${{ steps.changelog.outputs.changelog }}
+#        uses: VirtoCommerce/vc-github-actions/publish-github-release@VP-5059
+
+#      - name: Setup Git Credentials
+#        if: ${{ github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'}}
+#        uses: VirtoCommerce/vc-github-actions/setup-git-credentials-github@VP-5059
+#        with: 
+#          githubToken: ${{ secrets.REPO_TOKEN }}
+        
+#      - name: Publish Manifest
+#        if: ${{ github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'}}
+#        uses: VirtoCommerce/vc-github-actions/publish-manifest@VP-5059
+#        with:
+#          packageUrl: ${{ steps.blobRelease.outputs.packageUrl }}
