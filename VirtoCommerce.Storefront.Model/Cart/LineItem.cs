@@ -250,6 +250,8 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// <value>Used for dynamic properties management, contains object type string</value>
         public string ObjectType { get; set; }
 
+        public string ConfiguredProductId { get; set; }
+
         /// <summary>
         /// Dynamic properties collections
         /// </summary>
