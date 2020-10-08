@@ -60,6 +60,15 @@ jobs:
           tag: ${{ steps.image.outputs.taggedVersion }}
           dockerFiles: "https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile"
 
+      - name: Docker Login
+#        if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' }}
+        uses: azure/docker-login@v1
+        with:
+          login-server: docker.pkg.github.com
+          username: $GITHUB_ACTOR
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+
       - name: Publish Docker Image
 #        if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' }}
         uses: VirtoCommerce/vc-github-actions/publish-docker-image@master
