@@ -682,6 +682,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Width = (decimal?)lineItemDto.Width,
                 Length = (decimal?)lineItemDto.Length,
                 Height = (decimal?)lineItemDto.Height,
+                ConfiguredProductId = lineItemDto.ConfiguredProductId,
             };
 
 
@@ -765,7 +766,9 @@ namespace VirtoCommerce.Storefront.Domain
                 DiscountAmount = (double)lineItem.DiscountAmount.InternalAmount,
                 TaxDetails = lineItem.TaxDetails.Select(ToCartTaxDetailDto).ToList(),
                 DynamicProperties = lineItem.DynamicProperties.Select(ToCartDynamicPropertyDto).ToList(),
-                VolumetricWeight = (double)(lineItem.VolumetricWeight ?? 0)
+                VolumetricWeight = (double)(lineItem.VolumetricWeight ?? 0),
+
+                ConfiguredProductId = lineItem.ConfiguredProductId,
             };
             retVal.Weight = (double?)lineItem.Weight;
             retVal.Width = (double?)lineItem.Width;
