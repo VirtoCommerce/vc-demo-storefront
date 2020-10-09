@@ -51,7 +51,17 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
         public override async Task<ShoppingCart> SaveChanges(ShoppingCart cart)
         {
-            //TODO: Work with lineitems quantity
+            if (!cart.ConfiguredItems.IsNullOrEmpty())
+            {
+                foreach (var configuredItem in cart.ConfiguredItems)
+                {
+                    foreach (var lineItem in cart.Items.Where(x => x.ConfiguredProductId.Equals(configuredItem.ConfiguredLineItem.Id, StringComparison.InvariantCulture)))
+                    {
+                        lineItem.Quantity = configuredItem.ConfiguredLineItem.Quantity;
+                    }
+                }
+            }
+
             return await base.SaveChanges(cart);
         }
 
