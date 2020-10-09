@@ -123,7 +123,7 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>(), provider.GetService<DynamicAssociationsProvider>()));
             services.AddTransient<IQuoteRequestBuilder, QuoteRequestBuilder>();
             services.AddSingleton<IBlobChangesWatcher, BlobChangesWatcher>();
-            services.AddTransient<ICartBuilder, CartBuilder>();
+            services.AddTransient<ICartBuilder, DemoCartBuilder>();
             services.AddTransient<ICartService, DemoCartService>();
             services.AddTransient<AngularAntiforgeryCookieResultFilter>();
             services.AddTransient<AnonymousUserForStoreAuthorizationFilter>();
