@@ -34,7 +34,10 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
             if (configureLineItem != null)
             {
-
+                foreach (var configuirablePieceLineItem in Cart.Items.Where(x => x.ConfiguredProductId.Equals(lineItemId, StringComparison.InvariantCulture)))
+                {
+                    Cart.Items.Remove(configuirablePieceLineItem);
+                }
             }
 
             return base.RemoveItemAsync(lineItemId);
