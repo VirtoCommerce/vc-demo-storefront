@@ -38,7 +38,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
             if (configureLineItem != null)
             {
-                var configurablePieces = Cart.Items.Where(x => x.ConfiguredProductId.Equals(lineItemId, StringComparison.InvariantCulture)).ToArray();
+                var configurablePieces = Cart.Items.Where(x => x.ConfiguredProductId?.Equals(lineItemId, StringComparison.InvariantCulture) ?? false).ToArray();
 
                 foreach (var configuirablePieceLineItem in configurablePieces)
                 {
