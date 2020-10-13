@@ -29,7 +29,8 @@ using VirtoCommerce.Storefront.Binders;
 using VirtoCommerce.Storefront.Caching;
 using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Domain;
-using VirtoCommerce.Storefront.Domain.Cart;
+using VirtoCommerce.Storefront.Domain.Cart.Demo;
+using VirtoCommerce.Storefront.Domain.Catalog;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Filters;
@@ -40,6 +41,7 @@ using VirtoCommerce.Storefront.JsonConverters;
 using VirtoCommerce.Storefront.Middleware;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart.Services;
+using VirtoCommerce.Storefront.Model.Catalog.Services;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Bus;
 using VirtoCommerce.Storefront.Model.Common.Events;
@@ -121,8 +123,8 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IRecommendationProviderFactory, RecommendationProviderFactory>(provider => new RecommendationProviderFactory(provider.GetService<AssociationRecommendationsProvider>(), provider.GetService<CognitiveRecommendationsProvider>(), provider.GetService<DynamicAssociationsProvider>()));
             services.AddTransient<IQuoteRequestBuilder, QuoteRequestBuilder>();
             services.AddSingleton<IBlobChangesWatcher, BlobChangesWatcher>();
-            services.AddTransient<ICartBuilder, CartBuilder>();
-            services.AddTransient<ICartService, CartService>();
+            services.AddTransient<ICartBuilder, DemoCartBuilder>();
+            services.AddTransient<ICartService, DemoCartService>();
             services.AddTransient<AngularAntiforgeryCookieResultFilter>();
             services.AddTransient<AnonymousUserForStoreAuthorizationFilter>();
 
