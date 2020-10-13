@@ -84,7 +84,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                 gpuProductPart,
             };
 
-            return parts;
+            return parts.OrderBy(x => x.Name).ToArray();
         }
 
 
