@@ -94,14 +94,20 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
                     configuredItem.ConfiguredLineItem.ExtendedPrice = new Money(configuredProductItems.Sum(x => x.ExtendedPrice.Amount), currency);
                 }
 
-                configuredItem.Parts.AddRange(configuredProductItems.Select(x =>
-                {
-                    var result = _demoCatalogService.TryGetProductPartByCategoryId(x.CategoryId);
+                configuredItem
+                    .Parts
+                    .AddRange(
+                        configuredProductItems
+                            .Select(x =>
+                            {
+                                var result = _demoCatalogService.TryGetProductPartByCategoryId(x.CategoryId);
 
-                    result.SelectedItemId = x.Id;
+                                result.SelectedItemId = x.Id;
 
-                    return result;
-                }));
+                                return result;
+                            })
+                            .OrderBy(x => x.Name)
+                        );
 
                 cart.ConfiguredItems.Add(configuredItem);
             }

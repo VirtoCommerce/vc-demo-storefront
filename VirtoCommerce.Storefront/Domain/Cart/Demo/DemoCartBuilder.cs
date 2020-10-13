@@ -113,5 +113,18 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
             return result.IsValid;
         }
+
+        protected override async Task AddLineItemAsync(LineItem lineItem)
+        {
+            if (!string.IsNullOrEmpty(lineItem.ConfiguredProductId))
+            {
+                lineItem.Id = null;
+                Cart.Items.Add(lineItem);
+            }
+            else
+            {
+                await base.AddLineItemAsync(lineItem);
+            }
+        }
     }
 }
