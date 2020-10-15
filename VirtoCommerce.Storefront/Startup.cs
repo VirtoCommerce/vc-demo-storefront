@@ -68,7 +68,7 @@ namespace VirtoCommerce.Storefront
 {
     public class Startup
     {
-        public static string SwaggerDocName = "v1";
+        public static readonly string SwaggerDocName = "v1";
         private static string oauth2SchemeName = "oauth2";
 
         public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnviroment)
