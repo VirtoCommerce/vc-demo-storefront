@@ -24,9 +24,6 @@
   <ItemGroup>
     <Compile Remove="wwwroot\cms-content\**" />
     <Content Remove="wwwroot\cms-content\**" />
-    <Content Remove="wwwroot\swagger\index.html" />
-    <Content Remove="wwwroot\swagger\logo_small.png" />
-    <Content Remove="wwwroot\swagger\vc.css" />
     <Content Update="wwwroot\cms-content\**" CopyToPublishDirectory="Never" />
   </ItemGroup>
 
@@ -34,15 +31,6 @@
     <Content Include="IISUrlRewrite.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="wwwroot\swagger\index.html" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\swagger\logo_small.png" />
-    <None Include="wwwroot\swagger\vc.css" />
   </ItemGroup>
 
   <ItemGroup>
