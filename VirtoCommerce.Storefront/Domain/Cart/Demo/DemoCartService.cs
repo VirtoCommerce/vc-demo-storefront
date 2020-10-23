@@ -77,13 +77,13 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
         protected virtual async Task AddConfiguredItemsToCartAsync(ShoppingCart cart, Language language, Currency currency)
         {
-            foreach (var grouping in cart.Items.Where(x => !x.ConfiguredProductId.IsNullOrEmpty()).GroupBy(x => x.ConfiguredProductId))
+            foreach (var grouping in cart.Items.Where(x => !x.ConfiguredGropupId.IsNullOrEmpty()).GroupBy(x => x.ConfiguredGropupId))
             {
                 var configuredProductId = grouping.Key;
                 var configuredProductItems = grouping.AsEnumerable().ToArray();
                 var configuredProductQuantity = configuredProductItems.FirstOrDefault()?.Quantity ?? 1;
 
-                var configuredItem = new ConfiguredItem();
+                var configuredItem = new ConfiguredGroup();
                 var product = (await _catalogService.GetProductsAsync(new[] {configuredProductId}, ItemResponseGroup.None)).FirstOrDefault();
 
                 configuredItem.ConfiguredLineItem = product?.ToLineItem(language, configuredProductQuantity);
@@ -109,7 +109,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
                             .OrderBy(x => x.Name)
                         );
 
-                cart.ConfiguredItems.Add(configuredItem);
+                cart.ConfiguredGroups.Add(configuredItem);
             }
         }
     }

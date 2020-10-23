@@ -496,6 +496,11 @@ namespace VirtoCommerce.Storefront.Domain
             result.VolumetricWeight = (decimal)(cartDto.VolumetricWeight ?? 0);
             result.Weight = (decimal)(cartDto.Weight ?? 0);
 
+            if (cartDto.ConfiguredGroups != null)
+            {
+                result.ConfiguredGroups = cartDto.ConfiguredGroups.Select(x => x.ToConfiguredGroup(result)).ToList();
+            }
+
             return result;
         }
 
@@ -535,6 +540,8 @@ namespace VirtoCommerce.Storefront.Domain
             result.DynamicProperties = cart.DynamicProperties.Select(ToCartDynamicPropertyDto).ToList();
             result.VolumetricWeight = (double)cart.VolumetricWeight;
             result.Weight = (double)cart.Weight;
+
+            result.ConfiguredGroups = cart.ConfiguredGroups.Select(x => x.ToConfiguredGroup()).ToList();
 
             return result;
         }
@@ -682,7 +689,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Width = (decimal?)lineItemDto.Width,
                 Length = (decimal?)lineItemDto.Length,
                 Height = (decimal?)lineItemDto.Height,
-                ConfiguredProductId = lineItemDto.ConfiguredProductId,
+                ConfiguredGropupId = lineItemDto.ConfiguredGroupId,
             };
 
 
@@ -768,7 +775,7 @@ namespace VirtoCommerce.Storefront.Domain
                 DynamicProperties = lineItem.DynamicProperties.Select(ToCartDynamicPropertyDto).ToList(),
                 VolumetricWeight = (double)(lineItem.VolumetricWeight ?? 0),
 
-                ConfiguredProductId = lineItem.ConfiguredProductId,
+                ConfiguredGroupId = lineItem.ConfiguredGropupId,
             };
             retVal.Weight = (double?)lineItem.Weight;
             retVal.Width = (double?)lineItem.Width;

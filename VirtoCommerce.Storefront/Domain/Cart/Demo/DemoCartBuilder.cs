@@ -34,18 +34,18 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
         {
             EnsureCartExists();
 
-            var configureLineItem = Cart.ConfiguredItems.FirstOrDefault(x => x.ConfiguredLineItem?.ProductId.Equals(lineItemId, StringComparison.InvariantCulture) ?? false);
+            var configureLineItem = Cart.ConfiguredGroups.FirstOrDefault(x => x.ConfiguredLineItem?.ProductId.Equals(lineItemId, StringComparison.InvariantCulture) ?? false);
 
             if (configureLineItem != null)
             {
-                var configurablePieces = Cart.Items.Where(x => x.ConfiguredProductId?.Equals(lineItemId, StringComparison.InvariantCulture) ?? false).ToArray();
+                var configurablePieces = Cart.Items.Where(x => x.ConfiguredGropupId?.Equals(lineItemId, StringComparison.InvariantCulture) ?? false).ToArray();
 
                 foreach (var configuirablePieceLineItem in configurablePieces)
                 {
                     Cart.Items.Remove(configuirablePieceLineItem);
                 }
 
-                Cart.ConfiguredItems.Remove(configureLineItem);
+                Cart.ConfiguredGroups.Remove(configureLineItem);
             }
 
             return base.RemoveItemAsync(lineItemId);
@@ -55,7 +55,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
         {
             EnsureCartExists();
 
-            var configuredProduct = Cart.ConfiguredItems?.FirstOrDefault(x =>
+            var configuredProduct = Cart.ConfiguredGroups?.FirstOrDefault(x =>
                 x.ConfiguredLineItem?.ProductId.Equals(changeItemQty.LineItemId, StringComparison.InvariantCulture) ?? false);
 
             if (configuredProduct != null)
@@ -63,8 +63,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
                 foreach (var lineItem in Cart
                     .Items
                     .Where(x =>
-                        !string.IsNullOrEmpty(x.ConfiguredProductId) &&
-                        x.ConfiguredProductId.Equals(configuredProduct.ConfiguredLineItem.ProductId)
+                        !string.IsNullOrEmpty(x.ConfiguredGropupId) &&
+                        x.ConfiguredGropupId.Equals(configuredProduct.ConfiguredLineItem.ProductId)
                     )
                 )
                 {
@@ -85,7 +85,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
             {
                 var lineItem = addCartItem.Product.ToLineItem(Cart.Language, addCartItem.Quantity);                
                 lineItem.Product = addCartItem.Product;
-                lineItem.ConfiguredProductId = addCartItem.ConfiguredProductId;
+                lineItem.ConfiguredGropupId = addCartItem.ConfiguredProductId;
 
                 if (addCartItem.Price != null)
                 {
@@ -116,7 +116,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
         protected override async Task AddLineItemAsync(LineItem lineItem)
         {
-            if (!string.IsNullOrEmpty(lineItem.ConfiguredProductId))
+            if (!string.IsNullOrEmpty(lineItem.ConfiguredGropupId))
             {
                 lineItem.Id = null;
                 Cart.Items.Add(lineItem);

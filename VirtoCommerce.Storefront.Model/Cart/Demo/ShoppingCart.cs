@@ -5,7 +5,6 @@ namespace VirtoCommerce.Storefront.Model.Cart
 {
     public partial class ShoppingCart
     {
-
-        public ICollection<ConfiguredItem> ConfiguredItems { get; set; } = new List<ConfiguredItem>();
+        public ICollection<ConfiguredGroup> ConfiguredGroups { get; set; } = new List<ConfiguredGroup>();
     }
 }
