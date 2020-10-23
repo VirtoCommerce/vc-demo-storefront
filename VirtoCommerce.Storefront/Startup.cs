@@ -31,6 +31,7 @@ using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Cart.Demo;
 using VirtoCommerce.Storefront.Domain.Catalog;
+using VirtoCommerce.Storefront.Domain.Recommendations;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Filters;
@@ -68,7 +69,7 @@ namespace VirtoCommerce.Storefront
 {
     public class Startup
     {
-        public static string SwaggerDocName = "v1";
+        public static readonly string SwaggerDocName = "v1";
         private static string oauth2SchemeName = "oauth2";
 
         public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnviroment)
