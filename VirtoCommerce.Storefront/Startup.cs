@@ -31,6 +31,7 @@ using VirtoCommerce.Storefront.DependencyInjection;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Cart.Demo;
 using VirtoCommerce.Storefront.Domain.Catalog;
+using VirtoCommerce.Storefront.Domain.Recommendations;
 using VirtoCommerce.Storefront.Domain.Security;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Filters;
