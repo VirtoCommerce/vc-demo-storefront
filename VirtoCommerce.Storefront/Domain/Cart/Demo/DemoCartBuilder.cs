@@ -60,8 +60,11 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
             if (configuredGroup != null)
             {
+                configuredGroup.Quantity = changeItemQty.Quantity;
+
                 var groupItems = Cart.Items.Where(x => !string.IsNullOrEmpty(x.ConfiguredGropupId) &&
                        x.ConfiguredGropupId.Equals(configuredGroup.Id)).ToArray();
+
                 foreach (var lineItem in groupItems)
                 {
                     lineItem.Quantity = changeItemQty.Quantity;

@@ -60,7 +60,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
                 if (configuredGroup == null)
                 {
-                    configuredGroup = new Model.Cart.Demo.ConfiguredGroup(firstItem.Quantity, WorkContext.CurrentCurrency, new Money(0m, currency), new Money(0m, currency), new Money(0m, currency));
+                    configuredGroup = new Model.Cart.Demo.ConfiguredGroup(firstItem.Quantity, WorkContext.CurrentCurrency, configuredProductId);
                     cart.ConfiguredGroups.Add(configuredGroup);
                 }
                 else

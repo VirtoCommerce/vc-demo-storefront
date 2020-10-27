@@ -8,15 +8,23 @@ namespace VirtoCommerce.Storefront.Model.Cart.Demo
 {
     public class ConfiguredGroup : Entity
     {
-        public ConfiguredGroup(int quantity, Currency currency, Money extendedPrice,
-            Money extendedPriceWithTax, Money taxTotal)
+        public ConfiguredGroup(int quantity, Currency currency, string productId)
         {
             Id = Guid.NewGuid().ToString("N");
+            ProductId = productId;
             Quantity = quantity;
             Currency = currency;
-            ExtendedPrice = extendedPrice;
-            ExtendedPriceWithTax = extendedPriceWithTax;
-            TaxTotal = taxTotal;
+
+            ExtendedPrice = new Money(currency);
+            ExtendedPriceWithTax = new Money(currency);
+            TaxTotal = new Money(currency);
+
+            ListPrice = new Money(currency);
+            ListPriceWithTax = new Money(currency);
+            SalePrice = new Money(currency);
+            SalePriceWithTax = new Money(currency);
+            PlacedPrice = new Money(currency);
+            PlacedPriceWithTax = new Money(currency);
         }
 
         public string ProductId { get; set; }

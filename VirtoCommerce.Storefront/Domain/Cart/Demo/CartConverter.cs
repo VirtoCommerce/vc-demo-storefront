@@ -41,17 +41,18 @@ namespace VirtoCommerce.Storefront.Domain
 
         public static ConfiguredGroup ToConfiguredGroup(this cartDto.DemoCartConfiguredGroup group, ShoppingCart cart)
         {
-            var result = new ConfiguredGroup(
-                group.Quantity ?? 0, cart.Currency, new Money(group.ExtendedPrice ?? 0, cart.Currency),
-                new Money(group.ExtendedPriceWithTax ?? 0, cart.Currency),
-                new Money(group.TaxTotal ?? 0, cart.Currency))
+            var result = new ConfiguredGroup(group.Quantity ?? 0, cart.Currency, group.ProductId)
             {
-                Id = group.Id,
-                ProductId = group.ProductId,
+                Id = group.Id,                
                 CreatedBy = group.CreatedBy,
                 CreatedDate = group.CreatedDate ?? DateTime.UtcNow,
                 ModifiedBy = group.ModifiedBy,
                 ModifiedDate = group.ModifiedDate,
+
+                ExtendedPrice = new Money(group.ExtendedPrice ?? 0, cart.Currency),
+                ExtendedPriceWithTax = new Money(group.ExtendedPriceWithTax ?? 0, cart.Currency),
+                TaxTotal = new Money(group.TaxTotal ?? 0, cart.Currency),
+
                 ListPrice = new Money(group.ListPrice ?? 0, cart.Currency),
                 ListPriceWithTax = new Money(group.ListPriceWithTax ?? 0, cart.Currency),
                 SalePrice = new Money(group.SalePrice ?? 0, cart.Currency),
