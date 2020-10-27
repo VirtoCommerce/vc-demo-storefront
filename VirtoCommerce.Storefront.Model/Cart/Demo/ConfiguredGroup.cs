@@ -11,13 +11,17 @@ namespace VirtoCommerce.Storefront.Model.Cart.Demo
         public ConfiguredGroup(int quantity, Currency currency, Money extendedPrice,
             Money extendedPriceWithTax, Money taxTotal)
         {
+            Id = Guid.NewGuid().ToString("N");
             Quantity = quantity;
             Currency = currency;
             ExtendedPrice = extendedPrice;
             ExtendedPriceWithTax = extendedPriceWithTax;
-            TaxTotal = taxTotal;            
+            TaxTotal = taxTotal;
         }
 
+        public string ProductId { get; set; }
+
+        public Product Product { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
@@ -56,14 +60,14 @@ namespace VirtoCommerce.Storefront.Model.Cart.Demo
         [JsonRequired]
         public Money ExtendedPriceWithTax { get; set; }
 
-        #endregion
+        #endregion Pricing
 
         #region Taxation
 
         [JsonRequired]
         public Money TaxTotal { get; set; }
 
-        #endregion
+        #endregion Taxation
 
         public ICollection<ProductPart> Parts { get; set; } = new List<ProductPart>();
     }

@@ -66,7 +66,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
                     var cart = cartDto.ToShoppingCart(currency, language, user);
 
-                    await AddConfiguredItemsToCartAsync(cart, language, currency);
+                    await FillProductPartsOfGroups(cart, language, currency);
 
                     result.Add(cart);
                 }
@@ -74,30 +74,22 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
             });
         }
 
-
-        protected virtual async Task AddConfiguredItemsToCartAsync(ShoppingCart cart, Language language, Currency currency)
+        protected virtual async Task FillProductPartsOfGroups(ShoppingCart cart, Language language, Currency currency)
         {
-            foreach (var grouping in cart.Items.Where(x => !x.ConfiguredGropupId.IsNullOrEmpty()).GroupBy(x => x.ConfiguredGropupId))
+            if(cart.ConfiguredGroups.IsNullOrEmpty())
             {
-                var configuredProductId = grouping.Key;
-                var configuredProductItems = grouping.AsEnumerable().ToArray();
-                var configuredProductQuantity = configuredProductItems.FirstOrDefault()?.Quantity ?? 1;
+                return;
+            }
 
-                var configuredItem = new ConfiguredGroup();
-                var product = (await _catalogService.GetProductsAsync(new[] {configuredProductId}, ItemResponseGroup.None)).FirstOrDefault();
+            var groupProductsIds = cart.ConfiguredGroups.Select(x => x.ProductId).ToArray();
+            var groupProducts = await _catalogService.GetProductsAsync(groupProductsIds, ItemResponseGroup.None);
 
-                configuredItem.ConfiguredLineItem = product?.ToLineItem(language, configuredProductQuantity);
+            foreach (var group in cart.ConfiguredGroups)
+            {
+                var product = groupProducts.FirstOrDefault(x=>x.Id == group.ProductId);
+                group.Product = product;
 
-                if (configuredItem.ConfiguredLineItem != null)
-                {
-                    configuredItem.ConfiguredLineItem.PlacedPrice = new Money(configuredProductItems.Sum(x => x.PlacedPrice.Amount), currency);
-                    configuredItem.ConfiguredLineItem.ExtendedPrice = new Money(configuredProductItems.Sum(x => x.ExtendedPrice.Amount), currency);
-                }
-
-                configuredItem
-                    .Parts
-                    .AddRange(
-                        configuredProductItems
+                var productParts = group.Items
                             .Select(x =>
                             {
                                 var result = _demoCatalogService.TryGetProductPartByCategoryId(x.CategoryId);
@@ -106,10 +98,9 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
                                 return result;
                             })
-                            .OrderBy(x => x.Name)
-                        );
+                            .OrderBy(x => x.Name).ToArray();
 
-                cart.ConfiguredGroups.Add(configuredItem);
+                group.Parts.AddRange(productParts);
             }
         }
     }

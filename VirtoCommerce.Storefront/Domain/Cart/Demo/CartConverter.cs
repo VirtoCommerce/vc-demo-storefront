@@ -1,22 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using VirtoCommerce.Storefront.Common;
-using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Demo;
-using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Marketing;
-using VirtoCommerce.Storefront.Model.Security;
-using VirtoCommerce.Storefront.Model.Stores;
-using VirtoCommerce.Storefront.Model.Tax;
 using cartDto = VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models;
-
 
 namespace VirtoCommerce.Storefront.Domain
 {
-
     public static partial class CartConverter
     {
         public static cartDto.DemoCartConfiguredGroup ToConfiguredGroup(this ConfiguredGroup group)
@@ -29,7 +19,8 @@ namespace VirtoCommerce.Storefront.Domain
             return new cartDto.DemoCartConfiguredGroup
             {
                 Id = group.Id ?? Guid.NewGuid().ToString("N"),
-                ItemIds = group.Items.Select(x => x.Id).ToList(),                
+                ProductId = group.ProductId,
+                ItemIds = group.Items.Select(x => x.Id).ToList(),
                 CreatedBy = group.CreatedBy,
                 CreatedDate = group.CreatedDate,
                 ModifiedBy = group.ModifiedBy,
@@ -43,7 +34,7 @@ namespace VirtoCommerce.Storefront.Domain
                 PlacedPriceWithTax = (double)group.PlacedPriceWithTax.InternalAmount,
                 SalePrice = (double)group.SalePrice.InternalAmount,
                 SalePriceWithTax = (double)group.SalePriceWithTax.InternalAmount,
-                TaxTotal = (double)group.TaxTotal.InternalAmount,                
+                TaxTotal = (double)group.TaxTotal.InternalAmount,
                 Quantity = group.Quantity
             };
         }
@@ -56,6 +47,7 @@ namespace VirtoCommerce.Storefront.Domain
                 new Money(group.TaxTotal ?? 0, cart.Currency))
             {
                 Id = group.Id,
+                ProductId = group.ProductId,
                 CreatedBy = group.CreatedBy,
                 CreatedDate = group.CreatedDate ?? DateTime.UtcNow,
                 ModifiedBy = group.ModifiedBy,
@@ -67,7 +59,6 @@ namespace VirtoCommerce.Storefront.Domain
                 PlacedPrice = new Money(group.PlacedPrice ?? 0, cart.Currency),
                 PlacedPriceWithTax = new Money(group.PlacedPriceWithTax ?? 0, cart.Currency),
                 Currency = cart.Currency,
-                
             };
 
             foreach (var item in group.ItemIds.Select(id => cart.Items.First(x => x.Id == id)))

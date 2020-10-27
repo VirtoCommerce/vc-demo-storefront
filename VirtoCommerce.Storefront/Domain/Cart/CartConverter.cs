@@ -692,8 +692,6 @@ namespace VirtoCommerce.Storefront.Domain
                 ConfiguredGropupId = lineItemDto.ConfiguredGroupId,
             };
 
-
-
             result.ImageUrl = lineItemDto.ImageUrl.RemoveLeadingUriScheme();
 
             if (lineItemDto.TaxDetails != null)
