@@ -38,7 +38,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 throw new ArgumentNullException(nameof(items));
             }
-             
+
             async Task<ActionResult<AddItemsToCartResult>> InternalAddItemsToCart()
             {
                 EnsureCartExists();
@@ -91,7 +91,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     };
 
                     return result;
-                }                
+                }
             }
 
             return InternalAddItemsToCart();

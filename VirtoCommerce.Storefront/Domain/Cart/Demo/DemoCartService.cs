@@ -9,7 +9,6 @@ using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Cart;
-using VirtoCommerce.Storefront.Model.Cart.Demo;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Catalog.Services;
 using VirtoCommerce.Storefront.Model.Common;
@@ -82,7 +81,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
         protected virtual async Task FillProductPartsOfGroups(ShoppingCart cart, Language language, Currency currency)
         {
-            if(cart.ConfiguredGroups.IsNullOrEmpty())
+            if (cart.ConfiguredGroups.IsNullOrEmpty())
             {
                 return;
             }
@@ -92,7 +91,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
             foreach (var group in cart.ConfiguredGroups)
             {
-                var product = groupProducts.FirstOrDefault(x=>x.Id.Equals(group.ProductId, StringComparison.InvariantCulture));
+                var product = groupProducts.FirstOrDefault(x => x.Id.Equals(group.ProductId, StringComparison.InvariantCulture));
                 group.Product = product;
 
                 var productParts = group.Items

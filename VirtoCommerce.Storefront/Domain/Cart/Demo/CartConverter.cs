@@ -43,7 +43,7 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var result = new ConfiguredGroup(group.Quantity ?? 0, cart.Currency, group.ProductId)
             {
-                Id = group.Id,                
+                Id = group.Id,
                 CreatedBy = group.CreatedBy,
                 CreatedDate = group.CreatedDate ?? DateTime.UtcNow,
                 ModifiedBy = group.ModifiedBy,
