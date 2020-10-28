@@ -44,42 +44,37 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
             _catalogService = catalogService;
         }
 
-        public override Task<IPagedList<ShoppingCart>> SearchCartsAsync(CartSearchCriteria criteria)
+        public override async Task<IPagedList<ShoppingCart>> SearchCartsAsync(CartSearchCriteria criteria)
         {
             if (criteria == null)
             {
                 throw new ArgumentNullException(nameof(criteria));
             }
 
-            async Task<IPagedList<ShoppingCart>> IntertallSearchCartsAsync()
+            var cacheKey = CacheKey.With(GetType(), "SearchCartsAsync", criteria.GetCacheKey());
+            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async cacheEntry =>
             {
-                var cacheKey = CacheKey.With(GetType(), "SearchCartsAsync", criteria.GetCacheKey());
-                return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async cacheEntry =>
+                cacheEntry.AddExpirationToken(CartCacheRegion.CreateCustomerChangeToken(criteria.Customer?.Id));
+
+                var resultDto = await _cartApi.SearchShoppingCartAsync(criteria.ToSearchCriteriaDto());
+                var result = new List<ShoppingCart>();
+                foreach (var cartDto in resultDto.Results)
                 {
-                    cacheEntry.AddExpirationToken(CartCacheRegion.CreateCustomerChangeToken(criteria.Customer?.Id));
+                    var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
+                    var language = string.IsNullOrEmpty(cartDto.LanguageCode) ? Language.InvariantLanguage : new Language(cartDto.LanguageCode);
+                    var user = await _userManager.FindByIdAsync(cartDto.CustomerId) ?? criteria.Customer;
 
-                    var resultDto = await _cartApi.SearchShoppingCartAsync(criteria.ToSearchCriteriaDto());
-                    var result = new List<ShoppingCart>();
-                    foreach (var cartDto in resultDto.Results)
-                    {
-                        var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
-                        var language = string.IsNullOrEmpty(cartDto.LanguageCode) ? Language.InvariantLanguage : new Language(cartDto.LanguageCode);
-                        var user = await _userManager.FindByIdAsync(cartDto.CustomerId) ?? criteria.Customer;
+                    var cart = cartDto.ToShoppingCart(currency, language, user);
 
-                        var cart = cartDto.ToShoppingCart(currency, language, user);
+                    await FillProductPartsOfGroupsAsync(cart);
 
-                        await FillProductPartsOfGroups(cart, language, currency);
-
-                        result.Add(cart);
-                    }
-                    return new StaticPagedList<ShoppingCart>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalCount.Value);
-                });
-            }
-
-            return IntertallSearchCartsAsync();
+                    result.Add(cart);
+                }
+                return new StaticPagedList<ShoppingCart>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalCount.Value);
+            });
         }
 
-        protected virtual async Task FillProductPartsOfGroups(ShoppingCart cart, Language language, Currency currency)
+        protected virtual async Task FillProductPartsOfGroupsAsync(ShoppingCart cart)
         {
             if (cart.ConfiguredGroups.IsNullOrEmpty())
             {
