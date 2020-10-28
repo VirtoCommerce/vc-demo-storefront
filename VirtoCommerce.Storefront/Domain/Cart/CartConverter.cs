@@ -496,7 +496,7 @@ namespace VirtoCommerce.Storefront.Domain
             result.VolumetricWeight = (decimal)(cartDto.VolumetricWeight ?? 0);
             result.Weight = (decimal)(cartDto.Weight ?? 0);
 
-            if (cartDto.ConfiguredGroups != null)
+            if (!cartDto.ConfiguredGroups.IsNullOrEmpty())
             {
                 result.ConfiguredGroups = cartDto.ConfiguredGroups.Select(x => x.ToConfiguredGroup(result)).ToList();
             }
