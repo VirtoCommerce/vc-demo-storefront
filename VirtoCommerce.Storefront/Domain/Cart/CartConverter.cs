@@ -689,7 +689,7 @@ namespace VirtoCommerce.Storefront.Domain
                 Width = (decimal?)lineItemDto.Width,
                 Length = (decimal?)lineItemDto.Length,
                 Height = (decimal?)lineItemDto.Height,
-                ConfiguredGropupId = lineItemDto.ConfiguredGroupId,
+                ConfiguredGroupId = lineItemDto.ConfiguredGroupId,
             };
 
             result.ImageUrl = lineItemDto.ImageUrl.RemoveLeadingUriScheme();
@@ -773,7 +773,7 @@ namespace VirtoCommerce.Storefront.Domain
                 DynamicProperties = lineItem.DynamicProperties.Select(ToCartDynamicPropertyDto).ToList(),
                 VolumetricWeight = (double)(lineItem.VolumetricWeight ?? 0),
 
-                ConfiguredGroupId = lineItem.ConfiguredGropupId,
+                ConfiguredGroupId = lineItem.ConfiguredGroupId,
             };
             retVal.Weight = (double?)lineItem.Weight;
             retVal.Width = (double?)lineItem.Width;

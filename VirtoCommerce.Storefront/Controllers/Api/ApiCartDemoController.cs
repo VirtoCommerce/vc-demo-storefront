@@ -32,64 +32,69 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/cart/items/bulk
         [HttpPost("items/bulk")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<AddItemsToCartResult>> AddItemsToCart([FromBody] AddCartItem[] items)
+        public Task<ActionResult<AddItemsToCartResult>> AddItemsToCart([FromBody] AddCartItem[] items)
         {
             if (items.IsNullOrEmpty())
             {
-                throw new ArgumentException("Items should not be null or empty");
+                throw new ArgumentNullException(nameof(items));
             }
-
-            EnsureCartExists();
-
-            //Need lock to prevent concurrent access to same cart
-            using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
+             
+            async Task<ActionResult<AddItemsToCartResult>> InternalAddItemsToCart()
             {
-                var productIds = items.Select(x => x.Id).ToArray();
-                var products = await _catalogService.GetProductsAsync(productIds, Model.Catalog.ItemResponseGroup.ItemSmall | Model.Catalog.ItemResponseGroup.ItemWithPrices | Model.Catalog.ItemResponseGroup.Inventory);
-                var cartBuilder = await LoadOrCreateCartAsync();
-                var cart = _cartBuilder.Cart;
-                var currency = WorkContext.CurrentCurrency;
+                EnsureCartExists();
 
-                var firstItem = items.First();
-
-                var configuredProductId = firstItem.ConfiguredProductId;
-
-                var configuredGroup = cart.ConfiguredGroups?.FirstOrDefault(x => (x.ProductId == configuredProductId)
-                                                            && x.Items.OrderBy(x => x.ProductId).Select(x => x.ProductId).SequenceEqual(items.OrderBy(i => i.ProductId).Select(i => i.ProductId).ToArray())
-                                      );
-
-                if (configuredGroup == null)
+                //Need lock to prevent concurrent access to same cart
+                using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
                 {
-                    configuredGroup = new Model.Cart.Demo.ConfiguredGroup(firstItem.Quantity, WorkContext.CurrentCurrency, configuredProductId);
-                    cart.ConfiguredGroups.Add(configuredGroup);
-                }
-                else
-                {
-                    configuredGroup.Quantity = configuredGroup.Quantity + Math.Max(1, firstItem.Quantity);
-                }
+                    var productIds = items.Select(x => x.Id).ToArray();
+                    var products = await _catalogService.GetProductsAsync(productIds, Model.Catalog.ItemResponseGroup.ItemSmall | Model.Catalog.ItemResponseGroup.ItemWithPrices | Model.Catalog.ItemResponseGroup.Inventory);
+                    var cartBuilder = await LoadOrCreateCartAsync();
+                    var cart = _cartBuilder.Cart;
+                    var currency = WorkContext.CurrentCurrency;
 
-                foreach (var item in items)
-                {
-                    item.ConfiguredGroupId = configuredGroup?.Id;
-                    item.Product = products.First(x => x.Id == item.ProductId);
-                    await cartBuilder.AddItemAsync(item);
-                }
+                    var firstItem = items.First();
 
-                var validationResult = await new CartDemoValidator().ValidateAsync(cart, ruleSet: "default,strict");
+                    var configuredProductId = firstItem.ConfiguredProductId;
 
-                if (validationResult.IsValid)
-                {
-                    await cartBuilder.SaveAsync();
-                }
+                    var configuredGroup = cart.ConfiguredGroups?.FirstOrDefault(x => (x.ProductId == configuredProductId)
+                                                                && x.Items.OrderBy(x => x.ProductId).Select(x => x.ProductId).SequenceEqual(items.OrderBy(i => i.ProductId).Select(i => i.ProductId).ToArray())
+                                          );
 
-                var result = new AddItemsToCartResult
-                {
-                    IsSuccess = validationResult.IsValid,
-                    ErrorCodes = validationResult.Errors.Select(x => x.ErrorCode).Distinct().ToArray()
-                };
+                    if (configuredGroup == null)
+                    {
+                        configuredGroup = new Model.Cart.Demo.ConfiguredGroup(firstItem.Quantity, currency, configuredProductId);
+                        cart.ConfiguredGroups.Add(configuredGroup);
+                    }
+                    else
+                    {
+                        configuredGroup.Quantity += Math.Max(1, firstItem.Quantity);
+                    }
 
-                return result;
+                    foreach (var item in items)
+                    {
+                        item.ConfiguredGroupId = configuredGroup?.Id;
+                        item.Product = products.First(x => x.Id == item.ProductId);
+                        await cartBuilder.AddItemAsync(item);
+                    }
+
+                    var validationResult = await new CartDemoValidator().ValidateAsync(cart, ruleSet: "default,strict");
+
+                    if (validationResult.IsValid)
+                    {
+                        await cartBuilder.SaveAsync();
+                    }
+
+                    var result = new AddItemsToCartResult
+                    {
+                        IsSuccess = validationResult.IsValid,
+                        ErrorCodes = validationResult.Errors.Select(x => x.ErrorCode).Distinct().ToArray()
+                    };
+
+                    return result;
+                }                
             }
+
+            return InternalAddItemsToCart();
         }
 
         private void EnsureCartExists()

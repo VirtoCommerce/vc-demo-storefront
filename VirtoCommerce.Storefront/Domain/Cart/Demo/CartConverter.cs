@@ -3,20 +3,20 @@ using System.Linq;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Demo;
 using VirtoCommerce.Storefront.Model.Common;
-using cartDto = VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models;
+using cartApiDto = VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
     public static partial class CartConverter
     {
-        public static cartDto.DemoCartConfiguredGroup ToConfiguredGroup(this ConfiguredGroup group)
+        public static cartApiDto.DemoCartConfiguredGroup ToConfiguredGroup(this ConfiguredGroup group)
         {
             foreach (var lineItem in group.Items)
             {
                 lineItem.Id = lineItem.Id ?? Guid.NewGuid().ToString("N");
             }
 
-            return new cartDto.DemoCartConfiguredGroup
+            return new cartApiDto.DemoCartConfiguredGroup
             {
                 Id = group.Id ?? Guid.NewGuid().ToString("N"),
                 ProductId = group.ProductId,
@@ -39,7 +39,7 @@ namespace VirtoCommerce.Storefront.Domain
             };
         }
 
-        public static ConfiguredGroup ToConfiguredGroup(this cartDto.DemoCartConfiguredGroup group, ShoppingCart cart)
+        public static ConfiguredGroup ToConfiguredGroup(this cartApiDto.DemoCartConfiguredGroup group, ShoppingCart cart)
         {
             var result = new ConfiguredGroup(group.Quantity ?? 0, cart.Currency, group.ProductId)
             {

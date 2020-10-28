@@ -45,33 +45,39 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
             _catalogService = catalogService;
         }
 
-        public override async Task<IPagedList<ShoppingCart>> SearchCartsAsync(CartSearchCriteria criteria)
+        public override Task<IPagedList<ShoppingCart>> SearchCartsAsync(CartSearchCriteria criteria)
         {
             if (criteria == null)
             {
                 throw new ArgumentNullException(nameof(criteria));
             }
-            var cacheKey = CacheKey.With(GetType(), "SearchCartsAsync", criteria.GetCacheKey());
-            return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async cacheEntry =>
+
+            async Task<IPagedList<ShoppingCart>> IntertallSearchCartsAsync()
             {
-                cacheEntry.AddExpirationToken(CartCacheRegion.CreateCustomerChangeToken(criteria.Customer?.Id));
-
-                var resultDto = await _cartApi.SearchShoppingCartAsync(criteria.ToSearchCriteriaDto());
-                var result = new List<ShoppingCart>();
-                foreach (var cartDto in resultDto.Results)
+                var cacheKey = CacheKey.With(GetType(), "SearchCartsAsync", criteria.GetCacheKey());
+                return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async cacheEntry =>
                 {
-                    var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
-                    var language = string.IsNullOrEmpty(cartDto.LanguageCode) ? Language.InvariantLanguage : new Language(cartDto.LanguageCode);
-                    var user = await _userManager.FindByIdAsync(cartDto.CustomerId) ?? criteria.Customer;
+                    cacheEntry.AddExpirationToken(CartCacheRegion.CreateCustomerChangeToken(criteria.Customer?.Id));
 
-                    var cart = cartDto.ToShoppingCart(currency, language, user);
+                    var resultDto = await _cartApi.SearchShoppingCartAsync(criteria.ToSearchCriteriaDto());
+                    var result = new List<ShoppingCart>();
+                    foreach (var cartDto in resultDto.Results)
+                    {
+                        var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
+                        var language = string.IsNullOrEmpty(cartDto.LanguageCode) ? Language.InvariantLanguage : new Language(cartDto.LanguageCode);
+                        var user = await _userManager.FindByIdAsync(cartDto.CustomerId) ?? criteria.Customer;
 
-                    await FillProductPartsOfGroups(cart, language, currency);
+                        var cart = cartDto.ToShoppingCart(currency, language, user);
 
-                    result.Add(cart);
-                }
-                return new StaticPagedList<ShoppingCart>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalCount.Value);
-            });
+                        await FillProductPartsOfGroups(cart, language, currency);
+
+                        result.Add(cart);
+                    }
+                    return new StaticPagedList<ShoppingCart>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalCount.Value);
+                });
+            }
+
+            return IntertallSearchCartsAsync();
         }
 
         protected virtual async Task FillProductPartsOfGroups(ShoppingCart cart, Language language, Currency currency)
@@ -86,7 +92,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
             foreach (var group in cart.ConfiguredGroups)
             {
-                var product = groupProducts.FirstOrDefault(x=>x.Id == group.ProductId);
+                var product = groupProducts.FirstOrDefault(x=>x.Id.Equals(group.ProductId, StringComparison.InvariantCulture));
                 group.Product = product;
 
                 var productParts = group.Items
