@@ -11,9 +11,9 @@ namespace VirtoCommerce.Storefront.Domain
 {
     public static class CartWorkContextBuilderExtensions
     {
-        public static Task WithDefaultShoppingCartAsync(this IWorkContextBuilder builder, Func<Model.Cart.ShoppingCart> factory)
+        public static Task WithDefaultShoppingCartAsync(this IWorkContextBuilder builder, Func<Model.Cart.CustomerOrder> factory)
         {
-            builder.WorkContext.CurrentCart = new Lazy<Model.Cart.ShoppingCart>(factory);
+            builder.WorkContext.CurrentCart = new Lazy<Model.Cart.CustomerOrder>(factory);
             return Task.CompletedTask;
         }
 
@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Domain
             var serviceProvider = builder.HttpContext.RequestServices;
             var cartBuilder = serviceProvider.GetRequiredService<ICartBuilder>();
 
-            Func<Model.Cart.ShoppingCart> factory = () =>
+            Func<Model.Cart.CustomerOrder> factory = () =>
             {
                 cartBuilder.LoadOrCreateNewTransientCart(cartName, store, user, language, currency);
                 return cartBuilder.Cart;

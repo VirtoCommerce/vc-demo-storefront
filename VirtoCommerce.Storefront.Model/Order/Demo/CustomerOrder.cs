@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using VirtoCommerce.Storefront.Model.Cart.Demo;
+using VirtoCommerce.Storefront.Model.Order.Demo;
 
-namespace VirtoCommerce.Storefront.Model.Cart
+namespace VirtoCommerce.Storefront.Model.Order
 {
     public partial class CustomerOrder
     {

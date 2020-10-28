@@ -90,8 +90,8 @@ namespace VirtoCommerce.Storefront.Model
         /// <summary>
         /// Gets or sets the current shopping cart
         /// </summary>
-        public Lazy<ShoppingCart> CurrentCart { get; set; }
-        public ShoppingCart Cart => (CurrentCart?.IsValueCreated ?? false) ? CurrentCart.Value : null;
+        public Lazy<Cart.CustomerOrder> CurrentCart { get; set; }
+        public Cart.CustomerOrder Cart => (CurrentCart?.IsValueCreated ?? false) ? CurrentCart.Value : null;
 
 
         /// <summary>
@@ -228,8 +228,8 @@ namespace VirtoCommerce.Storefront.Model
 
         public IList<Country> AllCountries { get; set; }
 
-        public CustomerOrder CurrentOrder { get; set; }
-        public CustomerOrder Order => CurrentOrder;
+        public Order.CustomerOrder CurrentOrder { get; set; }
+        public Order.CustomerOrder Order => CurrentOrder;
 
 
         public StorefrontNotification StorefrontNotification { get; set; }

@@ -82,7 +82,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
         {
             //Arrange
             var cartService = new Moq.Mock<ICartService>();
-            cartService.Setup(x => x.GetAvailableShippingMethodsAsync(It.IsAny<ShoppingCart>())).Returns(Task.FromResult(ShippingMethods));
+            cartService.Setup(x => x.GetAvailableShippingMethodsAsync(It.IsAny<CustomerOrder>())).Returns(Task.FromResult(ShippingMethods));
             var cart = GetValidCart();
 
             //Act
@@ -101,7 +101,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
         {
             //Arrange
             var cartService = new Moq.Mock<ICartService>();
-            cartService.Setup(x => x.GetAvailableShippingMethodsAsync(It.IsAny<ShoppingCart>())).Returns(Task.FromResult(ShippingMethods));
+            cartService.Setup(x => x.GetAvailableShippingMethodsAsync(It.IsAny<CustomerOrder>())).Returns(Task.FromResult(ShippingMethods));
             var cart = GetValidCart();
 
             var testShipments = new Faker<Shipment>()
@@ -137,7 +137,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
         {
             //Arrange
             var cartService = new Moq.Mock<ICartService>();
-            cartService.Setup(x => x.GetAvailableShippingMethodsAsync(It.IsAny<ShoppingCart>())).Returns(Task.FromResult(ShippingMethods));
+            cartService.Setup(x => x.GetAvailableShippingMethodsAsync(It.IsAny<CustomerOrder>())).Returns(Task.FromResult(ShippingMethods));
             var cart = GetValidCart();
             var shipment = Faker.PickRandom( cart.Shipments );
             shipment.Price = new Money(shipment.Price.Amount+1m, Usd);
@@ -488,7 +488,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
         }
 
 
-        private ShoppingCart GetValidCart()
+        private CustomerOrder GetValidCart()
         {
             var testItems = new Faker<LineItem>()
                 .CustomInstantiator(f => new LineItem(Usd, Language.InvariantLanguage))
@@ -505,8 +505,8 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
                 .RuleFor(s => s.ShipmentMethodOption, (f, s) => ShippingMethods.FirstOrDefault(x=>x.ShipmentMethodCode == s.ShipmentMethodCode).OptionName)
                 .RuleFor(s => s.Price, (f,s) => ShippingMethods.FirstOrDefault(x => x.ShipmentMethodCode == s.ShipmentMethodCode).Price);
 
-            var testCart = new Faker<ShoppingCart>()
-                .CustomInstantiator(f => new ShoppingCart(Usd, Language.InvariantLanguage))
+            var testCart = new Faker<CustomerOrder>()
+                .CustomInstantiator(f => new CustomerOrder(Usd, Language.InvariantLanguage))
                 .RuleFor(c => c.Name, f => CART_NAME)
                 .RuleFor(c => c.CustomerId, f => Guid.NewGuid().ToString())
                 .RuleFor(c => c.CustomerName, f => f.Name.FullName())
@@ -517,10 +517,10 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             return cart;
         }
 
-        private ShoppingCart GetInvalidCart()
+        private CustomerOrder GetInvalidCart()
         {
-            var testCart = new Faker<ShoppingCart>()
-                .CustomInstantiator(f => new ShoppingCart(Usd, Language.InvariantLanguage))
+            var testCart = new Faker<CustomerOrder>()
+                .CustomInstantiator(f => new CustomerOrder(Usd, Language.InvariantLanguage))
                 .RuleFor(c => c.Name, f => null)
                 .RuleFor(c => c.CustomerId, f => null);                
 

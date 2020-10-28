@@ -7,7 +7,7 @@ using cartDto = VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
-    public static partial class CartConverter
+    public static partial class OrderConverter
     {
         public static cartDto.DemoCartConfiguredGroup ToConfiguredGroup(this ConfiguredGroup group)
         {
@@ -39,7 +39,7 @@ namespace VirtoCommerce.Storefront.Domain
             };
         }
 
-        public static ConfiguredGroup ToConfiguredGroup(this cartDto.DemoCartConfiguredGroup group, ShoppingCart cart)
+        public static ConfiguredGroup ToConfiguredGroup(this cartDto.DemoCartConfiguredGroup group, CustomerOrder cart)
         {
             var result = new ConfiguredGroup(group.Quantity ?? 0, cart.Currency, group.ProductId)
             {

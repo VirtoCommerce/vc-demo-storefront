@@ -30,7 +30,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         // GET: storefrontapi/lists/{listName}/{type}
         [HttpGet("{listName}/{type}")]
-        public async Task<ActionResult<ShoppingCart>> GetListByName([FromRoute]string listName, [FromRoute]string type)
+        public async Task<ActionResult<CustomerOrder>> GetListByName([FromRoute]string listName, [FromRoute]string type)
         {
             var unescapedListName = Uri.UnescapeDataString(listName);
             using (await AsyncLock.GetLockByKey(GetAsyncListKey(WorkContext, unescapedListName, type)).LockAsync())
@@ -177,7 +177,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // POST: storefrontapi/lists/{listName}/{type}/create
         [HttpPost("{listName}/{type}/create")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<ShoppingCart>> CreateList(string listName, string type)
+        public async Task<ActionResult<CustomerOrder>> CreateList(string listName, string type)
         {
             var cartBuilder = await LoadOrCreateCartAsync(Uri.UnescapeDataString(listName), type);
             if (cartBuilder.Cart.IsTransient())

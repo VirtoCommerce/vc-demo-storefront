@@ -3,7 +3,7 @@ using VirtoCommerce.Storefront.Model.Cart.Services;
 
 namespace VirtoCommerce.Storefront.Model.Cart.Validators
 {
-    public class CartValidator : AbstractValidator<ShoppingCart>
+    public class CartValidator : AbstractValidator<CustomerOrder>
     {
         public CartValidator(ICartService cartService)
         {

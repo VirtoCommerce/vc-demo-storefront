@@ -10,9 +10,9 @@ using VirtoCommerce.Storefront.Model.Subscriptions;
 
 namespace VirtoCommerce.Storefront.Model.Cart
 {
-    public partial class ShoppingCart : Entity, IDiscountable, IValidatable, IHasLanguage, ITaxable, ICacheKey
+    public partial class CustomerOrder : Entity, IDiscountable, IValidatable, IHasLanguage, ITaxable, ICacheKey
     {
-        public ShoppingCart(Currency currency, Language language)
+        public CustomerOrder(Currency currency, Language language)
         {
             Currency = currency;
             Language = language;
@@ -476,7 +476,7 @@ namespace VirtoCommerce.Storefront.Model.Cart
 
         public override object Clone()
         {
-            var result = base.Clone() as ShoppingCart;
+            var result = base.Clone() as CustomerOrder;
 
             result.HandlingTotal = HandlingTotal?.Clone() as Money;
             result.HandlingTotalWithTax = HandlingTotalWithTax?.Clone() as Money;

@@ -7,7 +7,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Validators
 {
     public class CartLineItemDemoValidator : AbstractValidator<LineItem>
     {
-        public CartLineItemDemoValidator(ShoppingCart cart)
+        public CartLineItemDemoValidator(CustomerOrder cart)
         {
             RuleSet("strict", () =>
             {

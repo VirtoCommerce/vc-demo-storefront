@@ -230,7 +230,8 @@ namespace VirtoCommerce.Storefront.Domain
                 CreatedBy = lineItemDto.CreatedBy,
                 CreatedDate = lineItemDto.CreatedDate,
                 ModifiedDate = lineItemDto.ModifiedDate,
-                ModifiedBy = lineItemDto.ModifiedBy
+                ModifiedBy = lineItemDto.ModifiedBy,
+                ConfiguredGropupId = lineItemDto.ConfiguredGroupId
             };
 
 
@@ -458,6 +459,11 @@ namespace VirtoCommerce.Storefront.Domain
             if (order.Items != null)
             {
                 result.Items = order.Items.Select(i => ToOrderLineItem(i, availCurrencies, language)).ToList();
+            }
+
+            if (order.ConfiguredGroups != null)
+            {
+                result.ConfiguredGroups = order.ConfiguredGroups.Select(x => x.ToConfiguredGroup(result)).ToList();
             }
 
             if (order.Shipments != null)

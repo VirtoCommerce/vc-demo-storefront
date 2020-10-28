@@ -6,13 +6,13 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
 {
     public interface ICartService
     {
-        Task<IPagedList<ShoppingCart>> SearchCartsAsync(CartSearchCriteria criteria);
-        Task<ShoppingCart> SaveChanges(ShoppingCart cart);
-        Task<ShoppingCart> GetByIdAsync(string cartId);
+        Task<IPagedList<CustomerOrder>> SearchCartsAsync(CartSearchCriteria criteria);
+        Task<CustomerOrder> SaveChanges(CustomerOrder cart);
+        Task<CustomerOrder> GetByIdAsync(string cartId);
         Task DeleteCartByIdAsync(string cartId);
 
-        Task<IEnumerable<ShippingMethod>> GetAvailableShippingMethodsAsync(ShoppingCart cart);
-        Task<IEnumerable<PaymentMethod>> GetAvailablePaymentMethodsAsync(ShoppingCart cart);
+        Task<IEnumerable<ShippingMethod>> GetAvailableShippingMethodsAsync(CustomerOrder cart);
+        Task<IEnumerable<PaymentMethod>> GetAvailablePaymentMethodsAsync(CustomerOrder cart);
 
     }
 }

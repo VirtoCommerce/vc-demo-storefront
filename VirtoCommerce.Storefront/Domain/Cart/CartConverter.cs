@@ -18,7 +18,7 @@ using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.M
 namespace VirtoCommerce.Storefront.Domain
 {
 
-    public static partial class CartConverter
+    public static partial class OrderConverter
     {
         public static cartDto.ShoppingCartSearchCriteria ToSearchCriteriaDto(this CartSearchCriteria criteria)
         {
@@ -156,7 +156,7 @@ namespace VirtoCommerce.Storefront.Domain
             return retVal.ToArray();
         }
 
-        public static CartShipmentItem ToShipmentItem(this cartDto.CartShipmentItem shipmentItemDto, ShoppingCart cart)
+        public static CartShipmentItem ToShipmentItem(this cartDto.CartShipmentItem shipmentItemDto, CustomerOrder cart)
         {
             var result = new CartShipmentItem
             {
@@ -181,7 +181,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static Shipment ToShipment(this cartDto.CartShipment shipmentDto, ShoppingCart cart)
+        public static Shipment ToShipment(this cartDto.CartShipment shipmentDto, CustomerOrder cart)
         {
             var retVal = new Shipment(cart.Currency)
             {
@@ -272,7 +272,7 @@ namespace VirtoCommerce.Storefront.Domain
             return retVal;
         }
 
-        public static PaymentMethod ToCartPaymentMethod(this cartDto.PaymentMethod paymentMethodDto, ShoppingCart cart)
+        public static PaymentMethod ToCartPaymentMethod(this cartDto.PaymentMethod paymentMethodDto, CustomerOrder cart)
         {
             var retVal = new PaymentMethod(cart.Currency)
             {
@@ -304,7 +304,7 @@ namespace VirtoCommerce.Storefront.Domain
             return retVal;
         }
 
-        public static Payment ToCartPayment(this PaymentMethod paymentMethod, Money amount, ShoppingCart cart)
+        public static Payment ToCartPayment(this PaymentMethod paymentMethod, Money amount, CustomerOrder cart)
         {
             var result = new Payment(cart.Currency)
             {
@@ -319,7 +319,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static Payment ToPayment(this cartDto.Payment paymentDto, ShoppingCart cart)
+        public static Payment ToPayment(this cartDto.Payment paymentDto, CustomerOrder cart)
         {
             var result = new Payment(cart.Currency)
             {
@@ -399,7 +399,7 @@ namespace VirtoCommerce.Storefront.Domain
             return addressDto.JsonConvert<coreDto.Address>().ToAddress();
         }
 
-        public static PromotionEvaluationContext ToPromotionEvaluationContext(this ShoppingCart cart)
+        public static PromotionEvaluationContext ToPromotionEvaluationContext(this CustomerOrder cart)
         {
             var result = new PromotionEvaluationContext(cart.Language, cart.Currency)
             {
@@ -413,9 +413,9 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static ShoppingCart ToShoppingCart(this cartDto.ShoppingCart cartDto, Currency currency, Language language, User user)
+        public static CustomerOrder ToShoppingCart(this cartDto.ShoppingCart cartDto, Currency currency, Language language, User user)
         {
-            var result = new ShoppingCart(currency, language)
+            var result = new CustomerOrder(currency, language)
             {
                 ChannelId = cartDto.ChannelId,
                 Comment = cartDto.Comment,
@@ -504,7 +504,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static cartDto.ShoppingCart ToShoppingCartDto(this ShoppingCart cart)
+        public static cartDto.ShoppingCart ToShoppingCartDto(this CustomerOrder cart)
         {
             var result = new cartDto.ShoppingCart
             {
@@ -546,7 +546,7 @@ namespace VirtoCommerce.Storefront.Domain
             return result;
         }
 
-        public static TaxEvaluationContext ToTaxEvalContext(this ShoppingCart cart, Store store)
+        public static TaxEvaluationContext ToTaxEvalContext(this CustomerOrder cart, Store store)
         {
             var result = new TaxEvaluationContext(cart.StoreId)
             {

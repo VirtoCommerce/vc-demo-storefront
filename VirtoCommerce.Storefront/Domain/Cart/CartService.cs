@@ -41,7 +41,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             await _cartApi.DeleteCartsAsync(new[] { cartId });
         }
 
-        public async Task<IEnumerable<PaymentMethod>> GetAvailablePaymentMethodsAsync(ShoppingCart cart)
+        public async Task<IEnumerable<PaymentMethod>> GetAvailablePaymentMethodsAsync(CustomerOrder cart)
         {
             if (cart == null)
             {
@@ -56,7 +56,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             return result;
         }
 
-        public virtual async Task<IEnumerable<ShippingMethod>> GetAvailableShippingMethodsAsync(ShoppingCart cart)
+        public virtual async Task<IEnumerable<ShippingMethod>> GetAvailableShippingMethodsAsync(CustomerOrder cart)
         {
             if (cart == null)
             {
@@ -71,9 +71,9 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             return result;
         }
 
-        public async Task<ShoppingCart> GetByIdAsync(string cartId)
+        public async Task<CustomerOrder> GetByIdAsync(string cartId)
         {
-            ShoppingCart result = null;
+            CustomerOrder result = null;
             var cartDto = await _cartApi.GetCartByIdAsync(cartId);
             if (cartDto != null)
             {
@@ -84,7 +84,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             return result;
         }
 
-        public virtual async Task<ShoppingCart> SaveChanges(ShoppingCart cart)
+        public virtual async Task<CustomerOrder> SaveChanges(CustomerOrder cart)
         {
             if (cart == null)
             {
@@ -103,7 +103,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
             return result;
         }
 
-        public virtual async Task<IPagedList<ShoppingCart>> SearchCartsAsync(CartSearchCriteria criteria)
+        public virtual async Task<IPagedList<CustomerOrder>> SearchCartsAsync(CartSearchCriteria criteria)
         {
             if (criteria == null)
             {
@@ -115,7 +115,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                 cacheEntry.AddExpirationToken(CartCacheRegion.CreateCustomerChangeToken(criteria.Customer?.Id));
 
                 var resultDto = await _cartApi.SearchShoppingCartAsync(criteria.ToSearchCriteriaDto());
-                var result = new List<ShoppingCart>();
+                var result = new List<CustomerOrder>();
                 foreach (var cartDto in resultDto.Results)
                 {
                     var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
@@ -124,7 +124,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart
                     var cart = cartDto.ToShoppingCart(currency, language, user);
                     result.Add(cart);
                 }
-                return new StaticPagedList<ShoppingCart>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalCount.Value);
+                return new StaticPagedList<CustomerOrder>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalCount.Value);
             });
         }
 

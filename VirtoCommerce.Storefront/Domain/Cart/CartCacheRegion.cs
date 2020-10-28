@@ -24,7 +24,7 @@ namespace VirtoCommerce.Storefront.Domain
         }
 
 
-        public static IChangeToken CreateChangeToken(ShoppingCart cart)
+        public static IChangeToken CreateChangeToken(CustomerOrder cart)
         {
             if (cart == null)
             {
@@ -34,7 +34,7 @@ namespace VirtoCommerce.Storefront.Domain
             return new CompositeChangeToken(new[] { CreateChangeToken(), new CancellationChangeToken(cancellationTokenSource.Token) });
         }
 
-        public static void ExpireCart(ShoppingCart cart)
+        public static void ExpireCart(CustomerOrder cart)
         {
             if (cart != null)
             {

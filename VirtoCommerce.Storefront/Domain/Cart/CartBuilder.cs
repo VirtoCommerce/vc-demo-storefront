@@ -52,9 +52,9 @@ namespace VirtoCommerce.Storefront.Domain
 
         #region ICartBuilder Members
 
-        public virtual ShoppingCart Cart { get; protected set; }
+        public virtual CustomerOrder Cart { get; protected set; }
 
-        public virtual async Task TakeCartAsync(ShoppingCart cart)
+        public virtual async Task TakeCartAsync(CustomerOrder cart)
         {
             var store = _workContextAccessor.WorkContext.AllStores.FirstOrDefault(x => x.Id.EqualsInvariant(cart.StoreId));
             if (store == null)
@@ -349,12 +349,12 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-        public virtual async Task MergeWithCartAsync(ShoppingCart cart)
+        public virtual async Task MergeWithCartAsync(CustomerOrder cart)
         {
             EnsureCartExists();
 
             // Clone source cart to prevent its damage
-            cart = (ShoppingCart)cart.Clone();
+            cart = (CustomerOrder)cart.Clone();
 
             // Reset primary keys for all aggregated entities before merge
             // To prevent insertions same Ids for target cart
@@ -561,9 +561,9 @@ namespace VirtoCommerce.Storefront.Domain
             };
         }
 
-        protected virtual ShoppingCart CreateCart(string cartName, Store store, User user, Language language, Currency currency, string type)
+        protected virtual CustomerOrder CreateCart(string cartName, Store store, User user, Language language, Currency currency, string type)
         {
-            var cart = new ShoppingCart(currency, language)
+            var cart = new CustomerOrder(currency, language)
             {
                 CustomerId = user.Id,
                 Name = cartName,
@@ -670,7 +670,7 @@ namespace VirtoCommerce.Storefront.Domain
             }
         }
 
-        protected virtual async Task PrepareCartAsync(ShoppingCart cart, Store store)
+        protected virtual async Task PrepareCartAsync(CustomerOrder cart, Store store)
         {
             if (cart == null)
             {
@@ -685,7 +685,7 @@ namespace VirtoCommerce.Storefront.Domain
             await PrepareCartInternalAsync(cart, store);
         }
 
-        protected virtual async Task PrepareCartInternalAsync(ShoppingCart cart, Store store)
+        protected virtual async Task PrepareCartInternalAsync(CustomerOrder cart, Store store)
         {
             //Load products for cart line items
             if (cart.Items.Any())

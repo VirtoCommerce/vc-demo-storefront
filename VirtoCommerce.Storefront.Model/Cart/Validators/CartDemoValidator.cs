@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace VirtoCommerce.Storefront.Model.Cart.Validators
 {
-    public class CartDemoValidator : AbstractValidator<ShoppingCart>
+    public class CartDemoValidator : AbstractValidator<CustomerOrder>
     {
         public CartDemoValidator()
         {
