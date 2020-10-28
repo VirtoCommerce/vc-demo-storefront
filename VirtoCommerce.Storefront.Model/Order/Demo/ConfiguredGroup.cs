@@ -11,6 +11,7 @@ namespace VirtoCommerce.Storefront.Model.Order.Demo
         public ConfiguredGroup(int quantity, Currency currency, string productId)
         {
             Id = Guid.NewGuid().ToString("N");
+            Items = new List<LineItem>();
             ProductId = productId;
             Quantity = quantity;
             Currency = currency;
@@ -38,7 +39,7 @@ namespace VirtoCommerce.Storefront.Model.Order.Demo
         public string ModifiedBy { get; set; }
 
         [JsonRequired]
-        public virtual IList<LineItem> Items { get; set; } = new List<LineItem>();
+        public virtual IList<LineItem> Items { get; set; }
 
         [JsonRequired]
         public int Quantity { get; set; }

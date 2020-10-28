@@ -8,15 +8,7 @@ namespace VirtoCommerce.Storefront.Model.Order
     public partial class CustomerOrder
     {
         [JsonRequired]
-        public LineItem[] UsualItems
-        {
-            get
-            {
-                var result = Items.Where(x => !ConfiguredGroups.Any(y => y.Items.Contains(x))).ToArray();
-
-                return result;
-            }
-        }
+        public LineItem[] UsualItems => Items.Where(x => !ConfiguredGroups.Any(y => y.Items.Contains(x))).ToArray();
 
         public ICollection<ConfiguredGroup> ConfiguredGroups { get; set; } = new List<ConfiguredGroup>();
     }
