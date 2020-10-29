@@ -14,7 +14,7 @@ namespace VirtoCommerce.Storefront.Model.Marketing
         {
         }
 
-        public Cart.CustomerOrder Cart { get; set; }
+        public Cart.ShoppingCart Cart { get; set; }
         public IList<Product> Products { get; set; } = new List<Product>();
         public Product Product { get; set; }
 

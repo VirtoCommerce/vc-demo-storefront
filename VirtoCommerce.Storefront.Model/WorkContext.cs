@@ -90,8 +90,8 @@ namespace VirtoCommerce.Storefront.Model
         /// <summary>
         /// Gets or sets the current shopping cart
         /// </summary>
-        public Lazy<Cart.CustomerOrder> CurrentCart { get; set; }
-        public Cart.CustomerOrder Cart => (CurrentCart?.IsValueCreated ?? false) ? CurrentCart.Value : null;
+        public Lazy<Cart.ShoppingCart> CurrentCart { get; set; }
+        public Cart.ShoppingCart Cart => (CurrentCart?.IsValueCreated ?? false) ? CurrentCart.Value : null;
 
 
         /// <summary>

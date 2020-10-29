@@ -45,7 +45,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         // Get current user shopping cart
         // GET: storefrontapi/cart
         [HttpGet]
-        public async Task<ActionResult<CustomerOrder>> GetCart()
+        public async Task<ActionResult<ShoppingCart>> GetCart()
         {
             var cartBuilder = await LoadOrCreateCartAsync();
             await cartBuilder.ValidateAsync();
@@ -268,7 +268,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             //Need lock to prevent concurrent access to same cart
             using (await AsyncLock.GetLockByKey(WorkContext.CurrentCart.Value.GetCacheKey()).LockAsync())
             {
-                await _cartBuilder.TakeCartAsync(WorkContext.CurrentCart.Value.Clone() as CustomerOrder);
+                await _cartBuilder.TakeCartAsync(WorkContext.CurrentCart.Value.Clone() as ShoppingCart);
                 _cartBuilder.Cart.Coupons = new[] { coupon };
                 await _cartBuilder.EvaluatePromotionsAsync();
                 return Ok(coupon);

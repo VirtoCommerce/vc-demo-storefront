@@ -8,7 +8,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Validators
 {
     public class CartShipmentValidator : AbstractValidator<Shipment>
     {
-        public CartShipmentValidator(CustomerOrder cart, ICartService cartService)
+        public CartShipmentValidator(ShoppingCart cart, ICartService cartService)
         {
             RuleSet("strict", () =>
             {

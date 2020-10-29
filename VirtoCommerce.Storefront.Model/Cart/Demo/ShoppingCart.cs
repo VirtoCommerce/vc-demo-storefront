@@ -5,7 +5,7 @@ using VirtoCommerce.Storefront.Model.Cart.Demo;
 
 namespace VirtoCommerce.Storefront.Model.Cart
 {
-    public partial class CustomerOrder
+    public partial class ShoppingCart
     {
         [JsonRequired]
         public LineItem[] UsualItems

@@ -15,14 +15,14 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
     /// </summary>
     public interface ICartBuilder
     {
-        CustomerOrder Cart { get; }
+        ShoppingCart Cart { get; }
 
         /// <summary>
         ///  Capture cart and all next changes will be implemented on it
         /// </summary>
         /// <param name="cart"></param>
         /// <returns></returns>
-        Task TakeCartAsync(CustomerOrder cart);
+        Task TakeCartAsync(ShoppingCart cart);
 
         /// <summary>
         /// Update shopping cart comment
@@ -133,7 +133,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Services
         /// </summary>
         /// <param name="cart"></param>
         /// <returns></returns>
-        Task MergeWithCartAsync(CustomerOrder cart);
+        Task MergeWithCartAsync(ShoppingCart cart);
 
         /// <summary>
         /// Remove cart from service

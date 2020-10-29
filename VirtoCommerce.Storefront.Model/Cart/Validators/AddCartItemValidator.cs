@@ -11,7 +11,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Validators
 {
     public class AddCartItemValidator : AbstractValidator<AddCartItem>
     {
-        public AddCartItemValidator(CustomerOrder cart)
+        public AddCartItemValidator(ShoppingCart cart)
         {
             RuleFor(x => x.Quantity).GreaterThan(0);
             RuleFor(x => x.Product).NotNull();
