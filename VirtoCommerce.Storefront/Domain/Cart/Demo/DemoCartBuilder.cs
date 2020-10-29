@@ -118,7 +118,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
             EnsureCartExists();
             Cart.ConfiguredGroups.Clear();
             Cart.Items.Clear();
-            return Task.FromResult((object)null);
+            return Task.CompletedTask;
         }
 
         protected override async Task AddLineItemAsync(LineItem lineItem)
