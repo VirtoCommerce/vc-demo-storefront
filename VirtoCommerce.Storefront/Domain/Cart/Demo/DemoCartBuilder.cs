@@ -113,6 +113,14 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
             return result.IsValid;
         }
 
+        public override Task ClearAsync()
+        {
+            EnsureCartExists();
+            Cart.ConfiguredGroups.Clear();
+            Cart.Items.Clear();
+            return Task.FromResult((object)null);
+        }
+
         protected override async Task AddLineItemAsync(LineItem lineItem)
         {
             var existingLineItem = Cart.Items.FirstOrDefault(li => li.ProductId.EqualsInvariant(lineItem.ProductId)
