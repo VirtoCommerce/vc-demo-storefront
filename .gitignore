@@ -270,3 +270,5 @@ __pycache__/
 .vscode
 
 VirtoCommerce.Storefront/wwwroot/js/designer.bundle.js*
+
+core-model-v1

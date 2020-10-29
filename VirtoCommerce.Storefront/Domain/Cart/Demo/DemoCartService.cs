@@ -9,7 +9,6 @@ using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Cart;
-using VirtoCommerce.Storefront.Model.Cart.Demo;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Catalog.Services;
 using VirtoCommerce.Storefront.Model.Common;
@@ -51,6 +50,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
             {
                 throw new ArgumentNullException(nameof(criteria));
             }
+
             var cacheKey = CacheKey.With(GetType(), "SearchCartsAsync", criteria.GetCacheKey());
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async cacheEntry =>
             {
@@ -66,7 +66,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
                     var cart = cartDto.ToShoppingCart(currency, language, user);
 
-                    await AddConfiguredItemsToCartAsync(cart, language, currency);
+                    await FillProductPartsOfGroupsAsync(cart);
 
                     result.Add(cart);
                 }
@@ -74,30 +74,22 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
             });
         }
 
-
-        protected virtual async Task AddConfiguredItemsToCartAsync(ShoppingCart cart, Language language, Currency currency)
+        protected virtual async Task FillProductPartsOfGroupsAsync(ShoppingCart cart)
         {
-            foreach (var grouping in cart.Items.Where(x => !x.ConfiguredProductId.IsNullOrEmpty()).GroupBy(x => x.ConfiguredProductId))
+            if (cart.ConfiguredGroups.IsNullOrEmpty())
             {
-                var configuredProductId = grouping.Key;
-                var configuredProductItems = grouping.AsEnumerable().ToArray();
-                var configuredProductQuantity = configuredProductItems.FirstOrDefault()?.Quantity ?? 1;
+                return;
+            }
 
-                var configuredItem = new ConfiguredItem();
-                var product = (await _catalogService.GetProductsAsync(new[] {configuredProductId}, ItemResponseGroup.None)).FirstOrDefault();
+            var groupProductsIds = cart.ConfiguredGroups.Select(x => x.ProductId).ToArray();
+            var groupProducts = await _catalogService.GetProductsAsync(groupProductsIds, ItemResponseGroup.None);
 
-                configuredItem.ConfiguredLineItem = product?.ToLineItem(language, configuredProductQuantity);
+            foreach (var group in cart.ConfiguredGroups)
+            {
+                var product = groupProducts.FirstOrDefault(x => x.Id.Equals(group.ProductId, StringComparison.InvariantCulture));
+                group.Product = product;
 
-                if (configuredItem.ConfiguredLineItem != null)
-                {
-                    configuredItem.ConfiguredLineItem.PlacedPrice = new Money(configuredProductItems.Sum(x => x.PlacedPrice.Amount), currency);
-                    configuredItem.ConfiguredLineItem.ExtendedPrice = new Money(configuredProductItems.Sum(x => x.ExtendedPrice.Amount), currency);
-                }
-
-                configuredItem
-                    .Parts
-                    .AddRange(
-                        configuredProductItems
+                var productParts = group.Items
                             .Select(x =>
                             {
                                 var result = _demoCatalogService.TryGetProductPartByCategoryId(x.CategoryId);
@@ -106,10 +98,9 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
                                 return result;
                             })
-                            .OrderBy(x => x.Name)
-                        );
+                            .OrderBy(x => x.Name).ToArray();
 
-                cart.ConfiguredItems.Add(configuredItem);
+                group.Parts.AddRange(productParts);
             }
         }
     }

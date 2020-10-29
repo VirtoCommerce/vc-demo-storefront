@@ -32,14 +32,14 @@ namespace VirtoCommerce.Storefront.Domain
             return await InnerSearchOrdersAsync(criteria, workContext);
         }
 
-        public async Task<CustomerOrder> GetOrderByNumberAsync(string number)
+        public virtual async Task<CustomerOrder> GetOrderByNumberAsync(string number)
         {
             var workContext = _workContextAccessor.WorkContext;
             return (await _orderApi.GetByNumberAsync(number, string.Empty))?.ToCustomerOrder(workContext.AllCurrencies, workContext.CurrentLanguage);
         }
 
 
-        public async Task<CustomerOrder> GetOrderByIdAsync(string id)
+        public virtual async Task<CustomerOrder> GetOrderByIdAsync(string id)
         {
             var workContext = _workContextAccessor.WorkContext;
             return (await _orderApi.GetByIdAsync(id, string.Empty))?.ToCustomerOrder(workContext.AllCurrencies, workContext.CurrentLanguage);

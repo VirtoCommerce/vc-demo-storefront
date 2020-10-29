@@ -4682,6 +4682,158 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
+    public partial class DemoCartConfiguredGroup
+    {
+        /// <summary>
+        /// Initializes a new instance of the DemoCartConfiguredGroup class.
+        /// </summary>
+        public DemoCartConfiguredGroup()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DemoCartConfiguredGroup class.
+        /// </summary>
+        public DemoCartConfiguredGroup(string productId = default(string), IList<string> itemIds = default(IList<string>), int? quantity = default(int?), string currency = default(string), double? extendedPrice = default(double?), double? extendedPriceWithTax = default(double?), double? listPrice = default(double?), double? listPriceWithTax = default(double?), double? salePrice = default(double?), double? salePriceWithTax = default(double?), double? placedPrice = default(double?), double? placedPriceWithTax = default(double?), double? taxTotal = default(double?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        {
+            ProductId = productId;
+            ItemIds = itemIds;
+            Quantity = quantity;
+            Currency = currency;
+            ExtendedPrice = extendedPrice;
+            ExtendedPriceWithTax = extendedPriceWithTax;
+            ListPrice = listPrice;
+            ListPriceWithTax = listPriceWithTax;
+            SalePrice = salePrice;
+            SalePriceWithTax = salePriceWithTax;
+            PlacedPrice = placedPrice;
+            PlacedPriceWithTax = placedPriceWithTax;
+            TaxTotal = taxTotal;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "productId")]
+        public string ProductId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "itemIds")]
+        public IList<string> ItemIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "quantity")]
+        public int? Quantity { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currency")]
+        public string Currency { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "extendedPrice")]
+        public double? ExtendedPrice { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "extendedPriceWithTax")]
+        public double? ExtendedPriceWithTax { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "listPrice")]
+        public double? ListPrice { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "listPriceWithTax")]
+        public double? ListPriceWithTax { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "salePrice")]
+        public double? SalePrice { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "salePriceWithTax")]
+        public double? SalePriceWithTax { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "placedPrice")]
+        public double? PlacedPrice { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "placedPriceWithTax")]
+        public double? PlacedPriceWithTax { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxTotal")]
+        public double? TaxTotal { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public partial class CartAddress
     {
         /// <summary>
@@ -5796,9 +5948,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the CartLineItem class.
         /// </summary>
-        public CartLineItem(string configuredProductId = default(string), string productId = default(string), string catalogId = default(string), string categoryId = default(string), string sku = default(string), string productType = default(string), string name = default(string), int? quantity = default(int?), string fulfillmentCenterId = default(string), string fulfillmentCenterName = default(string), string fulfillmentLocationCode = default(string), string shipmentMethodCode = default(string), bool? requiredShipping = default(bool?), string thumbnailImageUrl = default(string), string imageUrl = default(string), bool? isGift = default(bool?), string currency = default(string), string languageCode = default(string), string note = default(string), bool? isReccuring = default(bool?), bool? taxIncluded = default(bool?), double? volumetricWeight = default(double?), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), string validationType = default(string), bool? isReadOnly = default(bool?), string priceId = default(string), Price price = default(Price), double? listPrice = default(double?), double? listPriceWithTax = default(double?), double? salePrice = default(double?), double? salePriceWithTax = default(double?), double? placedPrice = default(double?), double? placedPriceWithTax = default(double?), double? extendedPrice = default(double?), double? extendedPriceWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), IList<Discount> discounts = default(IList<Discount>), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public CartLineItem(string configuredGroupId = default(string), string productId = default(string), string catalogId = default(string), string categoryId = default(string), string sku = default(string), string productType = default(string), string name = default(string), int? quantity = default(int?), string fulfillmentCenterId = default(string), string fulfillmentCenterName = default(string), string fulfillmentLocationCode = default(string), string shipmentMethodCode = default(string), bool? requiredShipping = default(bool?), string thumbnailImageUrl = default(string), string imageUrl = default(string), bool? isGift = default(bool?), string currency = default(string), string languageCode = default(string), string note = default(string), bool? isReccuring = default(bool?), bool? taxIncluded = default(bool?), double? volumetricWeight = default(double?), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), string validationType = default(string), bool? isReadOnly = default(bool?), string priceId = default(string), Price price = default(Price), double? listPrice = default(double?), double? listPriceWithTax = default(double?), double? salePrice = default(double?), double? salePriceWithTax = default(double?), double? placedPrice = default(double?), double? placedPriceWithTax = default(double?), double? extendedPrice = default(double?), double? extendedPriceWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), IList<Discount> discounts = default(IList<Discount>), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
-            ConfiguredProductId = configuredProductId;
+            ConfiguredGroupId = configuredGroupId;
             ProductId = productId;
             CatalogId = catalogId;
             CategoryId = categoryId;
@@ -5866,8 +6018,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "configuredProductId")]
-        public string ConfiguredProductId { get; set; }
+        [JsonProperty(PropertyName = "configuredGroupId")]
+        public string ConfiguredGroupId { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6722,8 +6874,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the ShoppingCart class.
         /// </summary>
-        public ShoppingCart(string name = default(string), string storeId = default(string), string channelId = default(string), bool? isAnonymous = default(bool?), string customerId = default(string), string customerName = default(string), string organizationId = default(string), string currency = default(string), string languageCode = default(string), bool? taxIncluded = default(bool?), bool? isRecuring = default(bool?), string comment = default(string), string status = default(string), string purchaseOrderNumber = default(string), string weightUnit = default(string), double? weight = default(double?), string validationType = default(string), string type = default(string), double? volumetricWeight = default(double?), double? total = default(double?), double? subTotal = default(double?), double? subTotalWithTax = default(double?), double? subTotalDiscount = default(double?), double? subTotalDiscountWithTax = default(double?), double? shippingTotal = default(double?), double? shippingTotalWithTax = default(double?), double? shippingSubTotal = default(double?), double? shippingSubTotalWithTax = default(double?), double? shippingDiscountTotal = default(double?), double? shippingDiscountTotalWithTax = default(double?), double? paymentTotal = default(double?), double? paymentTotalWithTax = default(double?), double? paymentSubTotal = default(double?), double? paymentSubTotalWithTax = default(double?), double? paymentDiscountTotal = default(double?), double? paymentDiscountTotalWithTax = default(double?), double? handlingTotal = default(double?), double? handlingTotalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), double? feeTotal = default(double?), double? feeTotalWithTax = default(double?), IList<CartAddress> addresses = default(IList<CartAddress>), IList<CartLineItem> items = default(IList<CartLineItem>), IList<Payment> payments = default(IList<Payment>), IList<CartShipment> shipments = default(IList<CartShipment>), IList<string> coupons = default(IList<string>), string coupon = default(string), IList<Discount> discounts = default(IList<Discount>), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public ShoppingCart(IList<DemoCartConfiguredGroup> configuredGroups = default(IList<DemoCartConfiguredGroup>), string name = default(string), string storeId = default(string), string channelId = default(string), bool? isAnonymous = default(bool?), string customerId = default(string), string customerName = default(string), string organizationId = default(string), string currency = default(string), string languageCode = default(string), bool? taxIncluded = default(bool?), bool? isRecuring = default(bool?), string comment = default(string), string status = default(string), string purchaseOrderNumber = default(string), string weightUnit = default(string), double? weight = default(double?), string validationType = default(string), string type = default(string), double? volumetricWeight = default(double?), double? total = default(double?), double? subTotal = default(double?), double? subTotalWithTax = default(double?), double? subTotalDiscount = default(double?), double? subTotalDiscountWithTax = default(double?), double? shippingTotal = default(double?), double? shippingTotalWithTax = default(double?), double? shippingSubTotal = default(double?), double? shippingSubTotalWithTax = default(double?), double? shippingDiscountTotal = default(double?), double? shippingDiscountTotalWithTax = default(double?), double? paymentTotal = default(double?), double? paymentTotalWithTax = default(double?), double? paymentSubTotal = default(double?), double? paymentSubTotalWithTax = default(double?), double? paymentDiscountTotal = default(double?), double? paymentDiscountTotalWithTax = default(double?), double? handlingTotal = default(double?), double? handlingTotalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), double? feeTotal = default(double?), double? feeTotalWithTax = default(double?), IList<CartAddress> addresses = default(IList<CartAddress>), IList<CartLineItem> items = default(IList<CartLineItem>), IList<Payment> payments = default(IList<Payment>), IList<CartShipment> shipments = default(IList<CartShipment>), IList<string> coupons = default(IList<string>), string coupon = default(string), IList<Discount> discounts = default(IList<Discount>), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
+            ConfiguredGroups = configuredGroups;
             Name = name;
             StoreId = storeId;
             ChannelId = channelId;
@@ -6795,6 +6948,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "configuredGroups")]
+        public IList<DemoCartConfiguredGroup> ConfiguredGroups { get; set; }
 
         /// <summary>
         /// </summary>

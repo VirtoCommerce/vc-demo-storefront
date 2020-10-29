@@ -34,18 +34,19 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
         {
             EnsureCartExists();
 
-            var configureLineItem = Cart.ConfiguredItems.FirstOrDefault(x => x.ConfiguredLineItem?.ProductId.Equals(lineItemId, StringComparison.InvariantCulture) ?? false);
+            var configuredGroup = Cart.ConfiguredGroups?.FirstOrDefault(x => x.Id.Equals(lineItemId, StringComparison.InvariantCulture));
 
-            if (configureLineItem != null)
+            if (configuredGroup != null)
             {
-                var configurablePieces = Cart.Items.Where(x => x.ConfiguredProductId?.Equals(lineItemId, StringComparison.InvariantCulture) ?? false).ToArray();
+                var groupItems = Cart.Items.Where(x => !string.IsNullOrEmpty(x.ConfiguredGroupId) &&
+                       x.ConfiguredGroupId.Equals(configuredGroup.Id, StringComparison.InvariantCulture)).ToArray();
 
-                foreach (var configuirablePieceLineItem in configurablePieces)
+                foreach (var lineItem in groupItems)
                 {
-                    Cart.Items.Remove(configuirablePieceLineItem);
+                    Cart.Items.Remove(lineItem);
                 }
 
-                Cart.ConfiguredItems.Remove(configureLineItem);
+                Cart.ConfiguredGroups.Remove(configuredGroup);
             }
 
             return base.RemoveItemAsync(lineItemId);
@@ -55,18 +56,16 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
         {
             EnsureCartExists();
 
-            var configuredProduct = Cart.ConfiguredItems?.FirstOrDefault(x =>
-                x.ConfiguredLineItem?.ProductId.Equals(changeItemQty.LineItemId, StringComparison.InvariantCulture) ?? false);
+            var configuredGroup = Cart.ConfiguredGroups?.FirstOrDefault(x => x.Id.Equals(changeItemQty.LineItemId, StringComparison.InvariantCulture));
 
-            if (configuredProduct != null)
+            if (configuredGroup != null)
             {
-                foreach (var lineItem in Cart
-                    .Items
-                    .Where(x =>
-                        !string.IsNullOrEmpty(x.ConfiguredProductId) &&
-                        x.ConfiguredProductId.Equals(configuredProduct.ConfiguredLineItem.ProductId)
-                    )
-                )
+                configuredGroup.Quantity = changeItemQty.Quantity;
+
+                var groupItems = Cart.Items.Where(x => !string.IsNullOrEmpty(x.ConfiguredGroupId) &&
+                       x.ConfiguredGroupId.Equals(configuredGroup.Id, StringComparison.InvariantCulture)).ToArray();
+
+                foreach (var lineItem in groupItems)
                 {
                     lineItem.Quantity = changeItemQty.Quantity;
                 }
@@ -83,9 +82,9 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
             if (result.IsValid)
             {
-                var lineItem = addCartItem.Product.ToLineItem(Cart.Language, addCartItem.Quantity);                
+                var lineItem = addCartItem.Product.ToLineItem(Cart.Language, addCartItem.Quantity);
                 lineItem.Product = addCartItem.Product;
-                lineItem.ConfiguredProductId = addCartItem.ConfiguredProductId;
+                lineItem.ConfiguredGroupId = addCartItem.ConfiguredGroupId;
 
                 if (addCartItem.Price != null)
                 {
@@ -114,16 +113,28 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
             return result.IsValid;
         }
 
+        public override async Task ClearAsync()
+        {
+            await base.ClearAsync();
+            Cart.ConfiguredGroups.Clear();
+        }
+
         protected override async Task AddLineItemAsync(LineItem lineItem)
         {
-            if (!string.IsNullOrEmpty(lineItem.ConfiguredProductId))
+            var existingLineItem = Cart.Items.FirstOrDefault(li => li.ProductId.EqualsInvariant(lineItem.ProductId)
+                                                                && (li.ConfiguredGroupId?.EqualsInvariant(lineItem.ConfiguredGroupId) ?? true));
+
+            if (existingLineItem != null)
             {
-                lineItem.Id = null;
-                Cart.Items.Add(lineItem);
+                await ChangeItemQuantityAsync(existingLineItem, existingLineItem.Quantity + Math.Max(1, lineItem.Quantity));
+                await ChangeItemPriceAsync(existingLineItem, new ChangeCartItemPrice { LineItemId = existingLineItem.Id, NewPrice = lineItem.ListPrice.Amount });
+                existingLineItem.Comment = lineItem.Comment;
+                existingLineItem.DynamicProperties = lineItem.DynamicProperties;
             }
             else
             {
-                await base.AddLineItemAsync(lineItem);
+                lineItem.Id = null;
+                Cart.Items.Add(lineItem);
             }
         }
     }

@@ -8,7 +8,6 @@ using VirtoCommerce.Storefront.Model.Order;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using orderDto = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
-using storeDto = VirtoCommerce.Storefront.AutoRestClients.StoreModuleApi.Models;
 using paymentDto = VirtoCommerce.Storefront.AutoRestClients.PaymentModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
@@ -230,7 +229,8 @@ namespace VirtoCommerce.Storefront.Domain
                 CreatedBy = lineItemDto.CreatedBy,
                 CreatedDate = lineItemDto.CreatedDate,
                 ModifiedDate = lineItemDto.ModifiedDate,
-                ModifiedBy = lineItemDto.ModifiedBy
+                ModifiedBy = lineItemDto.ModifiedBy,
+                ConfiguredGropupId = lineItemDto.ConfiguredGroupId
             };
 
 
@@ -438,12 +438,10 @@ namespace VirtoCommerce.Storefront.Domain
                 PurchaseOrderNumber = order.PurchaseOrderNumber
             };
 
-
             if (order.Addresses != null)
             {
                 result.Addresses = order.Addresses.Select(ToAddress).ToList();
             }
-
 
             if (order.DynamicProperties != null)
             {
@@ -460,6 +458,11 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Items = order.Items.Select(i => ToOrderLineItem(i, availCurrencies, language)).ToList();
             }
 
+            if (!order.ConfiguredGroups.IsNullOrEmpty())
+            {
+                result.ConfiguredGroups = order.ConfiguredGroups.Select(x => x.ToConfiguredGroup(result)).ToList();
+            }
+
             if (order.Shipments != null)
             {
                 result.Shipments = order.Shipments.Select(s => ToOrderShipment(s, availCurrencies, language)).ToList();
@@ -469,10 +472,12 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 result.Discounts.AddRange(order.Discounts.Select(x => ToDiscount(x, new[] { currency }, language)));
             }
+
             if (order.TaxDetails != null)
             {
                 result.TaxDetails = order.TaxDetails.Select(td => ToTaxDetail(td, currency)).ToList();
             }
+
             result.DiscountAmount = new Money(order.DiscountAmount ?? 0, currency);
             result.DiscountTotal = new Money(order.DiscountTotal ?? 0, currency);
             result.DiscountTotalWithTax = new Money(order.DiscountTotalWithTax ?? 0, currency);
