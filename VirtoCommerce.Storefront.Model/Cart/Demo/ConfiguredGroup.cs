@@ -25,6 +25,8 @@ namespace VirtoCommerce.Storefront.Model.Cart.Demo
             SalePriceWithTax = new Money(currency);
             PlacedPrice = new Money(currency);
             PlacedPriceWithTax = new Money(currency);
+
+            Items = new List<LineItem>();
         }
 
         public string ProductId { get; set; }
@@ -40,7 +42,7 @@ namespace VirtoCommerce.Storefront.Model.Cart.Demo
         public string ModifiedBy { get; set; }
 
         [JsonRequired]
-        public virtual IList<LineItem> Items { get; set; } = new List<LineItem>();
+        public virtual IList<LineItem> Items { get; set; }
 
         [JsonRequired]
         public int Quantity { get; set; }

@@ -36,7 +36,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         {
             if (items.IsNullOrEmpty())
             {
-                throw new ArgumentException("Items should not be null or empty");
+                throw new ArgumentNullException(nameof(items));
             }
 
             EnsureCartExists();
@@ -60,12 +60,12 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
                 if (configuredGroup == null)
                 {
-                    configuredGroup = new Model.Cart.Demo.ConfiguredGroup(firstItem.Quantity, WorkContext.CurrentCurrency, configuredProductId);
+                    configuredGroup = new Model.Cart.Demo.ConfiguredGroup(firstItem.Quantity, currency, configuredProductId);
                     cart.ConfiguredGroups.Add(configuredGroup);
                 }
                 else
                 {
-                    configuredGroup.Quantity = configuredGroup.Quantity + Math.Max(1, firstItem.Quantity);
+                    configuredGroup.Quantity += Math.Max(1, firstItem.Quantity);
                 }
 
                 foreach (var item in items)

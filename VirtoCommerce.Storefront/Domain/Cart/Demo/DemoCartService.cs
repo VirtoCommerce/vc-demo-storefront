@@ -9,7 +9,6 @@ using VirtoCommerce.Storefront.AutoRestClients.CartModuleApi;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Cart;
-using VirtoCommerce.Storefront.Model.Cart.Demo;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Catalog.Services;
 using VirtoCommerce.Storefront.Model.Common;
@@ -45,19 +44,20 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
             _catalogService = catalogService;
         }
 
-        public override async Task<IPagedList<CustomerOrder>> SearchCartsAsync(CartSearchCriteria criteria)
+        public override async Task<IPagedList<ShoppingCart>> SearchCartsAsync(CartSearchCriteria criteria)
         {
             if (criteria == null)
             {
                 throw new ArgumentNullException(nameof(criteria));
             }
+
             var cacheKey = CacheKey.With(GetType(), "SearchCartsAsync", criteria.GetCacheKey());
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async cacheEntry =>
             {
                 cacheEntry.AddExpirationToken(CartCacheRegion.CreateCustomerChangeToken(criteria.Customer?.Id));
 
                 var resultDto = await _cartApi.SearchShoppingCartAsync(criteria.ToSearchCriteriaDto());
-                var result = new List<CustomerOrder>();
+                var result = new List<ShoppingCart>();
                 foreach (var cartDto in resultDto.Results)
                 {
                     var currency = _workContextAccessor.WorkContext.AllCurrencies.FirstOrDefault(x => x.Equals(cartDto.Currency));
@@ -66,17 +66,17 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
                     var cart = cartDto.ToShoppingCart(currency, language, user);
 
-                    await FillProductPartsOfGroups(cart, language, currency);
+                    await FillProductPartsOfGroupsAsync(cart);
 
                     result.Add(cart);
                 }
-                return new StaticPagedList<CustomerOrder>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalCount.Value);
+                return new StaticPagedList<ShoppingCart>(result, criteria.PageNumber, criteria.PageSize, resultDto.TotalCount.Value);
             });
         }
 
-        protected virtual async Task FillProductPartsOfGroups(CustomerOrder cart, Language language, Currency currency)
+        protected virtual async Task FillProductPartsOfGroupsAsync(ShoppingCart cart)
         {
-            if(cart.ConfiguredGroups.IsNullOrEmpty())
+            if (cart.ConfiguredGroups.IsNullOrEmpty())
             {
                 return;
             }
@@ -86,7 +86,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
             foreach (var group in cart.ConfiguredGroups)
             {
-                var product = groupProducts.FirstOrDefault(x=>x.Id == group.ProductId);
+                var product = groupProducts.FirstOrDefault(x => x.Id.Equals(group.ProductId, StringComparison.InvariantCulture));
                 group.Product = product;
 
                 var productParts = group.Items
