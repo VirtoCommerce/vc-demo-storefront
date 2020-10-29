@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -262,7 +263,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 return Unauthorized();
             }
 
-            var stream = await _orderApi.GetInvoicePdfAsync(order.Number);
+            Stream stream = await _orderApi.GetInvoicePdfAsync(order.Number);
             return File(stream, "application/pdf");
         }
 
