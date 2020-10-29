@@ -23,14 +23,18 @@ namespace VirtoCommerce.Storefront.Controllers.Api
     public class ApiOrderController : StorefrontControllerBase
     {
         private readonly IOrderModule _orderApi;
+        private readonly IDemoCustomerOrderService _orderService;
         private readonly IStoreService _storeService;
         private readonly IAuthorizationService _authorizationService;
         private readonly IPaymentSearchService _paymentSearchService;
 
-        public ApiOrderController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, IOrderModule orderApi, IStoreService storeService, IAuthorizationService authorizationService, IPaymentSearchService paymentSearchService)
+        public ApiOrderController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder,
+            IOrderModule orderApi, IDemoCustomerOrderService orderService, IStoreService storeService,
+            IAuthorizationService authorizationService, IPaymentSearchService paymentSearchService)
             : base(workContextAccessor, urlBuilder)
         {
             _orderApi = orderApi;
+            _orderService = orderService;
             _storeService = storeService;
             _authorizationService = authorizationService;
             _paymentSearchService = paymentSearchService;
@@ -77,10 +81,13 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 criteria.CustomerId = WorkContext.CurrentUser.Id;
             }
             var result = await _orderApi.SearchCustomerOrderAsync(criteria.ToSearchCriteriaDto());
+            var orders = result.Results.Select(x => x.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage)).ToArray();
+            await _orderService.LoadProductsAsync(orders);
+            _orderService.SelectConfiguredProductParts(orders);
 
             return new CustomerOrderSearchResult
             {
-                Results = result.Results.Select(x => x.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage)).ToArray(),
+                Results = orders,
                 TotalCount = result.TotalCount ?? default(int),
             };
         }
@@ -95,7 +102,10 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 return Unauthorized();
             }
-            return orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
+            var order = orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
+            await _orderService.LoadProductsAsync(order);
+            _orderService.SelectConfiguredProductParts(order);
+            return order;
         }
 
         // GET: storefrontapi/orders/{orderNumber}/newpaymentdata
