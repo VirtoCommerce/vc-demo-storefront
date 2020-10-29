@@ -18,7 +18,7 @@ using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.M
 namespace VirtoCommerce.Storefront.Domain
 {
 
-    public static partial class OrderConverter
+    public static partial class CartConverter
     {
         public static cartDto.ShoppingCartSearchCriteria ToSearchCriteriaDto(this CartSearchCriteria criteria)
         {
