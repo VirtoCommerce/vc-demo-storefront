@@ -115,8 +115,8 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
         protected override async Task AddLineItemAsync(LineItem lineItem)
         {
-            var existingLineItem = Cart.Items.FirstOrDefault(li => li.ProductId.Equals(lineItem.ProductId, StringComparison.InvariantCulture)
-                                                                && (li.ConfiguredGroupId?.Equals(lineItem.ConfiguredGroupId, StringComparison.InvariantCulture) ?? true));
+            var existingLineItem = Cart.Items.FirstOrDefault(li => li.ProductId.EqualsInvariant(lineItem.ProductId)
+                                                                && (li.ConfiguredGroupId?.EqualsInvariant(lineItem.ConfiguredGroupId) ?? true));
 
             if (existingLineItem != null)
             {
