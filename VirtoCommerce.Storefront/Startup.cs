@@ -64,7 +64,6 @@ using VirtoCommerce.Storefront.Model.Stores;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 using VirtoCommerce.Storefront.Model.Tax.Services;
 using VirtoCommerce.Storefront.Routing;
-using VirtoCommerce.Storefront.Telemetry;
 using VirtoCommerce.Tools;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
@@ -92,13 +91,21 @@ namespace VirtoCommerce.Storefront
 
             services.Configure<StorefrontOptions>(Configuration.GetSection("VirtoCommerce"));
 
-            services.Configure<ForwardedHeadersOptions>(options =>
+            if (string.Equals(
+                Environment.GetEnvironmentVariable("ASPNETCORE_FORWARDEDHEADERS_ENABLED"),
+                "true", StringComparison.OrdinalIgnoreCase))
             {
-                options.ForwardedHeaders =
-                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-            });
-
-            services.AddSingleton<ITelemetryInitializer, TelemetryHeadersInitializer>();
+                services.Configure<ForwardedHeadersOptions>(options =>
+                {
+                    options.ForwardedHeaders =
+                        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                    // Only loopback proxies are allowed by default.
+                    // Clear that restriction because forwarders are enabled by explicit 
+                    // configuration.
+                    options.KnownNetworks.Clear();
+                    options.KnownProxies.Clear();
+                });
+            }
             
             //The IHttpContextAccessor service is not registered by default
             //https://github.com/aspnet/Hosting/issues/793
