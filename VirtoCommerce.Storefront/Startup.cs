@@ -400,8 +400,8 @@ namespace VirtoCommerce.Storefront
             else
             {
                 app.UseExceptionHandler("/error/500");
-                app.UseHsts();
                 app.UseForwardedHeaders();
+                app.UseHsts();
             }
             // Do not write telemetry to debug output 
             TelemetryDebugWriter.IsTracingDisabled = true;
