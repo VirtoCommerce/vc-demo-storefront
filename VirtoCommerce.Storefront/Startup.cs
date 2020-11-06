@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -88,6 +89,12 @@ namespace VirtoCommerce.Storefront
             services.AddResponseCaching();
 
             services.Configure<StorefrontOptions>(Configuration.GetSection("VirtoCommerce"));
+
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
 
             //The IHttpContextAccessor service is not registered by default
             //https://github.com/aspnet/Hosting/issues/793
@@ -384,11 +391,13 @@ namespace VirtoCommerce.Storefront
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseForwardedHeaders();
             }
             else
             {
                 app.UseExceptionHandler("/error/500");
                 app.UseHsts();
+                app.UseForwardedHeaders();
             }
             // Do not write telemetry to debug output 
             TelemetryDebugWriter.IsTracingDisabled = true;
