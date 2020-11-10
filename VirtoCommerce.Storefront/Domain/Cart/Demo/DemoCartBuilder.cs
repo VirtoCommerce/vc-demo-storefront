@@ -131,7 +131,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
                 foreach (var item in group.Items)
                 {
-                    var newItem = (LineItem)item.Clone();
+                    var newItem = (LineItem) item.Clone();
                     newItem.ConfiguredGroupId = newGroup.Id;
                     var existingLineItem = cart.Items.FirstOrDefault(li => li.ProductId.EqualsInvariant(newItem.ProductId));
                     if (existingLineItem != null)
