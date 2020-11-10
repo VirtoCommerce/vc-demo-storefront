@@ -5,6 +5,7 @@ using FluentValidation;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Cart;
+using VirtoCommerce.Storefront.Model.Cart.Demo;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Cart.Validators;
 using VirtoCommerce.Storefront.Model.Common;
@@ -117,6 +118,27 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
         {
             await base.ClearAsync();
             Cart.ConfiguredGroups.Clear();
+        }
+
+        public override async Task MergeWithCartAsync(ShoppingCart cart)
+        {
+            EnsureCartExists();
+
+            foreach (var group in cart.ConfiguredGroups)
+            {
+                var newGroup = new ConfiguredGroup(group.Quantity, group.Currency, group.ProductId);
+                Cart.ConfiguredGroups.Add(newGroup);
+                foreach (var item in group.Items)
+                {
+                    var newItem = item.Clone() as LineItem;
+                    newItem.ConfiguredGroupId = newGroup.Id;
+                    var existingLineItem = cart.Items.FirstOrDefault(li => li.ProductId.EqualsInvariant(newItem.ProductId));
+                    cart.Items.Remove(existingLineItem);
+                    await AddLineItemAsync(newItem);
+                }
+            }
+
+            await base.MergeWithCartAsync(cart);
         }
 
         protected override async Task AddLineItemAsync(LineItem lineItem)
