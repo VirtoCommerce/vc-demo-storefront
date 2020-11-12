@@ -38,11 +38,8 @@ jobs:
     - name: Set variables
       if: ${{ github.event_name == 'workflow_dispatch' }}
       run: |
-        echo "Set PUBLISH_TO_DOCKER=false" 
-        echo "Set UPDATE_LATEST_TAG=false"
-      env:
-        PUBLISH_TO_DOCKER: "false"
-        UPDATE_LATEST_TAG: "false"
+        echo "PUBLISH_TO_DOCKER=false" >> $GITHUB_ENV
+        echo "UPDATE_LATEST_TAG=false" >> $GITHUB_ENV 
 
     - uses: actions/checkout@v2
       with:
