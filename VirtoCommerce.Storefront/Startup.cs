@@ -88,7 +88,7 @@ namespace VirtoCommerce.Storefront
             services.AddResponseCaching();
 
             services.Configure<StorefrontOptions>(Configuration.GetSection("VirtoCommerce"));
-
+            
             //The IHttpContextAccessor service is not registered by default
             //https://github.com/aspnet/Hosting/issues/793
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -384,10 +384,12 @@ namespace VirtoCommerce.Storefront
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseForwardedHeaders();
             }
             else
             {
                 app.UseExceptionHandler("/error/500");
+                app.UseForwardedHeaders();
                 app.UseHsts();
             }
             // Do not write telemetry to debug output 
