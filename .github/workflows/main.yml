@@ -34,11 +34,12 @@ jobs:
       UPDATE_LATEST_TAG: "true"
 
     steps:
+
     - name: Set variables
       if: ${{ github.event == 'workflow_dispatch' }}
-      env:
-        PUBLISH_TO_DOCKER: "false"
-        UPDATE_LATEST_TAG: "false"
+      run: |
+        echo "false" >> $PUBLISH_TO_DOCKER
+        echo "false" >> $UPDATE_LATEST_TAG
 
     - uses: actions/checkout@v2
       with:
