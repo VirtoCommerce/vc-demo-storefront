@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using VirtoCommerce.Storefront.Infrastructure.Swagger;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Cart.Demo
 {
+    [SwaggerSchemaId("CartConfiguredGroup")]
     public class ConfiguredGroup : Entity
     {
         public ConfiguredGroup(int quantity, Currency currency, string productId)
