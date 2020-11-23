@@ -1,0 +1,90 @@
+# v0.1
+name: VC image deployment
+on:
+  workflow_dispatch:
+    inputs:
+      baseImageName:
+        description: 'Base kustomize image name'
+        required: true
+      imageName:
+        description: 'Deploying image name'
+        required: true
+      artifactVersion: 
+        description: 'Full artifact build number'
+        required: true
+      appDescriptionRepo:
+        description: 'ArgoCd repository'
+        required: true
+        default: 'VirtoCommerce/vc-deploy-apps'
+      appDescriptionBranch:
+        description: 'ArgoCd branch'
+        required: true
+        default: 'master'
+
+
+jobs:
+  cd:
+    runs-on: ubuntu-latest
+    steps: 
+    
+    - name: Start deployment
+      uses: bobheadxi/deployments@master
+      id: deployment
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: Development
+        no_override: false
+
+    - name: Checkout VirtoCommerce/vc-deploy-apps
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.REPO_TOKEN }}
+        repository: "${{ github.event.inputs.appDescriptionRepo }}"
+        ref: "${{ github.event.inputs.appDescriptionBranch }}"
+
+    - name: Update deployment-cm
+      shell: pwsh
+      run: |
+
+        cd ${{ github.workspace }}
+        cd ./webstore-app/overlays/dev
+        kustomize edit set image docker.pkg.github.com/virtocommerce/vc-storefront/storefront=docker.pkg.github.com/$REPOSITORY/${github.event.inputs.imageName}:${{ github.event.inputs.artifactVersion }}
+
+    - name: Commit deployment-cm change
+      run: |
+         git config --global user.name "GitHub Actions"
+         git config user.email --global  "github.actions@virtoway.com"
+         git commit -am "Automated update ${{ github.repository }} to ${{ github.event.inputs.artifactVersion }}"
+         git push
+
+    - name: Wait for environment is up
+      shell: pwsh
+      timeout-minutes: 5
+      run: | 
+        do {
+          Start-Sleep -s 15
+          $statusBage = (Invoke-WebRequest -Uri "https://cd.govirto.com/api/badge?name=webstore-app-dev").Content
+          
+          $syncedAndHealthy = $statusBage.Contains('>Healthy<') -and $statusBage.Contains('>Synced<')
+          if (-not $syncedAndHealthy) {
+            Write-Host "Sync pending..."
+          }
+        }
+        while (-not $syncedAndHealthy)
+    - name: BUILD_STATE::successful
+      if: success()
+      run: echo "BUILD_STATE=successful" >> $GITHUB_ENV
+
+    - name: BUILD_STATE::failed
+      if: failure()
+      run: echo "BUILD_STATE=failed"  >> $GITHUB_ENV
+
+    - name: Update GitHub deployment status
+      uses: bobheadxi/deployments@master
+      if: always()
+      with:
+        step: finish
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: ${{ job.status }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
