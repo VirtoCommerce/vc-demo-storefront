@@ -125,3 +125,11 @@ jobs:
           docker_token: ${{ secrets.DOCKER_TOKEN }}
           docker_hub: ${{ env.PUBLISH_TO_DOCKER }}
           update_latest: ${{ env.UPDATE_LATEST_TAG }}
+
+    - name: Invoke VC image deployment workflow
+      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master')}}
+      uses: benc-uk/workflow-dispatch@v1
+      with:
+        workflow: VC image deployment
+        token: ${{ secrets.REPO_TOKEN }}
+        inputs: '{ "baseImageName": "docker.pkg.github.com/virtocommerce/vc-storefront/storefront", "imageName": "odt-storefront", "artifactVersion": "${{ steps.image.outputs.taggedVersion }}"}'
