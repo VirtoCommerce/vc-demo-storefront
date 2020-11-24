@@ -54,10 +54,10 @@ jobs:
     - name: Update kustomize
       shell: pwsh
       run: |
-
+        $REPOSITORY = "docker.pkg.github.com/$('${{ github.repository }}'.ToLower())"
         cd ${{ github.workspace }}
         cd ./webstore-app/overlays/dev
-        kustomize edit set image ${{ github.event.inputs.baseImageName }}=docker.pkg.github.com/${{ github.repository }}/${{ github.event.inputs.imageName }}:${{ github.event.inputs.artifactVersion }}
+        kustomize edit set image ${{ github.event.inputs.baseImageName }}=$REPOSITORY/${{ github.event.inputs.imageName }}:${{ github.event.inputs.artifactVersion }}
 
     - name: Commit kustomize change
       run: |
