@@ -132,4 +132,4 @@ jobs:
       with:
         workflow: VC image deployment
         token: ${{ secrets.REPO_TOKEN }}
-        inputs: '{ "baseImageName": "docker.pkg.github.com/virtocommerce/vc-storefront/storefront", "imageName": "odt-storefront", "artifactVersion": "${{ steps.image.outputs.taggedVersion }}"}'
+        inputs: '{ "baseImageName": "docker.pkg.github.com/virtocommerce/vc-storefront/storefront", "imageName": "demo-storefront", "artifactVersion": "${{ steps.image.outputs.taggedVersion }}"}'
