@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using VirtoCommerce.Storefront.Domain.Security;
+using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Filters
 {
@@ -32,13 +33,13 @@ namespace VirtoCommerce.Storefront.Filters
             }
 
             // To avoid an infinite redirect to the login action when no store theme and "Allow anonymous user" of the store is disabled
-            var isItNoThemeAction = context.RouteData.Values.TryGetValue("controller", out var controller)
+            var isNoThemeAction = context.RouteData.Values.TryGetValue("controller", out var controller)
                 && context.RouteData.Values.TryGetValue("action", out var action)
-                && (controller as string).Equals("Common", StringComparison.InvariantCultureIgnoreCase)
-                && (action as string).Equals("NoTheme", StringComparison.InvariantCultureIgnoreCase);
+                && ((string)controller).EqualsInvariant("Common")
+                && ((string)action).EqualsInvariant("NoTheme");
 
             // Don not call filter for  ReExecute requests (such as status code pages) and skips all paths marked as AllowAnonymous attribute
-            if (context.HttpContext.Features.Get<IStatusCodeReExecuteFeature>() != null || context.Filters.Any(x => x is IAllowAnonymousFilter) || isItNoThemeAction)
+            if (context.HttpContext.Features.Get<IStatusCodeReExecuteFeature>() != null || context.Filters.Any(x => x is IAllowAnonymousFilter) || isNoThemeAction)
             {
                 return;
             }
