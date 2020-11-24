@@ -28,7 +28,7 @@ jobs:
     steps: 
     
     - name: Show inputs
-    - run: |
+      run: |
         echo ${{ github.event.inputs.baseImageName }}
         echo ${{ github.event.inputs.imageName }}
         echo ${{ github.event.inputs.artifactVersion }}
