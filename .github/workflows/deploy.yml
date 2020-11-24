@@ -43,7 +43,7 @@ jobs:
         repository: "${{ github.event.inputs.appDescriptionRepo }}"
         ref: "${{ github.event.inputs.appDescriptionBranch }}"
 
-    - name: Update deployment-cm
+    - name: Update kustomize
       shell: pwsh
       run: |
 
@@ -51,7 +51,7 @@ jobs:
         cd ./webstore-app/overlays/dev
         kustomize edit set image docker.pkg.github.com/virtocommerce/vc-storefront/storefront=docker.pkg.github.com/$REPOSITORY/${github.event.inputs.imageName}:${{ github.event.inputs.artifactVersion }}
 
-    - name: Commit deployment-cm change
+    - name: Commit kustomize change
       run: |
          git config --global user.name "GitHub Actions"
          git config user.email --global  "github.actions@virtoway.com"
