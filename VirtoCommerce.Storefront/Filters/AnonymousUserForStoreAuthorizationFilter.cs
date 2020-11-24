@@ -31,8 +31,12 @@ namespace VirtoCommerce.Storefront.Filters
                 throw new ArgumentNullException(nameof(context));
             }
 
+            var isItNoThemeAction = context.RouteData.Values.TryGetValue("controller", out var controller)
+                && context.RouteData.Values.TryGetValue("action", out var action)
+                && controller as string == "Common" && action as string == "NoTheme";
+
             // Don not call filter for  ReExecute requests (such as status code pages) and skips all paths marked as AllowAnonymous attribute
-            if (context.HttpContext.Features.Get<IStatusCodeReExecuteFeature>() != null || context.Filters.Any(x => x is IAllowAnonymousFilter))
+            if (context.HttpContext.Features.Get<IStatusCodeReExecuteFeature>() != null || context.Filters.Any(x => x is IAllowAnonymousFilter) || isItNoThemeAction)
             {
                 return;
             }
