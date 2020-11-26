@@ -27,14 +27,6 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
     
-    - name: Show inputs
-      run: |
-        echo ${{ github.event.inputs.baseImageName }}
-        echo ${{ github.event.inputs.imageName }}
-        echo ${{ github.event.inputs.artifactVersion }}
-        echo ${{ github.event.inputs.appDescriptionRepo }}
-        echo ${{ github.event.inputs.appDescriptionBranch }}
-
     - name: Start deployment
       uses: bobheadxi/deployments@master
       id: deployment
@@ -44,7 +36,7 @@ jobs:
         env: Development
         no_override: false
 
-    - name: Checkout VirtoCommerce/vc-deploy-apps
+    - name: Checkout ArgoCD repository
       uses: actions/checkout@v2
       with:
         token: ${{ secrets.REPO_TOKEN }}
@@ -60,11 +52,19 @@ jobs:
         kustomize edit set image ${{ github.event.inputs.baseImageName }}=$REPOSITORY/${{ github.event.inputs.imageName }}:${{ github.event.inputs.artifactVersion }}
 
     - name: Commit kustomize change
+      shell: pwsh
       run: |
-         git config --global user.name "GitHub Actions"
-         git config user.email --global  "github.actions@virtoway.com"
-         git commit -am "Automated update ${{ github.repository }} to ${{ github.event.inputs.artifactVersion }}"
-         git push
+        if(git status --porcelain |Where {$_ -notmatch '^\?\?'}) # uncommitted changes exist
+        {
+          git config --global user.name 'GitHub Actions'
+          git config user.email --global  'github.actions@virtoway.com'
+          git commit -am 'Automated update ${{ github.repository }} to ${{ github.event.inputs.artifactVersion }}'
+          git push
+        }
+        else 
+        {
+          Write-Output 'Nothing to commit, working tree clean'
+        }
 
     - name: Wait for environment is up
       shell: pwsh

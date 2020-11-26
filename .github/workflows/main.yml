@@ -127,7 +127,7 @@ jobs:
           update_latest: ${{ env.UPDATE_LATEST_TAG }}
 
     - name: Invoke VC image deployment workflow
-      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master')}}
+      if: ${{ github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master')}}
       uses: benc-uk/workflow-dispatch@v1
       with:
         workflow: VC image deployment
