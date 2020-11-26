@@ -24,6 +24,7 @@
   <ItemGroup>
     <Compile Remove="wwwroot\cms-content\**" />
     <Content Remove="wwwroot\cms-content\**" />
+    <Content Remove="wwwroot\swagger\index.html" />
     <Content Update="wwwroot\cms-content\**" CopyToPublishDirectory="Never" />
   </ItemGroup>
 
@@ -31,6 +32,10 @@
     <Content Include="IISUrlRewrite.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\swagger\index.html" />
   </ItemGroup>
 
   <ItemGroup>
