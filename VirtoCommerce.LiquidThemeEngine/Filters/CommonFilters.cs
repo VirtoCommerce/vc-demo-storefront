@@ -24,17 +24,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
     public static partial class CommonFilters
     {
         private static readonly string[] _poweredLinks = {
-            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">.NET ecommerce platform</a> by Virto",
-            "<a href=\"http://virtocommerce.com/shopping-cart\" rel=\"nofollow\" target=\"_blank\">Shopping Cart</a> by Virto",
-            "<a href=\"http://virtocommerce.com/shopping-cart\" rel=\"nofollow\" target=\"_blank\">.NET Shopping Cart</a> by Virto",
-            "<a href=\"http://virtocommerce.com/shopping-cart\" rel=\"nofollow\" target=\"_blank\">ASP.NET Shopping Cart</a> by Virto",
-            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">.NET ecommerce</a> by Virto",
-            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">.NET ecommerce framework</a> by Virto",
-            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">ASP.NET ecommerce</a> by Virto Commerce",
-            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">ASP.NET ecommerce platform</a> by Virto",
-            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">ASP.NET ecommerce framework</a> by Virto",
-            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">Enterprise ecommerce</a> by Virto",
-            "<a href=\"http://virtocommerce.com\" rel=\"nofollow\" target=\"_blank\">Enterprise ecommerce platform</a> by Virto",
+            "<a href=\"https://virtocommerce.com/b2b-ecommerce-platform\" target=\"_blank\">B2B ecommerce platform</a> by Virto Commerce",
         };
 
         private static readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings
@@ -67,10 +57,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return result;
         }
 
-        public static string PoweredBy(string signature)
+        public static string PoweredBy()
         {
-            var hashCode = (uint)signature.GetHashCode();
-            return _poweredLinks[hashCode % _poweredLinks.Length];
+            return _poweredLinks.FirstOrDefault();
         }
 
         public static string Render(TemplateContext context, string input)
