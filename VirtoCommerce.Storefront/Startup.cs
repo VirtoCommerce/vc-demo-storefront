@@ -99,7 +99,9 @@ namespace VirtoCommerce.Storefront
             services.AddSingleton<IStoreService, StoreService>();
             services.AddSingleton<ICurrencyService, CurrencyService>();
             services.AddSingleton<ISlugRouteService, SlugRouteService>();
-            services.AddSingleton<IMemberService, DemoMemberService>();
+            services.AddSingleton<DemoMemberService>();
+            services.AddSingleton<IMemberService>(x => x.GetRequiredService<DemoMemberService>());
+            services.AddSingleton<IDemoMemberService>(x => x.GetRequiredService<DemoMemberService>());
             services.AddSingleton<DemoCustomerOrderService>();
             services.AddSingleton<ICustomerOrderService>(x => x.GetRequiredService<DemoCustomerOrderService>());
             services.AddSingleton<IDemoCustomerOrderService>(x => x.GetRequiredService<DemoCustomerOrderService>());
