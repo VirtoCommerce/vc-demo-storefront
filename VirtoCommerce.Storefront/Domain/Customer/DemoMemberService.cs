@@ -4,13 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Rest;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.DemoCustomerSegmentsModuleModuleApi;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model.Caching;
-using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Customer.Services;
@@ -36,10 +34,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public async Task<IDictionary<string, object>> GetMemberIndexByIdAsync(string memberId)
         {
-            if (memberId == null)
-            {
-                throw new ArgumentNullException(nameof(memberId));
-            }
+            ValidateParameters(memberId);
 
             var cacheKey = CacheKey.With(GetType(), "GetMemberIndexByIdAsync", memberId);
             var result = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
@@ -55,19 +50,21 @@ namespace VirtoCommerce.Storefront.Domain
 
         public override async Task<Contact> GetContactByIdAsync(string contactId)
         {
-            if (contactId == null)
-            {
-                throw new ArgumentNullException(nameof(contactId));
-            }
-
             var result = await base.GetContactByIdAsync(contactId);
             var indexDocument = await GetMemberIndexByIdAsync(contactId);
             if (indexDocument != null)
             {
                 var groupsField = indexDocument["groups"];
                 // This conversion is required because returned IDictionary contains deserialized arrays as JArrays
-                var groups = groupsField is JArray groupsArray ? groupsArray.ToObject<string[]>() :
-                    groupsField != null ? new[] { groupsField as string } : Array.Empty<string>();
+                string[] groups;
+                if (groupsField is JArray groupsArray)
+                {
+                    groups = groupsArray.ToObject<string[]>();
+                }
+                else
+                {
+                    groups = groupsField != null ? new[] { groupsField as string } : Array.Empty<string>();
+                }
 
                 result.UserGroups = result.UserGroups.Concat(groups).Distinct().ToArray();
             }
@@ -94,6 +91,14 @@ namespace VirtoCommerce.Storefront.Domain
 
             //Invalidate cache
             CustomerCacheRegion.ExpireMember(contactId);
+        }
+
+        private static void ValidateParameters(string memberId)
+        {
+            if (memberId == null)
+            {
+                throw new ArgumentNullException(nameof(memberId));
+            }
         }
     }
 }
