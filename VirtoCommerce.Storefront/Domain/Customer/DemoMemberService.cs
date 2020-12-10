@@ -54,7 +54,7 @@ namespace VirtoCommerce.Storefront.Domain
             var indexDocument = await GetMemberIndexByIdAsync(contactId);
             if (indexDocument != null)
             {
-                var groupsField = indexDocument["groups"];
+                indexDocument.TryGetValue("groups", out var groupsField);
                 // This conversion is required because returned IDictionary contains deserialized arrays as JArrays
                 string[] groups;
                 if (groupsField is JArray groupsArray)
