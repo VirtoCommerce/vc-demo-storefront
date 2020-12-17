@@ -109,6 +109,22 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             return input.Trim();
         }
 
+        /// <summary>
+        /// Remove leading symbols from a string.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="symbols"></param>
+        /// <returns></returns>
+        public static string StripStart(string input, string symbols)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+
+            return input.TrimStart(symbols.ToCharArray());
+        }
+
         public static string Format(object input, string format)
         {
             if (input == null)
