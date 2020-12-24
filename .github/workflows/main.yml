@@ -1,4 +1,4 @@
-# v1.1.1.vc-demo-storefront
+# v1.1.2.vc-demo-storefront
 name: Storefront CI
 
 # Controls when the action will run. Triggers the workflow on push or pull request
@@ -41,6 +41,16 @@ jobs:
       run: |
         echo "PUBLISH_TO_DOCKER=false" >> $GITHUB_ENV
         echo "UPDATE_LATEST_TAG=false" >> $GITHUB_ENV 
+
+    - name: Set up JDK 11 for dotnet-sonarscanner #Sonar stop accepting Java versions less than 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.11
+
+    - name: Set up .net Core 3.1.x for vc-build #GitHib Actions migrates to .net Core 5.x. To vc-build work properly need to manually install .net Core 3.1.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
 
     - uses: actions/checkout@v2
       with:

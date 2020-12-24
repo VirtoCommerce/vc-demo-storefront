@@ -16,6 +16,7 @@ using VirtoCommerce.Storefront.AutoRestClients.CatalogModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.ContentModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi;
+using VirtoCommerce.Storefront.AutoRestClients.DemoCustomerSegmentsModuleModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.DynamicAssociationsModuleModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.InventoryModuleApi;
 using VirtoCommerce.Storefront.AutoRestClients.MarketingModuleApi;
@@ -120,6 +121,8 @@ namespace VirtoCommerce.Storefront.DependencyInjection
             services.AddSingleton<INotifications>(sp => new Notifications(sp.GetRequiredService<NotificationsModuleClient>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new CustomerModuleClient(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<ICustomerModule>(sp => new CustomerModule(sp.GetRequiredService<CustomerModuleClient>()));
+            services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new DemoCustomerSegmentsModuleModuleClient(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
+            services.AddSingleton<IDemoSearch>(sp => new DemoSearch(sp.GetRequiredService<DemoCustomerSegmentsModuleModuleClient>()));
             services.AddAutoRestClient((credentials, httpClient, disposeHttpClient, baseUri) => new OrdersModuleClient(credentials, httpClient, disposeHttpClient) { BaseUri = baseUri });
             services.AddSingleton<IOrderModule>(sp => new OrderModule(sp.GetRequiredService<OrdersModuleClient>()));
             services.AddSingleton<IOrderModulePayments>(sp => new OrderModulePayments(sp.GetRequiredService<OrdersModuleClient>()));
