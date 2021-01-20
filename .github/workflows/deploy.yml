@@ -15,11 +15,11 @@ on:
       appDescriptionRepo:
         description: 'ArgoCd repository'
         required: true
-        default: 'VirtoCommerce/vc-deploy-apps'
+        default: 'VirtoCommerce/vc-webstore-deploy'
       appDescriptionBranch:
         description: 'ArgoCd branch'
         required: true
-        default: 'master'
+        default: 'develop'
 
 
 jobs:
@@ -48,7 +48,7 @@ jobs:
       run: |
         $REPOSITORY = "docker.pkg.github.com/$('${{ github.repository }}'.ToLower())"
         cd ${{ github.workspace }}
-        cd ./webstore-app/overlays/dev
+        cd ./webstore-app/resources
         kustomize edit set image ${{ github.event.inputs.baseImageName }}=$REPOSITORY/${{ github.event.inputs.imageName }}:${{ github.event.inputs.artifactVersion }}
 
     - name: Commit kustomize change
