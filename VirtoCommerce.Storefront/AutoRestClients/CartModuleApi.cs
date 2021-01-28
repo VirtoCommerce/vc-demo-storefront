@@ -4122,7 +4122,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// </summary>
         /// <param name="valueType">Possible values include: 'ShortText',
         /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean',
-        /// 'SecureString', 'Json'</param>
+        /// 'SecureString', 'Json', 'PositiveInteger'</param>
         public ObjectSettingEntry(bool? itHasValues = default(bool?), string objectId = default(string), string objectType = default(string), object value = default(object), bool? restartRequired = default(bool?), string moduleId = default(string), string groupName = default(string), string name = default(string), bool? isHidden = default(bool?), string valueType = default(string), IList<object> allowedValues = default(IList<object>), object defaultValue = default(object), bool? isDictionary = default(bool?))
         {
             ItHasValues = itHasValues;
@@ -4193,7 +4193,8 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
 
         /// <summary>
         /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Integer', 'Decimal', 'DateTime', 'Boolean', 'SecureString', 'Json'
+        /// 'Integer', 'Decimal', 'DateTime', 'Boolean', 'SecureString',
+        /// 'Json', 'PositiveInteger'
         /// </summary>
         [JsonProperty(PropertyName = "valueType")]
         public string ValueType { get; set; }
@@ -4695,9 +4696,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// <summary>
         /// Initializes a new instance of the DemoCartConfiguredGroup class.
         /// </summary>
-        public DemoCartConfiguredGroup(string productId = default(string), IList<string> itemIds = default(IList<string>), int? quantity = default(int?), string currency = default(string), double? extendedPrice = default(double?), double? extendedPriceWithTax = default(double?), double? listPrice = default(double?), double? listPriceWithTax = default(double?), double? salePrice = default(double?), double? salePriceWithTax = default(double?), double? placedPrice = default(double?), double? placedPriceWithTax = default(double?), double? taxTotal = default(double?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public DemoCartConfiguredGroup(string productId = default(string), string name = default(string), string imageUrl = default(string), IList<string> itemIds = default(IList<string>), int? quantity = default(int?), string currency = default(string), double? extendedPrice = default(double?), double? extendedPriceWithTax = default(double?), double? listPrice = default(double?), double? listPriceWithTax = default(double?), double? salePrice = default(double?), double? salePriceWithTax = default(double?), double? placedPrice = default(double?), double? placedPriceWithTax = default(double?), double? taxTotal = default(double?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             ProductId = productId;
+            Name = name;
+            ImageUrl = imageUrl;
             ItemIds = itemIds;
             Quantity = quantity;
             Currency = currency;
@@ -4727,6 +4730,16 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CartModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "productId")]
         public string ProductId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "imageUrl")]
+        public string ImageUrl { get; set; }
 
         /// <summary>
         /// </summary>
