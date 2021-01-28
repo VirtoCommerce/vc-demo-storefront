@@ -61,7 +61,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 if (configuredGroup == null)
                 {
                     var configuredProduct = (await _catalogService.GetProductsAsync(new string[] { configuredProductId }, Model.Catalog.ItemResponseGroup.ItemSmall)).FirstOrDefault();
-                    configuredGroup = new Model.Cart.Demo.ConfiguredGroup(firstItem.Quantity, currency, configuredProductId, configuredProduct?.Name, configuredProduct?.PrimaryImage?.Url);
+                    configuredGroup = new Model.Cart.Demo.ConfiguredGroup(firstItem.Quantity, currency, configuredProductId)
+                    {
+                        Name = configuredProduct?.Name ?? "",
+                        ImageUrl = configuredProduct?.PrimaryImage?.Url
+                    };
                     cart.ConfiguredGroups.Add(configuredGroup);
                 }
                 else
