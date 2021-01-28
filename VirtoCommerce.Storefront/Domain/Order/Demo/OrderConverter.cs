@@ -20,6 +20,8 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 Id = group.Id ?? Guid.NewGuid().ToString("N"),
                 ProductId = group.ProductId,
+                Name = group.Name,
+                ImageUrl = group.ImageUrl,
                 ItemIds = group.Items.Select(x => x.Id).ToList(),
                 CreatedBy = group.CreatedBy,
                 CreatedDate = group.CreatedDate,
@@ -41,7 +43,9 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var result = new ConfiguredGroup(group.Quantity ?? 0, order.Currency, group.ProductId)
             {
-                Id = group.Id,                
+                Id = group.Id,
+                Name = group.Name,
+                ImageUrl = group.ImageUrl,
                 CreatedBy = group.CreatedBy,
                 CreatedDate = group.CreatedDate ?? DateTime.UtcNow,
                 ModifiedBy = group.ModifiedBy,

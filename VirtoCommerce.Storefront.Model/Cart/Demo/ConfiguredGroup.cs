@@ -10,6 +10,12 @@ namespace VirtoCommerce.Storefront.Model.Cart.Demo
     [SwaggerSchemaId("CartConfiguredGroup")]
     public class ConfiguredGroup : Entity
     {
+        public ConfiguredGroup(int quantity, Currency currency, string productId, string name, string imageUrl) : this(quantity, currency, productId)
+        {
+            Name = name;
+            ImageUrl = imageUrl;
+        }
+
         public ConfiguredGroup(int quantity, Currency currency, string productId)
         {
             Id = Guid.NewGuid().ToString("N");
@@ -32,6 +38,10 @@ namespace VirtoCommerce.Storefront.Model.Cart.Demo
         }
 
         public string ProductId { get; set; }
+
+        public string Name { get; set; }
+
+        public string ImageUrl { get; set; }
 
         public Product Product { get; set; }
 
