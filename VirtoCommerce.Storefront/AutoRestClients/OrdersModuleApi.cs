@@ -2277,7 +2277,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Stream>> GetInvoicePdfWithHttpMessagesAsync(string orderNumber, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<string>> GetInvoicePdfWithHttpMessagesAsync(string orderNumber, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (orderNumber == null)
             {
@@ -2332,7 +2332,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
                 ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
             }
             cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             if (_shouldTrace)
             {
                 ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
@@ -2365,13 +2365,26 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<Stream>();
+            var _result = new HttpOperationResponse<string>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
             if ((int)_statusCode == 200)
             {
-                _result.Body = await _httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<string>(_responseContent, Client.DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
             }
             if (_shouldTrace)
             {
@@ -2665,7 +2678,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
@@ -2989,7 +3001,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<Stream>> GetInvoicePdfWithHttpMessagesAsync(string orderNumber, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<string>> GetInvoicePdfWithHttpMessagesAsync(string orderNumber, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='id'>
         /// </param>
         /// <param name='customHeaders'>
@@ -3039,7 +3051,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
@@ -3559,7 +3570,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
             /// </param>
             /// <param name='orderNumber'>
             /// </param>
-            public static Stream GetInvoicePdf(this IOrderModule operations, string orderNumber)
+            public static string GetInvoicePdf(this IOrderModule operations, string orderNumber)
             {
                 return operations.GetInvoicePdfAsync(orderNumber).GetAwaiter().GetResult();
             }
@@ -3572,7 +3583,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Stream> GetInvoicePdfAsync(this IOrderModule operations, string orderNumber, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<string> GetInvoicePdfAsync(this IOrderModule operations, string orderNumber, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetInvoicePdfWithHttpMessagesAsync(orderNumber, null, cancellationToken).ConfigureAwait(false))
                 {
