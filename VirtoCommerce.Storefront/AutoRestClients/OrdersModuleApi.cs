@@ -2665,6 +2665,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
@@ -2988,7 +2989,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<string>> GetInvoicePdfWithHttpMessagesAsync(string orderNumber, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Stream>> GetInvoicePdfWithHttpMessagesAsync(string orderNumber, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='id'>
         /// </param>
         /// <param name='customHeaders'>
@@ -3038,6 +3039,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
@@ -3557,7 +3559,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
             /// </param>
             /// <param name='orderNumber'>
             /// </param>
-            public static string GetInvoicePdf(this IOrderModule operations, string orderNumber)
+            public static Stream GetInvoicePdf(this IOrderModule operations, string orderNumber)
             {
                 return operations.GetInvoicePdfAsync(orderNumber).GetAwaiter().GetResult();
             }
@@ -3570,7 +3572,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<string> GetInvoicePdfAsync(this IOrderModule operations, string orderNumber, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Stream> GetInvoicePdfAsync(this IOrderModule operations, string orderNumber, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetInvoicePdfWithHttpMessagesAsync(orderNumber, null, cancellationToken).ConfigureAwait(false))
                 {
