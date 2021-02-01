@@ -5,6 +5,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
     public class ProductTotal
     {
         public Money Total { get; set; }
+        public Money TotalWithTax { get; set; }
 
         public Money SubTotal { get; set; }
 

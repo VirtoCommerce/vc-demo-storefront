@@ -81,7 +81,8 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         DiscountTotalWithTax = new Money(Math.Round(discountTotalWithTax, 2, MidpointRounding.AwayFromZero), currency),
                         TaxTotal = new Money(Math.Round(taxTotal, 2, MidpointRounding.AwayFromZero), currency) 
                     };
-                    productTotal.Total = new Money(productTotal.SubTotal.Amount + productTotal.TaxTotal.Amount - productTotal.DiscountTotal.Amount, currency);
+                    productTotal.Total = new Money(productTotal.SubTotal.Amount - productTotal.DiscountTotal.Amount, currency);
+                    productTotal.TotalWithTax = new Money(productTotal.Total.Amount + productTotal.TaxTotal.Amount, currency);
                     return Ok(productTotal);
                 }
             }
