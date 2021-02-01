@@ -49,33 +49,41 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var cartBuilder = await LoadOrCreateCartAsync();
                 var cart = _cartBuilder.Cart;
                 var currency = WorkContext.CurrentCurrency;
-
+             
                 var firstItem = items.First();
 
                 var configuredProductId = firstItem.ConfiguredProductId;
 
-                var configuredGroup = cart.ConfiguredGroups?.FirstOrDefault(x => (x.ProductId == configuredProductId)
+                // case with the configured product adding
+                if(configuredProductId != null)
+                {                   
+                    var configuredGroup = cart.ConfiguredGroups?.FirstOrDefault(x => (x.ProductId == configuredProductId)
                                                             && x.Items.OrderBy(x => x.ProductId).Select(x => x.ProductId).SequenceEqual(items.OrderBy(i => i.ProductId).Select(i => i.ProductId).ToArray())
                                       );
 
-                if (configuredGroup == null)
-                {
-                    var configuredProduct = (await _catalogService.GetProductsAsync(new string[] { configuredProductId }, Model.Catalog.ItemResponseGroup.ItemSmall)).FirstOrDefault();
-                    configuredGroup = new Model.Cart.Demo.ConfiguredGroup(firstItem.Quantity, currency, configuredProductId)
+                    if (configuredGroup == null)
                     {
-                        Name = configuredProduct?.Name ?? "",
-                        ImageUrl = configuredProduct?.PrimaryImage?.Url
-                    };
-                    cart.ConfiguredGroups.Add(configuredGroup);
-                }
-                else
-                {
-                    configuredGroup.Quantity += Math.Max(1, firstItem.Quantity);
-                }
+                        var configuredProduct = (await _catalogService.GetProductsAsync(new string[] { configuredProductId }, Model.Catalog.ItemResponseGroup.ItemSmall)).FirstOrDefault();
+                        configuredGroup = new Model.Cart.Demo.ConfiguredGroup(firstItem.Quantity, currency, configuredProductId)
+                        {
+                            Name = configuredProduct?.Name ?? "",
+                            ImageUrl = configuredProduct?.PrimaryImage?.Url
+                        };
+                        cart.ConfiguredGroups.Add(configuredGroup);
+                    }
+                    else
+                    {
+                        configuredGroup.Quantity += Math.Max(1, firstItem.Quantity);
+                    }
 
+                    foreach (var item in items)
+                    {
+                        item.ConfiguredGroupId = configuredGroup.Id;
+                    }
+                }
+                
                 foreach (var item in items)
-                {
-                    item.ConfiguredGroupId = configuredGroup?.Id;
+                {                    
                     item.Product = products.First(x => x.Id == item.ProductId);
                     await cartBuilder.AddItemAsync(item);
                 }
