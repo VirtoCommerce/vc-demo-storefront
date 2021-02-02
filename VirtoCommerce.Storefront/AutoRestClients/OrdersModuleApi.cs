@@ -3574,10 +3574,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
             /// </param>
             public static async Task<Stream> GetInvoicePdfAsync(this IOrderModule operations, string orderNumber, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetInvoicePdfWithHttpMessagesAsync(orderNumber, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
+                var _result = await operations.GetInvoicePdfWithHttpMessagesAsync(orderNumber, null, cancellationToken).ConfigureAwait(false);
+                _result.Request.Dispose();
+                return _result.Body;                
             }
 
             /// <param name='operations'>
