@@ -10,7 +10,7 @@ namespace VirtoCommerce.Storefront.Domain
     {
         public static ProductPart ToProductPart(this demoCatalogDto.DemoProductPart productPartDto, string currentLanguage)
         {
-            var result = new ProductPart()
+            var result = new ProductPart
             {
                 Id = productPartDto.Id,
                 Name = productPartDto.Name,

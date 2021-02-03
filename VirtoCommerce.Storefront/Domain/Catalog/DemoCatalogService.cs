@@ -25,6 +25,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IDemoCatalog _demoCatalogApi;
         private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly IApiChangesWatcher _apiChangesWatcher;
         public DemoCatalogService(IWorkContextAccessor workContextAccessor,
             ICatalogModuleCategories categoriesApi, ICatalogModuleProducts productsApi,
             ICatalogModuleAssociations associationsApi, ICatalogModuleIndexedSearch searchApi,
@@ -42,6 +43,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             _memoryCache = memoryCache;
             _demoCatalogApi = demoCatalogApi;
             _workContextAccessor = workContextAccessor;
+            _apiChangesWatcher = changesWatcher;
         }
 
         protected override async Task LoadProductDependencies(List<Product> products, ItemResponseGroup responseGroup, WorkContext workContext)
@@ -66,16 +68,18 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             var searchResult = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
-                var searchPartsResultDto = await _demoCatalogApi.SearchAsync(new DemoProductPartSearchCriteria { ConfiguredProductId = productId, Take = 1000 });
+                cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+                var searchPartsResultDto = await _demoCatalogApi.SearchAsync(new DemoProductPartSearchCriteria { ConfiguredProductId = productId, Take = int.MaxValue });
                 return searchPartsResultDto;
             });
 
             var partItemIds = searchResult.Results?
                 .Where(x => x.PartItems != null).SelectMany(x => x.PartItems).Select(x => x.ItemId).Distinct()
                 .ToArray();
+
             var allPartItems = !partItemIds.IsNullOrEmpty() ? await GetProductsAsync(partItemIds) : null; // Potential recursion
 
-            var productParts = searchResult.Results?.OrderBy(x => x.Priority).Select(x =>
+            ProductPart ConvertDtoToProductPartAndAttachItsItems(DemoProductPart x, WorkContext workContext, Product[] allPartItems)
             {
                 var productPart = x.ToProductPart(workContext.CurrentLanguage.CultureName);
                 productPart.Items = x.PartItems?
@@ -84,10 +88,12 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                     .Where(product => product != null)
                     .ToArray() ?? Array.Empty<Product>();
                 return productPart;
-            }).ToArray() ?? Array.Empty<ProductPart>();
+            }
+
+            var productParts = searchResult.Results?.OrderBy(x => x.Priority).Select(x => ConvertDtoToProductPartAndAttachItsItems(x, workContext, allPartItems))
+                                .ToArray<ProductPart>() ?? Array.Empty<ProductPart>();
 
             return productParts;          
         }
-
     }
 }
