@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,13 +50,10 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
 
             if (!products.IsNullOrEmpty())
             {
-                foreach(var product in products)
+                foreach (var product in products.Where(product => product.ProductType.EqualsInvariant("Configurable")))
                 {
-                    if(product.ProductType.EqualsInvariant("Configurable"))
-                    {
-                        var productParts = await GetProductPartsAsync(product.Id);
-                        product.Parts = productParts;
-                    }
+                    var productParts = await GetProductPartsAsync(product.Id);
+                    product.Parts = productParts;
                 }
             }
         }
@@ -68,20 +66,25 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
             var searchResult = await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CatalogCacheRegion.CreateChangeToken());
-                var searchPartsResultDto = await _demoCatalogApi.SearchAsync(new DemoProductPartSearchCriteria() { ConfiguredProductId = productId, Take = 1000 });
+                var searchPartsResultDto = await _demoCatalogApi.SearchAsync(new DemoProductPartSearchCriteria { ConfiguredProductId = productId, Take = 1000 });
                 return searchPartsResultDto;
             });
 
-            var itemsIds = searchResult.Results.SelectMany(x => x.PartItems).Select(x => x.ItemId).Distinct().ToArray();
-            var allPartItems = await GetProductsAsync(itemsIds); // Potential recursion
+            var partItemIds = searchResult.Results?
+                .Where(x => x.PartItems != null).SelectMany(x => x.PartItems).Select(x => x.ItemId).Distinct()
+                .ToArray();
+            var allPartItems = !partItemIds.IsNullOrEmpty() ? await GetProductsAsync(partItemIds) : null; // Potential recursion
 
-            var productParts = searchResult.Results.OrderBy(x => x.Priority).Select(x => {
+            var productParts = searchResult.Results?.OrderBy(x => x.Priority).Select(x =>
+            {
                 var productPart = x.ToProductPart(workContext.CurrentLanguage.CultureName);
-                productPart.Items = x.PartItems.OrderBy(itemDto => itemDto.Priority)
-                                    .Select(itemDto =>  allPartItems.FirstOrDefault(p => p.Id.EqualsInvariant(itemDto.ItemId)))
-                                    .Where(p=>p != null).ToArray();
+                productPart.Items = x.PartItems?
+                    .OrderBy(partItemInfo => partItemInfo.Priority)
+                    .Select(partItemInfo => allPartItems?.FirstOrDefault(product => product.Id.EqualsInvariant(partItemInfo.ItemId)))
+                    .Where(product => product != null)
+                    .ToArray() ?? Array.Empty<Product>();
                 return productPart;
-                }).ToArray();            
+            }).ToArray() ?? Array.Empty<ProductPart>();
 
             return productParts;          
         }
