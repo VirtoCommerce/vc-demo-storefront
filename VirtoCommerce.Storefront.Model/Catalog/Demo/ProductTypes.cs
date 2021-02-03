@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace VirtoCommerce.Storefront.Model.Catalog.Demo
 {
     public static class ProductTypes
     {
-        static public string Configurable { get; set; } = "Configurable";
+        public const string Configurable = "Configurable";
 
-        static public string Physical { get; set; } = "Physical";
+        public const string Physical = "Physical";
 
-        static public string Digital { get; set; } = "Digital";
+        public const string Digital = "Digital";
     }
 }
