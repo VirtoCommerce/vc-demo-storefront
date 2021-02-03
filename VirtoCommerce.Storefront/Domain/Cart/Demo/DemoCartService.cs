@@ -88,19 +88,6 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
             {
                 var product = groupProducts.FirstOrDefault(x => x.Id.Equals(group.ProductId, StringComparison.InvariantCulture));
                 group.Product = product;
-
-                var productParts = group.Items
-                            .Select(x =>
-                            {
-                                var result = _demoCatalogService.TryGetProductPartByCategoryId(x.CategoryId);
-
-                                result.SelectedItemId = x.Id;
-
-                                return result;
-                            })
-                            .OrderBy(x => x.Name).ToArray();
-
-                group.Parts.AddRange(productParts);
             }
         }
     }

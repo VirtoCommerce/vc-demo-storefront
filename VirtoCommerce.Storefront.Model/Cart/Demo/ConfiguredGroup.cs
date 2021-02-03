@@ -84,7 +84,5 @@ namespace VirtoCommerce.Storefront.Model.Cart.Demo
         public Money TaxTotal { get; set; }
 
         #endregion Taxation
-
-        public ICollection<ProductPart> Parts { get; set; } = new List<ProductPart>();
     }
 }

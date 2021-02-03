@@ -28,7 +28,6 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var order = await base.GetOrderByNumberAsync(number);
             await LoadProductsAsync(order);
-            SelectConfiguredProductParts(order);
             return order;
         }
 
@@ -37,7 +36,6 @@ namespace VirtoCommerce.Storefront.Domain
         {
             var order = await base.GetOrderByIdAsync(id);
             await LoadProductsAsync(order);
-            SelectConfiguredProductParts(order);
             return order;
         }
 
@@ -46,7 +44,6 @@ namespace VirtoCommerce.Storefront.Domain
             var ordersPagedList = await base.InnerSearchOrdersAsync(criteria, workContext);
             var orders = ordersPagedList.ToArray();
             await LoadProductsAsync(orders.ToArray());
-            SelectConfiguredProductParts(orders);
             return new StaticPagedList<CustomerOrder>(ordersPagedList, ordersPagedList.PageNumber, ordersPagedList.PageSize, ordersPagedList.TotalItemCount);
         }
 
@@ -64,25 +61,6 @@ namespace VirtoCommerce.Storefront.Domain
             {
                 group.Product = products[group.ProductId];
             }
-        }
-
-        public void SelectConfiguredProductParts(params CustomerOrder[] orders)
-        {
-            foreach (var group in orders.SelectMany(x => x.ConfiguredGroups))
-            {
-                var productParts = group.Items
-                    .Select(x =>
-                    {
-                        var result = _demoCatalogService.TryGetProductPartByCategoryId(x.CategoryId);
-
-                        result.SelectedItemId = x.Id;
-
-                        return result;
-                    })
-                    .OrderBy(x => x.Name).ToArray();
-
-                group.Parts.AddRange(productParts);
-            }
-        }
+        }       
     }
 }
