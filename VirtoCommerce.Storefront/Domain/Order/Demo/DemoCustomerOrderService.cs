@@ -4,8 +4,6 @@ using PagedList.Core;
 using VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
-using VirtoCommerce.Storefront.Model.Catalog.Services;
-using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Order;
 using VirtoCommerce.Storefront.Model.Order.Services;
 using VirtoCommerce.Storefront.Model.Services;
@@ -15,13 +13,11 @@ namespace VirtoCommerce.Storefront.Domain
     public class DemoCustomerOrderService : CustomerOrderService, IDemoCustomerOrderService
     {
         private readonly ICatalogService _catalogService;
-        private readonly IDemoCatalogService _demoCatalogService;
 
-        public DemoCustomerOrderService(IOrderModule orderApi, ICatalogService catalogService, IDemoCatalogService demoCatalogService,
+        public DemoCustomerOrderService(IOrderModule orderApi, ICatalogService catalogService,
             IWorkContextAccessor workContextAccessor) : base(orderApi, workContextAccessor)
         {
             _catalogService = catalogService;
-            _demoCatalogService = demoCatalogService;
         }
 
         public override async Task<CustomerOrder> GetOrderByNumberAsync(string number)

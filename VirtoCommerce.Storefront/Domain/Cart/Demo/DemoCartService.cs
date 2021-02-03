@@ -10,7 +10,6 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Catalog;
-using VirtoCommerce.Storefront.Model.Catalog.Services;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.Security;
@@ -24,7 +23,6 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
         private readonly ICartModule _cartApi;
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly UserManager<User> _userManager;
-        private readonly IDemoCatalogService _demoCatalogService;
         private readonly ICatalogService _catalogService;
 
         public DemoCartService(
@@ -32,7 +30,6 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
             IWorkContextAccessor workContextAccessor,
             IStorefrontMemoryCache memoryCache,
             UserManager<User> userManager,
-            IDemoCatalogService demoCatalogService,
             ICatalogService catalogService)
             : base(cartModule, workContextAccessor, memoryCache, userManager)
         {
@@ -40,7 +37,6 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
             _workContextAccessor = workContextAccessor;
             _cartApi = cartModule;
             _memoryCache = memoryCache;
-            _demoCatalogService = demoCatalogService;
             _catalogService = catalogService;
         }
 
