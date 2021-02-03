@@ -10,6 +10,7 @@ using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Catalog;
+using VirtoCommerce.Storefront.Model.Catalog.Demo;
 using VirtoCommerce.Storefront.Model.Catalog.Services;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Common.Caching;
@@ -52,7 +53,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
 
             if (!products.IsNullOrEmpty())
             {
-                foreach (var product in products.Where(product => product.ProductType.EqualsInvariant("Configurable")))
+                foreach (var product in products.Where(product => product.ProductType.EqualsInvariant(ProductTypes.Configurable)))
                 {
                     var productParts = await GetProductPartsAsync(product.Id);
                     product.Parts = productParts;
