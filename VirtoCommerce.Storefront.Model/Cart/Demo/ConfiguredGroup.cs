@@ -84,24 +84,5 @@ namespace VirtoCommerce.Storefront.Model.Cart.Demo
         public Money TaxTotal { get; set; }
 
         #endregion Taxation
-
-        public override object Clone()
-        {
-            var result = (ConfiguredGroup)base.Clone();
-
-            result.ListPrice = ListPrice?.Clone() as Money;
-            result.SalePrice = SalePrice?.Clone() as Money;
-            result.ListPriceWithTax = ListPriceWithTax?.Clone() as Money;
-            result.SalePriceWithTax = SalePriceWithTax?.Clone() as Money;
-            result.PlacedPrice = PlacedPrice?.Clone() as Money;
-            result.PlacedPriceWithTax = PlacedPriceWithTax?.Clone() as Money;
-            result.ExtendedPrice = ExtendedPrice?.Clone() as Money;
-            result.ExtendedPriceWithTax = ExtendedPriceWithTax?.Clone() as Money;
-            result.TaxTotal = TaxTotal?.Clone() as Money;
-
-            result.Items = new List<LineItem>();
-
-            return result;
-        }
     }
 }

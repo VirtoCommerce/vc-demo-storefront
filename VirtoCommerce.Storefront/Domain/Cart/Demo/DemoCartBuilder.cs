@@ -10,7 +10,6 @@ using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Cart.Validators;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Marketing.Services;
-using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Services;
 using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 using VirtoCommerce.Storefront.Model.Tax.Services;
@@ -125,52 +124,27 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
         {
             EnsureCartExists();
 
-            // Clone source cart to prevent its damage
-            cart = (ShoppingCart)cart.Clone();
-
-            // Reset primary keys for all aggregated entities before merge
-            // to prevent insertions same Ids for target cart.
-            // Exclude user because it might be the current one.
-            // Exclude configuration groups because we need it to build correct relations
-            var entities = cart.GetFlatObjectsListWithInterface<IEntity>();
-            foreach (var entity in entities.Where(x => !(x is User || x is ConfiguredGroup)).ToList())
+            foreach (var group in cart.ConfiguredGroups)
             {
-                entity.Id = null;
-            }
+                var newGroup = new ConfiguredGroup(group.Quantity, group.Currency, group.ProductId);
+                Cart.ConfiguredGroups.Add(newGroup);
 
-            foreach (var configuredGroup in cart.ConfiguredGroups)
-            {
-                var configuredGroupId = configuredGroup.Id;
-                configuredGroup.Id = Guid.NewGuid().ToString("N");
-
-                foreach (var item in cart.Items.Where(x => x.ConfiguredGroupId == configuredGroupId))
+                foreach (var item in group.Items)
                 {
-                    item.ConfiguredGroupId = configuredGroup.Id;
-                    configuredGroup.Items.Add(item);
+                    var newItem = (LineItem) item.Clone();
+                    newItem.ConfiguredGroupId = newGroup.Id;
+                    var existingLineItem = cart.Items.FirstOrDefault(li => li.ProductId.EqualsInvariant(newItem.ProductId));
+
+                    if (existingLineItem != null)
+                    {
+                        cart.Items.Remove(existingLineItem);
+                    }
+
+                    await AddLineItemAsync(newItem);
                 }
-
-                Cart.ConfiguredGroups.Add(configuredGroup);
             }
 
-            foreach (var lineItem in cart.Items)
-            {
-                await AddLineItemAsync(lineItem);
-            }
-
-            foreach (var coupon in cart.Coupons)
-            {
-                await AddCouponAsync(coupon.Code);
-            }
-
-            foreach (var shipment in cart.Shipments)
-            {
-                await AddOrUpdateShipmentAsync(shipment);
-            }
-
-            foreach (var payment in cart.Payments)
-            {
-                await AddOrUpdatePaymentAsync(payment);
-            }
+            await base.MergeWithCartAsync(cart);
         }
 
         protected override async Task AddLineItemAsync(LineItem lineItem)
