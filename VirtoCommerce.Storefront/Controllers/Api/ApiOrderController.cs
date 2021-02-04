@@ -84,7 +84,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             var result = await _orderApi.SearchCustomerOrderAsync(criteria.ToSearchCriteriaDto());
             var orders = result.Results.Select(x => x.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage)).ToArray();
             await _orderService.LoadProductsAsync(orders);
-            _orderService.SelectConfiguredProductParts(orders);
 
             return new CustomerOrderSearchResult
             {
@@ -105,7 +104,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             }
             var order = orderDto.ToCustomerOrder(WorkContext.AllCurrencies, WorkContext.CurrentLanguage);
             await _orderService.LoadProductsAsync(order);
-            _orderService.SelectConfiguredProductParts(order);
             return order;
         }
 

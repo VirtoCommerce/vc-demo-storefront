@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using VirtoCommerce.Storefront.Model.Common.Specifications;
+using VirtoCommerce.Storefront.Model.Catalog.Demo;
 
 namespace VirtoCommerce.Storefront.Model.Catalog
 {
@@ -10,7 +12,8 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
 
-            return product.IsActive && product.IsBuyable && product.Price.ListPrice.Amount > 0;
+            return ( product.IsActive && product.IsBuyable && product.Price.ListPrice.Amount > 0 && product.ProductType != ProductTypes.Configurable )
+                || ( product.ProductType == ProductTypes.Configurable && product.Parts.Any() && product.Parts.All(x => x.Items.Any()) );
         }
 
     }
