@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using VirtoCommerce.Storefront.Model.Cart.Demo;
 using VirtoCommerce.Storefront.Model.Cart.Services;
 using VirtoCommerce.Storefront.Model.Cart.ValidationErrors;
 using VirtoCommerce.Storefront.Model.Common;
@@ -502,38 +503,56 @@ namespace VirtoCommerce.Storefront.Model.Cart
             {
                 result.Discounts = new List<Discount>(Discounts.Select(x => x.Clone() as Discount));
             }
+
             if (TaxDetails != null)
             {
                 result.TaxDetails = new List<TaxDetail>(TaxDetails.Select(x => x.Clone() as TaxDetail));
             }
+
             if (DynamicProperties != null)
             {
                 result.DynamicProperties = new List<DynamicProperty>(DynamicProperties.Select(x => x.Clone() as DynamicProperty));
             }
+
             if (ValidationErrors != null)
             {
                 result.ValidationErrors = new List<ValidationError>(ValidationErrors.Select(x => x.Clone() as ValidationError));
             }
+
             if (Addresses != null)
             {
                 result.Addresses = new List<Address>(Addresses.Select(x => x.Clone() as Address));
             }
+
             if (Items != null)
             {
                 result.Items = new List<LineItem>(Items.Select(x => x.Clone() as LineItem));
             }
+
+            if (ConfiguredGroups != null)
+            {
+                result.ConfiguredGroups = new List<ConfiguredGroup>(ConfiguredGroups.Select(x => x.Clone() as ConfiguredGroup));
+                foreach (var configuredGroup in result.ConfiguredGroups)
+                {
+                    configuredGroup.Items = result.Items.Where(x => x.ConfiguredGroupId == configuredGroup.Id).ToList();
+                }
+            }
+
             if (Payments != null)
             {
                 result.Payments = new List<Payment>(Payments.Select(x => x.Clone() as Payment));
             }
+
             if (Shipments != null)
             {
                 result.Shipments = new List<Shipment>(Shipments.Select(x => x.Clone() as Shipment));
             }
+
             if (Coupons != null)
             {
                 result.Coupons = new List<Coupon>(Coupons.Select(x => x.Clone() as Coupon));
             }
+
             if (AvailablePaymentMethods != null)
             {
                 result.AvailablePaymentMethods = new List<PaymentMethod>(AvailablePaymentMethods.Select(x => x.Clone() as PaymentMethod));
