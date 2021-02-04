@@ -126,21 +126,14 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
             foreach (var group in cart.ConfiguredGroups)
             {
-                var newGroup = new ConfiguredGroup(group.Quantity, group.Currency, group.ProductId);
+                var newGroup = (ConfiguredGroup) group.Clone();
+                newGroup.Id = Guid.NewGuid().ToString("N");
+
                 Cart.ConfiguredGroups.Add(newGroup);
 
                 foreach (var item in group.Items)
                 {
-                    var newItem = (LineItem) item.Clone();
-                    newItem.ConfiguredGroupId = newGroup.Id;
-                    var existingLineItem = cart.Items.FirstOrDefault(li => li.ProductId.EqualsInvariant(newItem.ProductId));
-
-                    if (existingLineItem != null)
-                    {
-                        cart.Items.Remove(existingLineItem);
-                    }
-
-                    await AddLineItemAsync(newItem);
+                    item.ConfiguredGroupId = newGroup.Id;
                 }
             }
 

@@ -2308,7 +2308,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -2343,10 +2343,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
             if ((int)_statusCode != 200 && (int)_statusCode != 401 && (int)_statusCode != 403)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -3574,7 +3576,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
             {
                 var _result = await operations.GetInvoicePdfWithHttpMessagesAsync(orderNumber, null, cancellationToken).ConfigureAwait(false);
                 _result.Request.Dispose();
-                return _result.Body;
+                return _result.Body;                
             }
 
             /// <param name='operations'>
@@ -3645,6 +3647,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -5081,1137 +5084,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class DemoOrderConfiguredGroup
-    {
-        /// <summary>
-        /// Initializes a new instance of the DemoOrderConfiguredGroup class.
-        /// </summary>
-        public DemoOrderConfiguredGroup()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DemoOrderConfiguredGroup class.
-        /// </summary>
-        public DemoOrderConfiguredGroup(string productId = default(string), IList<string> itemIds = default(IList<string>), int? quantity = default(int?), string currency = default(string), double? extendedPrice = default(double?), double? extendedPriceWithTax = default(double?), double? price = default(double?), double? priceWithTax = default(double?), double? placedPrice = default(double?), double? placedPriceWithTax = default(double?), double? taxTotal = default(double?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            ProductId = productId;
-            ItemIds = itemIds;
-            Quantity = quantity;
-            Currency = currency;
-            ExtendedPrice = extendedPrice;
-            ExtendedPriceWithTax = extendedPriceWithTax;
-            Price = price;
-            PriceWithTax = priceWithTax;
-            PlacedPrice = placedPrice;
-            PlacedPriceWithTax = placedPriceWithTax;
-            TaxTotal = taxTotal;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "productId")]
-        public string ProductId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "itemIds")]
-        public IList<string> ItemIds { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "quantity")]
-        public int? Quantity { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "currency")]
-        public string Currency { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "extendedPrice")]
-        public double? ExtendedPrice { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "extendedPriceWithTax")]
-        public double? ExtendedPriceWithTax { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "price")]
-        public double? Price { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priceWithTax")]
-        public double? PriceWithTax { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "placedPrice")]
-        public double? PlacedPrice { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "placedPriceWithTax")]
-        public double? PlacedPriceWithTax { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "taxTotal")]
-        public double? TaxTotal { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class OrderAddress
-    {
-        /// <summary>
-        /// Initializes a new instance of the OrderAddress class.
-        /// </summary>
-        public OrderAddress()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the OrderAddress class.
-        /// </summary>
-        /// <param name="addressType">Possible values include: 'Billing',
-        /// 'Shipping', 'BillingAndShipping', 'Pickup'</param>
-        public OrderAddress(string addressType = default(string), string key = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
-        {
-            AddressType = addressType;
-            Key = key;
-            Name = name;
-            Organization = organization;
-            CountryCode = countryCode;
-            CountryName = countryName;
-            City = city;
-            PostalCode = postalCode;
-            Zip = zip;
-            Line1 = line1;
-            Line2 = line2;
-            RegionId = regionId;
-            RegionName = regionName;
-            FirstName = firstName;
-            MiddleName = middleName;
-            LastName = lastName;
-            Phone = phone;
-            Email = email;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Billing', 'Shipping',
-        /// 'BillingAndShipping', 'Pickup'
-        /// </summary>
-        [JsonProperty(PropertyName = "addressType")]
-        public string AddressType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "key")]
-        public string Key { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "organization")]
-        public string Organization { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "countryCode")]
-        public string CountryCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "countryName")]
-        public string CountryName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "city")]
-        public string City { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "postalCode")]
-        public string PostalCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "zip")]
-        public string Zip { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "line1")]
-        public string Line1 { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "line2")]
-        public string Line2 { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "regionId")]
-        public string RegionId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "regionName")]
-        public string RegionName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "firstName")]
-        public string FirstName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "middleName")]
-        public string MiddleName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "lastName")]
-        public string LastName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "phone")]
-        public string Phone { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "email")]
-        public string Email { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class ObjectSettingEntry
-    {
-        /// <summary>
-        /// Initializes a new instance of the ObjectSettingEntry class.
-        /// </summary>
-        public ObjectSettingEntry()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ObjectSettingEntry class.
-        /// </summary>
-        /// <param name="valueType">Possible values include: 'ShortText',
-        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean',
-        /// 'SecureString', 'Json'</param>
-        public ObjectSettingEntry(bool? itHasValues = default(bool?), string objectId = default(string), string objectType = default(string), object value = default(object), bool? restartRequired = default(bool?), string moduleId = default(string), string groupName = default(string), string name = default(string), bool? isHidden = default(bool?), string valueType = default(string), IList<object> allowedValues = default(IList<object>), object defaultValue = default(object), bool? isDictionary = default(bool?))
-        {
-            ItHasValues = itHasValues;
-            ObjectId = objectId;
-            ObjectType = objectType;
-            Value = value;
-            RestartRequired = restartRequired;
-            ModuleId = moduleId;
-            GroupName = groupName;
-            Name = name;
-            IsHidden = isHidden;
-            ValueType = valueType;
-            AllowedValues = allowedValues;
-            DefaultValue = defaultValue;
-            IsDictionary = isDictionary;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "itHasValues")]
-        public bool? ItHasValues { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectId")]
-        public string ObjectId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public object Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "restartRequired")]
-        public bool? RestartRequired { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "moduleId")]
-        public string ModuleId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "groupName")]
-        public string GroupName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isHidden")]
-        public bool? IsHidden { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'ShortText', 'LongText',
-        /// 'Integer', 'Decimal', 'DateTime', 'Boolean', 'SecureString', 'Json'
-        /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
-        public string ValueType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "allowedValues")]
-        public IList<object> AllowedValues { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "defaultValue")]
-        public object DefaultValue { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isDictionary")]
-        public bool? IsDictionary { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class TaxDetail
-    {
-        /// <summary>
-        /// Initializes a new instance of the TaxDetail class.
-        /// </summary>
-        public TaxDetail()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the TaxDetail class.
-        /// </summary>
-        public TaxDetail(double? rate = default(double?), double? amount = default(double?), string name = default(string))
-        {
-            Rate = rate;
-            Amount = amount;
-            Name = name;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "rate")]
-        public double? Rate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "amount")]
-        public double? Amount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class PaymentMethod
-    {
-        /// <summary>
-        /// Initializes a new instance of the PaymentMethod class.
-        /// </summary>
-        public PaymentMethod()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PaymentMethod class.
-        /// </summary>
-        /// <param name="paymentMethodType">Possible values include: 'Unknown',
-        /// 'Standard', 'Redirection', 'PreparedForm'</param>
-        /// <param name="paymentMethodGroupType">Possible values include:
-        /// 'Paypal', 'BankCard', 'Alternative', 'Manual'</param>
-        public PaymentMethod(string code = default(string), string name = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), bool? isAvailableForPartial = default(bool?), string currency = default(string), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), string storeId = default(string), string typeName = default(string), IList<ObjectSettingEntry> settings = default(IList<ObjectSettingEntry>), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string paymentMethodType = default(string), string paymentMethodGroupType = default(string), string id = default(string))
-        {
-            Code = code;
-            Name = name;
-            LogoUrl = logoUrl;
-            IsActive = isActive;
-            Priority = priority;
-            IsAvailableForPartial = isAvailableForPartial;
-            Currency = currency;
-            Price = price;
-            PriceWithTax = priceWithTax;
-            Total = total;
-            TotalWithTax = totalWithTax;
-            DiscountAmount = discountAmount;
-            DiscountAmountWithTax = discountAmountWithTax;
-            StoreId = storeId;
-            TypeName = typeName;
-            Settings = settings;
-            TaxType = taxType;
-            TaxTotal = taxTotal;
-            TaxPercentRate = taxPercentRate;
-            TaxDetails = taxDetails;
-            PaymentMethodType = paymentMethodType;
-            PaymentMethodGroupType = paymentMethodGroupType;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "code")]
-        public string Code { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "logoUrl")]
-        public string LogoUrl { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isActive")]
-        public bool? IsActive { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priority")]
-        public int? Priority { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isAvailableForPartial")]
-        public bool? IsAvailableForPartial { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "currency")]
-        public string Currency { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "price")]
-        public double? Price { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priceWithTax")]
-        public double? PriceWithTax { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "total")]
-        public double? Total { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "totalWithTax")]
-        public double? TotalWithTax { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "discountAmount")]
-        public double? DiscountAmount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "discountAmountWithTax")]
-        public double? DiscountAmountWithTax { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "storeId")]
-        public string StoreId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "typeName")]
-        public string TypeName { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "settings")]
-        public IList<ObjectSettingEntry> Settings { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "taxType")]
-        public string TaxType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "taxTotal")]
-        public double? TaxTotal { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "taxPercentRate")]
-        public double? TaxPercentRate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "taxDetails")]
-        public IList<TaxDetail> TaxDetails { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Unknown', 'Standard',
-        /// 'Redirection', 'PreparedForm'
-        /// </summary>
-        [JsonProperty(PropertyName = "paymentMethodType")]
-        public string PaymentMethodType { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'Paypal', 'BankCard',
-        /// 'Alternative', 'Manual'
-        /// </summary>
-        [JsonProperty(PropertyName = "paymentMethodGroupType")]
-        public string PaymentMethodGroupType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class ProcessPaymentRequestResult
-    {
-        /// <summary>
-        /// Initializes a new instance of the ProcessPaymentRequestResult
-        /// class.
-        /// </summary>
-        public ProcessPaymentRequestResult()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ProcessPaymentRequestResult
-        /// class.
-        /// </summary>
-        /// <param name="newPaymentStatus">Possible values include: 'New',
-        /// 'Pending', 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded',
-        /// 'Voided', 'Custom', 'Cancelled', 'Declined', 'Error'</param>
-        public ProcessPaymentRequestResult(string redirectUrl = default(string), string htmlForm = default(string), string outerId = default(string), PaymentMethod paymentMethod = default(PaymentMethod), bool? isSuccess = default(bool?), string errorMessage = default(string), string newPaymentStatus = default(string))
-        {
-            RedirectUrl = redirectUrl;
-            HtmlForm = htmlForm;
-            OuterId = outerId;
-            PaymentMethod = paymentMethod;
-            IsSuccess = isSuccess;
-            ErrorMessage = errorMessage;
-            NewPaymentStatus = newPaymentStatus;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "redirectUrl")]
-        public string RedirectUrl { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "htmlForm")]
-        public string HtmlForm { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "paymentMethod")]
-        public PaymentMethod PaymentMethod { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isSuccess")]
-        public bool? IsSuccess { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "errorMessage")]
-        public string ErrorMessage { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'New', 'Pending',
-        /// 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded', 'Voided',
-        /// 'Custom', 'Cancelled', 'Declined', 'Error'
-        /// </summary>
-        [JsonProperty(PropertyName = "newPaymentStatus")]
-        public string NewPaymentStatus { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class Discount
-    {
-        /// <summary>
-        /// Initializes a new instance of the Discount class.
-        /// </summary>
-        public Discount()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Discount class.
-        /// </summary>
-        public Discount(string promotionId = default(string), string currency = default(string), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), string coupon = default(string), string description = default(string), string id = default(string))
-        {
-            PromotionId = promotionId;
-            Currency = currency;
-            DiscountAmount = discountAmount;
-            DiscountAmountWithTax = discountAmountWithTax;
-            Coupon = coupon;
-            Description = description;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "promotionId")]
-        public string PromotionId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "currency")]
-        public string Currency { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "discountAmount")]
-        public double? DiscountAmount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "discountAmountWithTax")]
-        public double? DiscountAmountWithTax { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "coupon")]
-        public string Coupon { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class PaymentGatewayTransaction
-    {
-        /// <summary>
-        /// Initializes a new instance of the PaymentGatewayTransaction class.
-        /// </summary>
-        public PaymentGatewayTransaction()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PaymentGatewayTransaction class.
-        /// </summary>
-        /// <param name="isProcessed">Flag represent that current transaction
-        /// is processed</param>
-        /// <param name="processedDate">Date when this transaction was
-        /// handled</param>
-        /// <param name="requestData">Raw request data</param>
-        /// <param name="responseData">Raw response data</param>
-        /// <param name="responseCode">Gateway or VC response status
-        /// code</param>
-        /// <param name="gatewayIpAddress">Gateway IP address</param>
-        /// <param name="type">The type of payment interaction.The payment can
-        /// be Capture or CheckReceived.
-        /// The value also includes customer payment interactions such as
-        /// Website, Call, Store, or Unknown.</param>
-        /// <param name="status">"Active", "Expired", and "Inactive" or
-        /// other</param>
-        public PaymentGatewayTransaction(double? amount = default(double?), string currencyCode = default(string), bool? isProcessed = default(bool?), System.DateTime? processedDate = default(System.DateTime?), string processError = default(string), int? processAttemptCount = default(int?), string requestData = default(string), string responseData = default(string), string responseCode = default(string), string gatewayIpAddress = default(string), string type = default(string), string status = default(string), string note = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            Amount = amount;
-            CurrencyCode = currencyCode;
-            IsProcessed = isProcessed;
-            ProcessedDate = processedDate;
-            ProcessError = processError;
-            ProcessAttemptCount = processAttemptCount;
-            RequestData = requestData;
-            ResponseData = responseData;
-            ResponseCode = responseCode;
-            GatewayIpAddress = gatewayIpAddress;
-            Type = type;
-            Status = status;
-            Note = note;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "amount")]
-        public double? Amount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "currencyCode")]
-        public string CurrencyCode { get; set; }
-
-        /// <summary>
-        /// Gets or sets flag represent that current transaction is processed
-        /// </summary>
-        [JsonProperty(PropertyName = "isProcessed")]
-        public bool? IsProcessed { get; set; }
-
-        /// <summary>
-        /// Gets or sets date when this transaction was handled
-        /// </summary>
-        [JsonProperty(PropertyName = "processedDate")]
-        public System.DateTime? ProcessedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "processError")]
-        public string ProcessError { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "processAttemptCount")]
-        public int? ProcessAttemptCount { get; set; }
-
-        /// <summary>
-        /// Gets or sets raw request data
-        /// </summary>
-        [JsonProperty(PropertyName = "requestData")]
-        public string RequestData { get; set; }
-
-        /// <summary>
-        /// Gets or sets raw response data
-        /// </summary>
-        [JsonProperty(PropertyName = "responseData")]
-        public string ResponseData { get; set; }
-
-        /// <summary>
-        /// Gets or sets gateway or VC response status code
-        /// </summary>
-        [JsonProperty(PropertyName = "responseCode")]
-        public string ResponseCode { get; set; }
-
-        /// <summary>
-        /// Gets or sets gateway IP address
-        /// </summary>
-        [JsonProperty(PropertyName = "gatewayIpAddress")]
-        public string GatewayIpAddress { get; set; }
-
-        /// <summary>
-        /// Gets or sets the type of payment interaction.The payment can be
-        /// Capture or CheckReceived.
-        /// The value also includes customer payment interactions such as
-        /// Website, Call, Store, or Unknown.
-        /// </summary>
-        [JsonProperty(PropertyName = "type")]
-        public string Type { get; set; }
-
-        /// <summary>
-        /// Gets or sets "Active", "Expired", and "Inactive" or other
-        /// </summary>
-        [JsonProperty(PropertyName = "status")]
-        public string Status { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "note")]
-        public string Note { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class IOperation
-    {
-        /// <summary>
-        /// Initializes a new instance of the IOperation class.
-        /// </summary>
-        public IOperation()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the IOperation class.
-        /// </summary>
-        public IOperation(string operationType = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), string parentOperationId = default(string), IList<IOperation> childrenOperations = default(IList<IOperation>), string id = default(string))
-        {
-            OperationType = operationType;
-            Number = number;
-            IsApproved = isApproved;
-            Status = status;
-            Comment = comment;
-            Currency = currency;
-            ParentOperationId = parentOperationId;
-            ChildrenOperations = childrenOperations;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "operationType")]
-        public string OperationType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "number")]
-        public string Number { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isApproved")]
-        public bool? IsApproved { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "status")]
-        public string Status { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "comment")]
-        public string Comment { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "currency")]
-        public string Currency { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "parentOperationId")]
-        public string ParentOperationId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "childrenOperations")]
-        public IList<IOperation> ChildrenOperations { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public partial class DynamicPropertyObjectValue
     {
         /// <summary>
@@ -6518,72 +5390,27 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class PaymentIn
+    public partial class Discount
     {
         /// <summary>
-        /// Initializes a new instance of the PaymentIn class.
+        /// Initializes a new instance of the Discount class.
         /// </summary>
-        public PaymentIn()
+        public Discount()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PaymentIn class.
+        /// Initializes a new instance of the Discount class.
         /// </summary>
-        /// <param name="gatewayCode">Payment method (gateway) code</param>
-        /// <param name="paymentStatus">Possible values include: 'New',
-        /// 'Pending', 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded',
-        /// 'Voided', 'Custom', 'Cancelled', 'Declined', 'Error'</param>
-        /// <param name="taxType">Tax category or type</param>
-        public PaymentIn(string orderId = default(string), string purpose = default(string), string gatewayCode = default(string), PaymentMethod paymentMethod = default(PaymentMethod), string organizationId = default(string), string organizationName = default(string), string customerId = default(string), string customerName = default(string), System.DateTime? incomingDate = default(System.DateTime?), OrderAddress billingAddress = default(OrderAddress), string paymentStatus = default(string), System.DateTime? authorizedDate = default(System.DateTime?), System.DateTime? capturedDate = default(System.DateTime?), System.DateTime? voidedDate = default(System.DateTime?), ProcessPaymentRequestResult processPaymentResult = default(ProcessPaymentRequestResult), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), string objectType = default(string), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), IList<Discount> discounts = default(IList<Discount>), IList<PaymentGatewayTransaction> transactions = default(IList<PaymentGatewayTransaction>), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), string outerId = default(string), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public Discount(string promotionId = default(string), string currency = default(string), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), string coupon = default(string), string description = default(string), string id = default(string))
         {
-            OrderId = orderId;
-            Purpose = purpose;
-            GatewayCode = gatewayCode;
-            PaymentMethod = paymentMethod;
-            OrganizationId = organizationId;
-            OrganizationName = organizationName;
-            CustomerId = customerId;
-            CustomerName = customerName;
-            IncomingDate = incomingDate;
-            BillingAddress = billingAddress;
-            PaymentStatus = paymentStatus;
-            AuthorizedDate = authorizedDate;
-            CapturedDate = capturedDate;
-            VoidedDate = voidedDate;
-            ProcessPaymentResult = processPaymentResult;
-            Price = price;
-            PriceWithTax = priceWithTax;
-            Total = total;
-            TotalWithTax = totalWithTax;
+            PromotionId = promotionId;
+            Currency = currency;
             DiscountAmount = discountAmount;
             DiscountAmountWithTax = discountAmountWithTax;
-            ObjectType = objectType;
-            TaxType = taxType;
-            TaxTotal = taxTotal;
-            TaxPercentRate = taxPercentRate;
-            TaxDetails = taxDetails;
-            Discounts = discounts;
-            Transactions = transactions;
-            OperationType = operationType;
-            ParentOperationId = parentOperationId;
-            Number = number;
-            IsApproved = isApproved;
-            Status = status;
-            Comment = comment;
-            Currency = currency;
-            Sum = sum;
-            OuterId = outerId;
-            IsCancelled = isCancelled;
-            CancelledDate = cancelledDate;
-            CancelReason = cancelReason;
-            DynamicProperties = dynamicProperties;
-            OperationsLog = operationsLog;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
+            Coupon = coupon;
+            Description = description;
             Id = id;
             CustomInit();
         }
@@ -6595,102 +5422,13 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "orderId")]
-        public string OrderId { get; set; }
+        [JsonProperty(PropertyName = "promotionId")]
+        public string PromotionId { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "purpose")]
-        public string Purpose { get; set; }
-
-        /// <summary>
-        /// Gets or sets payment method (gateway) code
-        /// </summary>
-        [JsonProperty(PropertyName = "gatewayCode")]
-        public string GatewayCode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "paymentMethod")]
-        public PaymentMethod PaymentMethod { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "organizationId")]
-        public string OrganizationId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "organizationName")]
-        public string OrganizationName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "customerId")]
-        public string CustomerId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "customerName")]
-        public string CustomerName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "incomingDate")]
-        public System.DateTime? IncomingDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "billingAddress")]
-        public OrderAddress BillingAddress { get; set; }
-
-        /// <summary>
-        /// Gets or sets possible values include: 'New', 'Pending',
-        /// 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded', 'Voided',
-        /// 'Custom', 'Cancelled', 'Declined', 'Error'
-        /// </summary>
-        [JsonProperty(PropertyName = "paymentStatus")]
-        public string PaymentStatus { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "authorizedDate")]
-        public System.DateTime? AuthorizedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "capturedDate")]
-        public System.DateTime? CapturedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "voidedDate")]
-        public System.DateTime? VoidedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "processPaymentResult")]
-        public ProcessPaymentRequestResult ProcessPaymentResult { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "price")]
-        public double? Price { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priceWithTax")]
-        public double? PriceWithTax { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "total")]
-        public double? Total { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "totalWithTax")]
-        public double? TotalWithTax { get; set; }
+        [JsonProperty(PropertyName = "currency")]
+        public string Currency { get; set; }
 
         /// <summary>
         /// </summary>
@@ -6704,134 +5442,80 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "objectType")]
-        public string ObjectType { get; set; }
-
-        /// <summary>
-        /// Gets or sets tax category or type
-        /// </summary>
-        [JsonProperty(PropertyName = "taxType")]
-        public string TaxType { get; set; }
+        [JsonProperty(PropertyName = "coupon")]
+        public string Coupon { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "taxTotal")]
-        public double? TaxTotal { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "taxPercentRate")]
-        public double? TaxPercentRate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "taxDetails")]
-        public IList<TaxDetail> TaxDetails { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "discounts")]
-        public IList<Discount> Discounts { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "transactions")]
-        public IList<PaymentGatewayTransaction> Transactions { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "operationType")]
-        public string OperationType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "parentOperationId")]
-        public string ParentOperationId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "number")]
-        public string Number { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isApproved")]
-        public bool? IsApproved { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "status")]
-        public string Status { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "comment")]
-        public string Comment { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "currency")]
-        public string Currency { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "sum")]
-        public double? Sum { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "outerId")]
-        public string OuterId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isCancelled")]
-        public bool? IsCancelled { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "cancelledDate")]
-        public System.DateTime? CancelledDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "cancelReason")]
-        public string CancelReason { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "dynamicProperties")]
-        public IList<DynamicObjectProperty> DynamicProperties { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "operationsLog")]
-        public IList<OperationLog> OperationsLog { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class TaxDetail
+    {
+        /// <summary>
+        /// Initializes a new instance of the TaxDetail class.
+        /// </summary>
+        public TaxDetail()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the TaxDetail class.
+        /// </summary>
+        public TaxDetail(double? rate = default(double?), double? amount = default(double?), string name = default(string))
+        {
+            Rate = rate;
+            Amount = amount;
+            Name = name;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "rate")]
+        public double? Rate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "amount")]
+        public double? Amount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
 
     }
 }
@@ -7177,6 +5861,1714 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "taxDetails")]
         public IList<TaxDetail> TaxDetails { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class DemoOrderLineItem
+    {
+        /// <summary>
+        /// Initializes a new instance of the DemoOrderLineItem class.
+        /// </summary>
+        public DemoOrderLineItem()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DemoOrderLineItem class.
+        /// </summary>
+        /// <param name="priceId">Price id</param>
+        /// <param name="price">unit price without discount and tax</param>
+        /// <param name="placedPrice">Resulting price with discount for one
+        /// unit</param>
+        /// <param name="discountAmount">Gets the value of the single qty line
+        /// item discount amount</param>
+        /// <param name="taxType">Tax category or type</param>
+        /// <param name="reserveQuantity">Reserve quantity</param>
+        public DemoOrderLineItem(string configuredGroupId = default(string), string priceId = default(string), string currency = default(string), double? price = default(double?), double? priceWithTax = default(double?), double? placedPrice = default(double?), double? placedPriceWithTax = default(double?), double? extendedPrice = default(double?), double? extendedPriceWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), int? reserveQuantity = default(int?), int? quantity = default(int?), string productId = default(string), string sku = default(string), string productType = default(string), string catalogId = default(string), string categoryId = default(string), string name = default(string), string comment = default(string), string imageUrl = default(string), bool? isGift = default(bool?), string shippingMethodCode = default(string), string fulfillmentLocationCode = default(string), string fulfillmentCenterId = default(string), string fulfillmentCenterName = default(string), string outerId = default(string), string weightUnit = default(string), double? weight = default(double?), string measureUnit = default(string), double? height = default(double?), double? length = default(double?), double? width = default(double?), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), string objectType = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<Discount> discounts = default(IList<Discount>), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        {
+            ConfiguredGroupId = configuredGroupId;
+            PriceId = priceId;
+            Currency = currency;
+            Price = price;
+            PriceWithTax = priceWithTax;
+            PlacedPrice = placedPrice;
+            PlacedPriceWithTax = placedPriceWithTax;
+            ExtendedPrice = extendedPrice;
+            ExtendedPriceWithTax = extendedPriceWithTax;
+            DiscountAmount = discountAmount;
+            DiscountAmountWithTax = discountAmountWithTax;
+            DiscountTotal = discountTotal;
+            DiscountTotalWithTax = discountTotalWithTax;
+            Fee = fee;
+            FeeWithTax = feeWithTax;
+            TaxType = taxType;
+            TaxTotal = taxTotal;
+            TaxPercentRate = taxPercentRate;
+            ReserveQuantity = reserveQuantity;
+            Quantity = quantity;
+            ProductId = productId;
+            Sku = sku;
+            ProductType = productType;
+            CatalogId = catalogId;
+            CategoryId = categoryId;
+            Name = name;
+            Comment = comment;
+            ImageUrl = imageUrl;
+            IsGift = isGift;
+            ShippingMethodCode = shippingMethodCode;
+            FulfillmentLocationCode = fulfillmentLocationCode;
+            FulfillmentCenterId = fulfillmentCenterId;
+            FulfillmentCenterName = fulfillmentCenterName;
+            OuterId = outerId;
+            WeightUnit = weightUnit;
+            Weight = weight;
+            MeasureUnit = measureUnit;
+            Height = height;
+            Length = length;
+            Width = width;
+            IsCancelled = isCancelled;
+            CancelledDate = cancelledDate;
+            CancelReason = cancelReason;
+            ObjectType = objectType;
+            DynamicProperties = dynamicProperties;
+            Discounts = discounts;
+            TaxDetails = taxDetails;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "configuredGroupId")]
+        public string ConfiguredGroupId { get; set; }
+
+        /// <summary>
+        /// Gets or sets price id
+        /// </summary>
+        [JsonProperty(PropertyName = "priceId")]
+        public string PriceId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currency")]
+        public string Currency { get; set; }
+
+        /// <summary>
+        /// Gets or sets unit price without discount and tax
+        /// </summary>
+        [JsonProperty(PropertyName = "price")]
+        public double? Price { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "priceWithTax")]
+        public double? PriceWithTax { get; set; }
+
+        /// <summary>
+        /// Gets or sets resulting price with discount for one unit
+        /// </summary>
+        [JsonProperty(PropertyName = "placedPrice")]
+        public double? PlacedPrice { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "placedPriceWithTax")]
+        public double? PlacedPriceWithTax { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "extendedPrice")]
+        public double? ExtendedPrice { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "extendedPriceWithTax")]
+        public double? ExtendedPriceWithTax { get; set; }
+
+        /// <summary>
+        /// Gets the value of the single qty line item discount amount
+        /// </summary>
+        [JsonProperty(PropertyName = "discountAmount")]
+        public double? DiscountAmount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "discountAmountWithTax")]
+        public double? DiscountAmountWithTax { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "discountTotal")]
+        public double? DiscountTotal { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "discountTotalWithTax")]
+        public double? DiscountTotalWithTax { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "fee")]
+        public double? Fee { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "feeWithTax")]
+        public double? FeeWithTax { get; set; }
+
+        /// <summary>
+        /// Gets or sets tax category or type
+        /// </summary>
+        [JsonProperty(PropertyName = "taxType")]
+        public string TaxType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxTotal")]
+        public double? TaxTotal { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxPercentRate")]
+        public double? TaxPercentRate { get; set; }
+
+        /// <summary>
+        /// Gets or sets reserve quantity
+        /// </summary>
+        [JsonProperty(PropertyName = "reserveQuantity")]
+        public int? ReserveQuantity { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "quantity")]
+        public int? Quantity { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "productId")]
+        public string ProductId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sku")]
+        public string Sku { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "productType")]
+        public string ProductType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "catalogId")]
+        public string CatalogId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "categoryId")]
+        public string CategoryId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "comment")]
+        public string Comment { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "imageUrl")]
+        public string ImageUrl { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isGift")]
+        public bool? IsGift { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "shippingMethodCode")]
+        public string ShippingMethodCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "fulfillmentLocationCode")]
+        public string FulfillmentLocationCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "fulfillmentCenterId")]
+        public string FulfillmentCenterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "fulfillmentCenterName")]
+        public string FulfillmentCenterName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "weightUnit")]
+        public string WeightUnit { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "weight")]
+        public double? Weight { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "measureUnit")]
+        public string MeasureUnit { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "height")]
+        public double? Height { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "length")]
+        public double? Length { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "width")]
+        public double? Width { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isCancelled")]
+        public bool? IsCancelled { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "cancelledDate")]
+        public System.DateTime? CancelledDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "cancelReason")]
+        public string CancelReason { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "dynamicProperties")]
+        public IList<DynamicObjectProperty> DynamicProperties { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "discounts")]
+        public IList<Discount> Discounts { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxDetails")]
+        public IList<TaxDetail> TaxDetails { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class DemoOrderConfiguredGroup
+    {
+        /// <summary>
+        /// Initializes a new instance of the DemoOrderConfiguredGroup class.
+        /// </summary>
+        public DemoOrderConfiguredGroup()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DemoOrderConfiguredGroup class.
+        /// </summary>
+        public DemoOrderConfiguredGroup(string productId = default(string), string name = default(string), string imageUrl = default(string), IList<string> itemIds = default(IList<string>), IList<DemoOrderLineItem> items = default(IList<DemoOrderLineItem>), int? quantity = default(int?), string currency = default(string), double? extendedPrice = default(double?), double? extendedPriceWithTax = default(double?), double? price = default(double?), double? priceWithTax = default(double?), double? placedPrice = default(double?), double? placedPriceWithTax = default(double?), double? taxTotal = default(double?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        {
+            ProductId = productId;
+            Name = name;
+            ImageUrl = imageUrl;
+            ItemIds = itemIds;
+            Items = items;
+            Quantity = quantity;
+            Currency = currency;
+            ExtendedPrice = extendedPrice;
+            ExtendedPriceWithTax = extendedPriceWithTax;
+            Price = price;
+            PriceWithTax = priceWithTax;
+            PlacedPrice = placedPrice;
+            PlacedPriceWithTax = placedPriceWithTax;
+            TaxTotal = taxTotal;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "productId")]
+        public string ProductId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "imageUrl")]
+        public string ImageUrl { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "itemIds")]
+        public IList<string> ItemIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "items")]
+        public IList<DemoOrderLineItem> Items { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "quantity")]
+        public int? Quantity { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currency")]
+        public string Currency { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "extendedPrice")]
+        public double? ExtendedPrice { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "extendedPriceWithTax")]
+        public double? ExtendedPriceWithTax { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "price")]
+        public double? Price { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "priceWithTax")]
+        public double? PriceWithTax { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "placedPrice")]
+        public double? PlacedPrice { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "placedPriceWithTax")]
+        public double? PlacedPriceWithTax { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxTotal")]
+        public double? TaxTotal { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class OrderAddress
+    {
+        /// <summary>
+        /// Initializes a new instance of the OrderAddress class.
+        /// </summary>
+        public OrderAddress()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the OrderAddress class.
+        /// </summary>
+        /// <param name="addressType">Possible values include: 'Billing',
+        /// 'Shipping', 'BillingAndShipping', 'Pickup'</param>
+        public OrderAddress(string addressType = default(string), string key = default(string), string name = default(string), string organization = default(string), string countryCode = default(string), string countryName = default(string), string city = default(string), string postalCode = default(string), string zip = default(string), string line1 = default(string), string line2 = default(string), string regionId = default(string), string regionName = default(string), string firstName = default(string), string middleName = default(string), string lastName = default(string), string phone = default(string), string email = default(string))
+        {
+            AddressType = addressType;
+            Key = key;
+            Name = name;
+            Organization = organization;
+            CountryCode = countryCode;
+            CountryName = countryName;
+            City = city;
+            PostalCode = postalCode;
+            Zip = zip;
+            Line1 = line1;
+            Line2 = line2;
+            RegionId = regionId;
+            RegionName = regionName;
+            FirstName = firstName;
+            MiddleName = middleName;
+            LastName = lastName;
+            Phone = phone;
+            Email = email;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Billing', 'Shipping',
+        /// 'BillingAndShipping', 'Pickup'
+        /// </summary>
+        [JsonProperty(PropertyName = "addressType")]
+        public string AddressType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "key")]
+        public string Key { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "organization")]
+        public string Organization { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "countryCode")]
+        public string CountryCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "countryName")]
+        public string CountryName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "city")]
+        public string City { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "postalCode")]
+        public string PostalCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "zip")]
+        public string Zip { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "line1")]
+        public string Line1 { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "line2")]
+        public string Line2 { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "regionId")]
+        public string RegionId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "regionName")]
+        public string RegionName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "firstName")]
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "middleName")]
+        public string MiddleName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "lastName")]
+        public string LastName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "phone")]
+        public string Phone { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "email")]
+        public string Email { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class ObjectSettingEntry
+    {
+        /// <summary>
+        /// Initializes a new instance of the ObjectSettingEntry class.
+        /// </summary>
+        public ObjectSettingEntry()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ObjectSettingEntry class.
+        /// </summary>
+        /// <param name="valueType">Possible values include: 'ShortText',
+        /// 'LongText', 'Integer', 'Decimal', 'DateTime', 'Boolean',
+        /// 'SecureString', 'Json', 'PositiveInteger'</param>
+        public ObjectSettingEntry(bool? itHasValues = default(bool?), string objectId = default(string), string objectType = default(string), object value = default(object), bool? restartRequired = default(bool?), string moduleId = default(string), string groupName = default(string), string name = default(string), bool? isHidden = default(bool?), string valueType = default(string), IList<object> allowedValues = default(IList<object>), object defaultValue = default(object), bool? isDictionary = default(bool?))
+        {
+            ItHasValues = itHasValues;
+            ObjectId = objectId;
+            ObjectType = objectType;
+            Value = value;
+            RestartRequired = restartRequired;
+            ModuleId = moduleId;
+            GroupName = groupName;
+            Name = name;
+            IsHidden = isHidden;
+            ValueType = valueType;
+            AllowedValues = allowedValues;
+            DefaultValue = defaultValue;
+            IsDictionary = isDictionary;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "itHasValues")]
+        public bool? ItHasValues { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectId")]
+        public string ObjectId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "value")]
+        public object Value { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "restartRequired")]
+        public bool? RestartRequired { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "moduleId")]
+        public string ModuleId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "groupName")]
+        public string GroupName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isHidden")]
+        public bool? IsHidden { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'ShortText', 'LongText',
+        /// 'Integer', 'Decimal', 'DateTime', 'Boolean', 'SecureString',
+        /// 'Json', 'PositiveInteger'
+        /// </summary>
+        [JsonProperty(PropertyName = "valueType")]
+        public string ValueType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "allowedValues")]
+        public IList<object> AllowedValues { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "defaultValue")]
+        public object DefaultValue { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isDictionary")]
+        public bool? IsDictionary { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class PaymentMethod
+    {
+        /// <summary>
+        /// Initializes a new instance of the PaymentMethod class.
+        /// </summary>
+        public PaymentMethod()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the PaymentMethod class.
+        /// </summary>
+        /// <param name="paymentMethodType">Possible values include: 'Unknown',
+        /// 'Standard', 'Redirection', 'PreparedForm'</param>
+        /// <param name="paymentMethodGroupType">Possible values include:
+        /// 'Paypal', 'BankCard', 'Alternative', 'Manual'</param>
+        public PaymentMethod(string code = default(string), string name = default(string), string logoUrl = default(string), bool? isActive = default(bool?), int? priority = default(int?), bool? isAvailableForPartial = default(bool?), string currency = default(string), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), string storeId = default(string), string typeName = default(string), IList<ObjectSettingEntry> settings = default(IList<ObjectSettingEntry>), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), string paymentMethodType = default(string), string paymentMethodGroupType = default(string), string id = default(string))
+        {
+            Code = code;
+            Name = name;
+            LogoUrl = logoUrl;
+            IsActive = isActive;
+            Priority = priority;
+            IsAvailableForPartial = isAvailableForPartial;
+            Currency = currency;
+            Price = price;
+            PriceWithTax = priceWithTax;
+            Total = total;
+            TotalWithTax = totalWithTax;
+            DiscountAmount = discountAmount;
+            DiscountAmountWithTax = discountAmountWithTax;
+            StoreId = storeId;
+            TypeName = typeName;
+            Settings = settings;
+            TaxType = taxType;
+            TaxTotal = taxTotal;
+            TaxPercentRate = taxPercentRate;
+            TaxDetails = taxDetails;
+            PaymentMethodType = paymentMethodType;
+            PaymentMethodGroupType = paymentMethodGroupType;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "code")]
+        public string Code { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "logoUrl")]
+        public string LogoUrl { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isActive")]
+        public bool? IsActive { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "priority")]
+        public int? Priority { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isAvailableForPartial")]
+        public bool? IsAvailableForPartial { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currency")]
+        public string Currency { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "price")]
+        public double? Price { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "priceWithTax")]
+        public double? PriceWithTax { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "total")]
+        public double? Total { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "totalWithTax")]
+        public double? TotalWithTax { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "discountAmount")]
+        public double? DiscountAmount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "discountAmountWithTax")]
+        public double? DiscountAmountWithTax { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "storeId")]
+        public string StoreId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "typeName")]
+        public string TypeName { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "settings")]
+        public IList<ObjectSettingEntry> Settings { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxType")]
+        public string TaxType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxTotal")]
+        public double? TaxTotal { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxPercentRate")]
+        public double? TaxPercentRate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxDetails")]
+        public IList<TaxDetail> TaxDetails { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Unknown', 'Standard',
+        /// 'Redirection', 'PreparedForm'
+        /// </summary>
+        [JsonProperty(PropertyName = "paymentMethodType")]
+        public string PaymentMethodType { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'Paypal', 'BankCard',
+        /// 'Alternative', 'Manual'
+        /// </summary>
+        [JsonProperty(PropertyName = "paymentMethodGroupType")]
+        public string PaymentMethodGroupType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class ProcessPaymentRequestResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the ProcessPaymentRequestResult
+        /// class.
+        /// </summary>
+        public ProcessPaymentRequestResult()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ProcessPaymentRequestResult
+        /// class.
+        /// </summary>
+        /// <param name="newPaymentStatus">Possible values include: 'New',
+        /// 'Pending', 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded',
+        /// 'Voided', 'Custom', 'Cancelled', 'Declined', 'Error'</param>
+        public ProcessPaymentRequestResult(string redirectUrl = default(string), string htmlForm = default(string), string outerId = default(string), PaymentMethod paymentMethod = default(PaymentMethod), bool? isSuccess = default(bool?), string errorMessage = default(string), string newPaymentStatus = default(string))
+        {
+            RedirectUrl = redirectUrl;
+            HtmlForm = htmlForm;
+            OuterId = outerId;
+            PaymentMethod = paymentMethod;
+            IsSuccess = isSuccess;
+            ErrorMessage = errorMessage;
+            NewPaymentStatus = newPaymentStatus;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "redirectUrl")]
+        public string RedirectUrl { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "htmlForm")]
+        public string HtmlForm { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "paymentMethod")]
+        public PaymentMethod PaymentMethod { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isSuccess")]
+        public bool? IsSuccess { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "errorMessage")]
+        public string ErrorMessage { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'New', 'Pending',
+        /// 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded', 'Voided',
+        /// 'Custom', 'Cancelled', 'Declined', 'Error'
+        /// </summary>
+        [JsonProperty(PropertyName = "newPaymentStatus")]
+        public string NewPaymentStatus { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class PaymentGatewayTransaction
+    {
+        /// <summary>
+        /// Initializes a new instance of the PaymentGatewayTransaction class.
+        /// </summary>
+        public PaymentGatewayTransaction()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the PaymentGatewayTransaction class.
+        /// </summary>
+        /// <param name="isProcessed">Flag represent that current transaction
+        /// is processed</param>
+        /// <param name="processedDate">Date when this transaction was
+        /// handled</param>
+        /// <param name="requestData">Raw request data</param>
+        /// <param name="responseData">Raw response data</param>
+        /// <param name="responseCode">Gateway or VC response status
+        /// code</param>
+        /// <param name="gatewayIpAddress">Gateway IP address</param>
+        /// <param name="type">The type of payment interaction.The payment can
+        /// be Capture or CheckReceived.
+        /// The value also includes customer payment interactions such as
+        /// Website, Call, Store, or Unknown.</param>
+        /// <param name="status">"Active", "Expired", and "Inactive" or
+        /// other</param>
+        public PaymentGatewayTransaction(double? amount = default(double?), string currencyCode = default(string), bool? isProcessed = default(bool?), System.DateTime? processedDate = default(System.DateTime?), string processError = default(string), int? processAttemptCount = default(int?), string requestData = default(string), string responseData = default(string), string responseCode = default(string), string gatewayIpAddress = default(string), string type = default(string), string status = default(string), string note = default(string), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        {
+            Amount = amount;
+            CurrencyCode = currencyCode;
+            IsProcessed = isProcessed;
+            ProcessedDate = processedDate;
+            ProcessError = processError;
+            ProcessAttemptCount = processAttemptCount;
+            RequestData = requestData;
+            ResponseData = responseData;
+            ResponseCode = responseCode;
+            GatewayIpAddress = gatewayIpAddress;
+            Type = type;
+            Status = status;
+            Note = note;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "amount")]
+        public double? Amount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currencyCode")]
+        public string CurrencyCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets flag represent that current transaction is processed
+        /// </summary>
+        [JsonProperty(PropertyName = "isProcessed")]
+        public bool? IsProcessed { get; set; }
+
+        /// <summary>
+        /// Gets or sets date when this transaction was handled
+        /// </summary>
+        [JsonProperty(PropertyName = "processedDate")]
+        public System.DateTime? ProcessedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "processError")]
+        public string ProcessError { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "processAttemptCount")]
+        public int? ProcessAttemptCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets raw request data
+        /// </summary>
+        [JsonProperty(PropertyName = "requestData")]
+        public string RequestData { get; set; }
+
+        /// <summary>
+        /// Gets or sets raw response data
+        /// </summary>
+        [JsonProperty(PropertyName = "responseData")]
+        public string ResponseData { get; set; }
+
+        /// <summary>
+        /// Gets or sets gateway or VC response status code
+        /// </summary>
+        [JsonProperty(PropertyName = "responseCode")]
+        public string ResponseCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets gateway IP address
+        /// </summary>
+        [JsonProperty(PropertyName = "gatewayIpAddress")]
+        public string GatewayIpAddress { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of payment interaction.The payment can be
+        /// Capture or CheckReceived.
+        /// The value also includes customer payment interactions such as
+        /// Website, Call, Store, or Unknown.
+        /// </summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets "Active", "Expired", and "Inactive" or other
+        /// </summary>
+        [JsonProperty(PropertyName = "status")]
+        public string Status { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "note")]
+        public string Note { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedDate")]
+        public System.DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class IOperation
+    {
+        /// <summary>
+        /// Initializes a new instance of the IOperation class.
+        /// </summary>
+        public IOperation()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the IOperation class.
+        /// </summary>
+        public IOperation(string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), IList<IOperation> childrenOperations = default(IList<IOperation>), string id = default(string))
+        {
+            OperationType = operationType;
+            ParentOperationId = parentOperationId;
+            Number = number;
+            IsApproved = isApproved;
+            Status = status;
+            Comment = comment;
+            Currency = currency;
+            ChildrenOperations = childrenOperations;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "operationType")]
+        public string OperationType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "parentOperationId")]
+        public string ParentOperationId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "number")]
+        public string Number { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isApproved")]
+        public bool? IsApproved { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "status")]
+        public string Status { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "comment")]
+        public string Comment { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currency")]
+        public string Currency { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "childrenOperations")]
+        public IList<IOperation> ChildrenOperations { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class PaymentIn
+    {
+        /// <summary>
+        /// Initializes a new instance of the PaymentIn class.
+        /// </summary>
+        public PaymentIn()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the PaymentIn class.
+        /// </summary>
+        /// <param name="gatewayCode">Payment method (gateway) code</param>
+        /// <param name="paymentStatus">Possible values include: 'New',
+        /// 'Pending', 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded',
+        /// 'Voided', 'Custom', 'Cancelled', 'Declined', 'Error'</param>
+        /// <param name="taxType">Tax category or type</param>
+        public PaymentIn(string orderId = default(string), string purpose = default(string), string gatewayCode = default(string), PaymentMethod paymentMethod = default(PaymentMethod), string organizationId = default(string), string organizationName = default(string), string customerId = default(string), string customerName = default(string), System.DateTime? incomingDate = default(System.DateTime?), OrderAddress billingAddress = default(OrderAddress), string paymentStatus = default(string), System.DateTime? authorizedDate = default(System.DateTime?), System.DateTime? capturedDate = default(System.DateTime?), System.DateTime? voidedDate = default(System.DateTime?), ProcessPaymentRequestResult processPaymentResult = default(ProcessPaymentRequestResult), double? price = default(double?), double? priceWithTax = default(double?), double? total = default(double?), double? totalWithTax = default(double?), double? discountAmount = default(double?), double? discountAmountWithTax = default(double?), string objectType = default(string), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), IList<Discount> discounts = default(IList<Discount>), IList<PaymentGatewayTransaction> transactions = default(IList<PaymentGatewayTransaction>), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), string outerId = default(string), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        {
+            OrderId = orderId;
+            Purpose = purpose;
+            GatewayCode = gatewayCode;
+            PaymentMethod = paymentMethod;
+            OrganizationId = organizationId;
+            OrganizationName = organizationName;
+            CustomerId = customerId;
+            CustomerName = customerName;
+            IncomingDate = incomingDate;
+            BillingAddress = billingAddress;
+            PaymentStatus = paymentStatus;
+            AuthorizedDate = authorizedDate;
+            CapturedDate = capturedDate;
+            VoidedDate = voidedDate;
+            ProcessPaymentResult = processPaymentResult;
+            Price = price;
+            PriceWithTax = priceWithTax;
+            Total = total;
+            TotalWithTax = totalWithTax;
+            DiscountAmount = discountAmount;
+            DiscountAmountWithTax = discountAmountWithTax;
+            ObjectType = objectType;
+            TaxType = taxType;
+            TaxTotal = taxTotal;
+            TaxPercentRate = taxPercentRate;
+            TaxDetails = taxDetails;
+            Discounts = discounts;
+            Transactions = transactions;
+            OperationType = operationType;
+            ParentOperationId = parentOperationId;
+            Number = number;
+            IsApproved = isApproved;
+            Status = status;
+            Comment = comment;
+            Currency = currency;
+            Sum = sum;
+            OuterId = outerId;
+            IsCancelled = isCancelled;
+            CancelledDate = cancelledDate;
+            CancelReason = cancelReason;
+            DynamicProperties = dynamicProperties;
+            OperationsLog = operationsLog;
+            CreatedDate = createdDate;
+            ModifiedDate = modifiedDate;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            Id = id;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "orderId")]
+        public string OrderId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "purpose")]
+        public string Purpose { get; set; }
+
+        /// <summary>
+        /// Gets or sets payment method (gateway) code
+        /// </summary>
+        [JsonProperty(PropertyName = "gatewayCode")]
+        public string GatewayCode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "paymentMethod")]
+        public PaymentMethod PaymentMethod { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "organizationId")]
+        public string OrganizationId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "organizationName")]
+        public string OrganizationName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "customerId")]
+        public string CustomerId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "customerName")]
+        public string CustomerName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "incomingDate")]
+        public System.DateTime? IncomingDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "billingAddress")]
+        public OrderAddress BillingAddress { get; set; }
+
+        /// <summary>
+        /// Gets or sets possible values include: 'New', 'Pending',
+        /// 'Authorized', 'Paid', 'PartiallyRefunded', 'Refunded', 'Voided',
+        /// 'Custom', 'Cancelled', 'Declined', 'Error'
+        /// </summary>
+        [JsonProperty(PropertyName = "paymentStatus")]
+        public string PaymentStatus { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "authorizedDate")]
+        public System.DateTime? AuthorizedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "capturedDate")]
+        public System.DateTime? CapturedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "voidedDate")]
+        public System.DateTime? VoidedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "processPaymentResult")]
+        public ProcessPaymentRequestResult ProcessPaymentResult { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "price")]
+        public double? Price { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "priceWithTax")]
+        public double? PriceWithTax { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "total")]
+        public double? Total { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "totalWithTax")]
+        public double? TotalWithTax { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "discountAmount")]
+        public double? DiscountAmount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "discountAmountWithTax")]
+        public double? DiscountAmountWithTax { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "objectType")]
+        public string ObjectType { get; set; }
+
+        /// <summary>
+        /// Gets or sets tax category or type
+        /// </summary>
+        [JsonProperty(PropertyName = "taxType")]
+        public string TaxType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxTotal")]
+        public double? TaxTotal { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxPercentRate")]
+        public double? TaxPercentRate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "taxDetails")]
+        public IList<TaxDetail> TaxDetails { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "discounts")]
+        public IList<Discount> Discounts { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "transactions")]
+        public IList<PaymentGatewayTransaction> Transactions { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "operationType")]
+        public string OperationType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "parentOperationId")]
+        public string ParentOperationId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "number")]
+        public string Number { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isApproved")]
+        public bool? IsApproved { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "status")]
+        public string Status { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "comment")]
+        public string Comment { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currency")]
+        public string Currency { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "sum")]
+        public double? Sum { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "outerId")]
+        public string OuterId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isCancelled")]
+        public bool? IsCancelled { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "cancelledDate")]
+        public System.DateTime? CancelledDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "cancelReason")]
+        public string CancelReason { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "dynamicProperties")]
+        public IList<DynamicObjectProperty> DynamicProperties { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "operationsLog")]
+        public IList<OperationLog> OperationsLog { get; set; }
 
         /// <summary>
         /// </summary>
@@ -7593,8 +7985,9 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// $100).</param>
         /// <param name="total">Grand order total</param>
         /// <param name="taxType">Tax category or type</param>
-        public CustomerOrder(IList<DemoOrderConfiguredGroup> configuredGroups = default(IList<DemoOrderConfiguredGroup>), string customerId = default(string), string customerName = default(string), string channelId = default(string), string storeId = default(string), string storeName = default(string), string organizationId = default(string), string organizationName = default(string), string employeeId = default(string), string employeeName = default(string), string shoppingCartId = default(string), bool? isPrototype = default(bool?), string purchaseOrderNumber = default(string), string subscriptionNumber = default(string), string subscriptionId = default(string), string objectType = default(string), IList<OrderAddress> addresses = default(IList<OrderAddress>), IList<PaymentIn> inPayments = default(IList<PaymentIn>), IList<OrderLineItem> items = default(IList<OrderLineItem>), IList<OrderShipment> shipments = default(IList<OrderShipment>), IList<Discount> discounts = default(IList<Discount>), double? discountAmount = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), IList<string> scopes = default(IList<string>), double? total = default(double?), double? subTotal = default(double?), double? subTotalWithTax = default(double?), double? subTotalDiscount = default(double?), double? subTotalDiscountWithTax = default(double?), double? subTotalTaxTotal = default(double?), double? shippingTotal = default(double?), double? shippingTotalWithTax = default(double?), double? shippingSubTotal = default(double?), double? shippingSubTotalWithTax = default(double?), double? shippingDiscountTotal = default(double?), double? shippingDiscountTotalWithTax = default(double?), double? shippingTaxTotal = default(double?), double? paymentTotal = default(double?), double? paymentTotalWithTax = default(double?), double? paymentSubTotal = default(double?), double? paymentSubTotalWithTax = default(double?), double? paymentDiscountTotal = default(double?), double? paymentDiscountTotalWithTax = default(double?), double? paymentTaxTotal = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), double? feeTotal = default(double?), double? feeTotalWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), string languageCode = default(string), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), string outerId = default(string), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public CustomerOrder(IList<OrderLineItem> usualItems = default(IList<OrderLineItem>), IList<DemoOrderConfiguredGroup> configuredGroups = default(IList<DemoOrderConfiguredGroup>), string customerId = default(string), string customerName = default(string), string channelId = default(string), string storeId = default(string), string storeName = default(string), string organizationId = default(string), string organizationName = default(string), string employeeId = default(string), string employeeName = default(string), string shoppingCartId = default(string), bool? isPrototype = default(bool?), string purchaseOrderNumber = default(string), string subscriptionNumber = default(string), string subscriptionId = default(string), string objectType = default(string), IList<OrderAddress> addresses = default(IList<OrderAddress>), IList<PaymentIn> inPayments = default(IList<PaymentIn>), IList<OrderLineItem> items = default(IList<OrderLineItem>), IList<OrderShipment> shipments = default(IList<OrderShipment>), IList<Discount> discounts = default(IList<Discount>), double? discountAmount = default(double?), IList<TaxDetail> taxDetails = default(IList<TaxDetail>), IList<string> scopes = default(IList<string>), double? total = default(double?), double? subTotal = default(double?), double? subTotalWithTax = default(double?), double? subTotalDiscount = default(double?), double? subTotalDiscountWithTax = default(double?), double? subTotalTaxTotal = default(double?), double? shippingTotal = default(double?), double? shippingTotalWithTax = default(double?), double? shippingSubTotal = default(double?), double? shippingSubTotalWithTax = default(double?), double? shippingDiscountTotal = default(double?), double? shippingDiscountTotalWithTax = default(double?), double? shippingTaxTotal = default(double?), double? paymentTotal = default(double?), double? paymentTotalWithTax = default(double?), double? paymentSubTotal = default(double?), double? paymentSubTotalWithTax = default(double?), double? paymentDiscountTotal = default(double?), double? paymentDiscountTotalWithTax = default(double?), double? paymentTaxTotal = default(double?), double? discountTotal = default(double?), double? discountTotalWithTax = default(double?), double? fee = default(double?), double? feeWithTax = default(double?), double? feeTotal = default(double?), double? feeTotalWithTax = default(double?), string taxType = default(string), double? taxTotal = default(double?), double? taxPercentRate = default(double?), string languageCode = default(string), string operationType = default(string), string parentOperationId = default(string), string number = default(string), bool? isApproved = default(bool?), string status = default(string), string comment = default(string), string currency = default(string), double? sum = default(double?), string outerId = default(string), bool? isCancelled = default(bool?), System.DateTime? cancelledDate = default(System.DateTime?), string cancelReason = default(string), IList<DynamicObjectProperty> dynamicProperties = default(IList<DynamicObjectProperty>), IList<OperationLog> operationsLog = default(IList<OperationLog>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
+            UsualItems = usualItems;
             ConfiguredGroups = configuredGroups;
             CustomerId = customerId;
             CustomerName = customerName;
@@ -7675,6 +8068,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "usualItems")]
+        public IList<OrderLineItem> UsualItems { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -9220,12 +9618,14 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// order id</param>
         /// <param name="orderNumber">It used to limit search within a customer
         /// order number</param>
+        /// <param name="customerId">Filter payments by customer</param>
         /// <param name="status">Search by status</param>
         /// <param name="number">Search by numbers</param>
-        public PaymentSearchCriteria(string orderId = default(string), string orderNumber = default(string), System.DateTime? capturedStartDate = default(System.DateTime?), System.DateTime? capturedEndDate = default(System.DateTime?), System.DateTime? authorizedStartDate = default(System.DateTime?), System.DateTime? authorizedEndDate = default(System.DateTime?), IList<string> ids = default(IList<string>), string employeeId = default(string), IList<string> storeIds = default(IList<string>), string status = default(string), IList<string> statuses = default(IList<string>), string number = default(string), IList<string> numbers = default(IList<string>), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
+        public PaymentSearchCriteria(string orderId = default(string), string orderNumber = default(string), string customerId = default(string), System.DateTime? capturedStartDate = default(System.DateTime?), System.DateTime? capturedEndDate = default(System.DateTime?), System.DateTime? authorizedStartDate = default(System.DateTime?), System.DateTime? authorizedEndDate = default(System.DateTime?), IList<string> ids = default(IList<string>), string employeeId = default(string), IList<string> storeIds = default(IList<string>), string status = default(string), IList<string> statuses = default(IList<string>), string number = default(string), IList<string> numbers = default(IList<string>), System.DateTime? startDate = default(System.DateTime?), System.DateTime? endDate = default(System.DateTime?), string responseGroup = default(string), string objectType = default(string), IList<string> objectTypes = default(IList<string>), IList<string> objectIds = default(IList<string>), string keyword = default(string), string searchPhrase = default(string), string languageCode = default(string), string sort = default(string), IList<SortInfo> sortInfos = default(IList<SortInfo>), int? skip = default(int?), int? take = default(int?))
         {
             OrderId = orderId;
             OrderNumber = orderNumber;
+            CustomerId = customerId;
             CapturedStartDate = capturedStartDate;
             CapturedEndDate = capturedEndDate;
             AuthorizedStartDate = authorizedStartDate;
@@ -9269,6 +9669,12 @@ namespace VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models
         /// </summary>
         [JsonProperty(PropertyName = "orderNumber")]
         public string OrderNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets filter payments by customer
+        /// </summary>
+        [JsonProperty(PropertyName = "customerId")]
+        public string CustomerId { get; set; }
 
         /// <summary>
         /// </summary>

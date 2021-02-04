@@ -30,6 +30,10 @@ namespace VirtoCommerce.Storefront.Model.Order.Demo
 
         public string ProductId { get; set; }
 
+        public string Name { get; set; }
+
+        public string ImageUrl { get; set; }
+
         public Product Product { get; set; }
 
         public DateTime CreatedDate { get; set; }
@@ -73,7 +77,5 @@ namespace VirtoCommerce.Storefront.Model.Order.Demo
         public Money TaxTotal { get; set; }
 
         #endregion Taxation
-
-        public ICollection<ProductPart> Parts { get; set; } = new List<ProductPart>();
     }
 }

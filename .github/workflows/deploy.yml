@@ -56,8 +56,8 @@ jobs:
       run: |
         if(git status --porcelain |Where {$_ -notmatch '^\?\?'}) # uncommitted changes exist
         {
-          git config --global user.name 'GitHub Actions'
-          git config user.email --global  'github.actions@virtoway.com'
+          git config --global user.name 'vc-ci'
+          git config user.email --global  'ci@virtocommerce.com'
           git commit -am 'Automated update ${{ github.repository }} to ${{ github.event.inputs.artifactVersion }}'
           git push
         }
