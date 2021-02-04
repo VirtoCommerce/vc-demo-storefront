@@ -48,9 +48,7 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
         }
 
         protected override async Task LoadProductDependencies(List<Product> products, ItemResponseGroup responseGroup, WorkContext workContext)
-        {
-            await base.LoadProductDependencies(products, responseGroup, workContext);
-
+        {           
             if (!products.IsNullOrEmpty())
             {
                 foreach (var product in products.Where(product => product.ProductType.EqualsInvariant(ProductTypes.Configurable)))
@@ -59,6 +57,8 @@ namespace VirtoCommerce.Storefront.Domain.Catalog
                     product.Parts = productParts;
                 }
             }
+
+            await base.LoadProductDependencies(products, responseGroup, workContext);
         }
 
         public async Task<ProductPart[]> GetProductPartsAsync(string productId)
