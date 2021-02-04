@@ -53,19 +53,22 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         [HttpPost("total")]
         public async Task<ActionResult<ProductPrice>> GetProductsTotal([FromBody] AddCartItem[] items)
         {
+            var currency = _workContextAccessor.WorkContext.CurrentCurrency;
+            var productTotal = new ProductTotal(currency);
+
             // Based on https://github.com/VirtoCommerce/vc-module-cart/blob/05dac9453f375f015bbea57e3f95f4c87a62ec74/src/VirtoCommerce.CartModule.Data/Services/DefaultShoppingCartTotalsCalculator.cs#L57-L68
-            if (items != null && items.Any())
+            if (!items.IsNullOrEmpty())
             {
                 var products = await _catalogService.GetProductsAsync(items.Select(x => x.ProductId).ToArray(), ItemResponseGroup.ItemWithPrices);
+
                 if (products != null && products.Any())
                 {
                     var productsById = products.ToDictionary(x => x.Id, x => x);
+
                     foreach (var item in items)
                     {
                         item.Product = productsById[item.ProductId];
                     }
-
-                    var currency = _workContextAccessor.WorkContext.CurrentCurrency;
 
                     // Original price without rounding stored in InternalAmount
                     var subTotal = items.Sum(x => x.Product.Price.ListPrice.InternalAmount * x.Quantity);
@@ -73,20 +76,18 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     var discountTotal = items.Sum(x => x.Product.Price.DiscountAmount.InternalAmount);
                     var discountTotalWithTax = items.Sum(x => x.Product.Price.DiscountAmountWithTax.InternalAmount);
                     var taxTotal = items.Sum(x => x.Product.TaxTotal.InternalAmount);
-                    var productTotal = new ProductTotal
-                    {
-                        SubTotal = new Money(Math.Round(subTotal, 2, MidpointRounding.AwayFromZero), currency),
-                        SubTotalWithTax = new Money(Math.Round(subTotalWithTax, 2, MidpointRounding.AwayFromZero), currency),
-                        DiscountTotal = new Money(Math.Round(discountTotal, 2, MidpointRounding.AwayFromZero), currency),
-                        DiscountTotalWithTax = new Money(Math.Round(discountTotalWithTax, 2, MidpointRounding.AwayFromZero), currency),
-                        TaxTotal = new Money(Math.Round(taxTotal, 2, MidpointRounding.AwayFromZero), currency) 
-                    };
+
+                    productTotal.SubTotal = new Money(Math.Round(subTotal, 2, MidpointRounding.AwayFromZero), currency);
+                    productTotal.SubTotalWithTax = new Money(Math.Round(subTotalWithTax, 2, MidpointRounding.AwayFromZero), currency);
+                    productTotal.DiscountTotal = new Money(Math.Round(discountTotal, 2, MidpointRounding.AwayFromZero), currency);
+                    productTotal.DiscountTotalWithTax = new Money(Math.Round(discountTotalWithTax, 2, MidpointRounding.AwayFromZero), currency);
+                    productTotal.TaxTotal = new Money(Math.Round(taxTotal, 2, MidpointRounding.AwayFromZero), currency);
                     productTotal.Total = new Money(productTotal.SubTotal.Amount - productTotal.DiscountTotal.Amount, currency);
                     productTotal.TotalWithTax = new Money(productTotal.Total.Amount + productTotal.TaxTotal.Amount, currency);
-                    return Ok(productTotal);
                 }
             }
-            return Ok();
+
+            return Ok(productTotal);
         }
     }
 }
