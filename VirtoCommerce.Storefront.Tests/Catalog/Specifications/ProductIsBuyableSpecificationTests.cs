@@ -18,6 +18,7 @@ namespace VirtoCommerce.Storefront.Tests.Catalog.Specifications
         [Fact]
         public void IsSatisfiedBy_NotConfigurable_True()
         {
+            // arrange
             var product = new Product()
             {
                 ProductType = ProductTypes.Physical,
@@ -31,8 +32,10 @@ namespace VirtoCommerce.Storefront.Tests.Catalog.Specifications
 
             var spec = new ProductIsBuyableSpecification();
 
+            // act
             var result = spec.IsSatisfiedBy(product);
 
+            // assert
             Assert.True(result);
         }
 
@@ -44,6 +47,7 @@ namespace VirtoCommerce.Storefront.Tests.Catalog.Specifications
         [InlineData(true, true, 0, 0)]
         public void IsSatisfiedBy_NotConfigurable_False(bool isActive, bool isBuyable, int priceMin, int priceMax)
         {
+            // arrange
             var product = new Product()
             {
                 ProductType = ProductTypes.Physical,
@@ -57,14 +61,17 @@ namespace VirtoCommerce.Storefront.Tests.Catalog.Specifications
 
             var spec = new ProductIsBuyableSpecification();
 
+            // act
             var result = spec.IsSatisfiedBy(product);
 
+            // assert
             Assert.False(result);
         }
 
         [Fact]
         public void IsSatisfiedBy_Configurable_True()
         {
+            // arrange
             var partItemFaker = new Faker<Product>()
                  .RuleFor(p => p.ProductType, f => ProductTypes.Physical);
 
@@ -79,14 +86,17 @@ namespace VirtoCommerce.Storefront.Tests.Catalog.Specifications
 
             var spec = new ProductIsBuyableSpecification();
 
+            // act
             var result = spec.IsSatisfiedBy(product);
 
+            // assert
             Assert.True(result);
         }
 
         [Fact]        
         public void IsSatisfiedBy_ConfigurablePartsIsEmpty_False()
         {
+            // arrange
             var partItemFaker = new Faker<Product>()
                  .RuleFor(p => p.ProductType, f => ProductTypes.Physical);
 
@@ -103,14 +113,17 @@ namespace VirtoCommerce.Storefront.Tests.Catalog.Specifications
 
             var spec = new ProductIsBuyableSpecification();
 
+            // act
             var result = spec.IsSatisfiedBy(product);
 
+            // assert
             Assert.False(result);
         }
 
         [Fact]
         public void IsSatisfiedBy_ConfigurableAnyPartItemsIsEmpty_False()
         {
+            // arrange
             var partItemFaker = new Faker<Product>()
                  .RuleFor(p => p.ProductType, f => ProductTypes.Physical);
 
@@ -129,8 +142,10 @@ namespace VirtoCommerce.Storefront.Tests.Catalog.Specifications
 
             var spec = new ProductIsBuyableSpecification();
 
+            // act
             var result = spec.IsSatisfiedBy(product);
 
+            // assert
             Assert.False(result);
         }
     }
