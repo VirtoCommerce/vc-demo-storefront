@@ -53,6 +53,8 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         public bool IsFuzzySearch { get; set; }
 
+        public ICollection<string> ObjectIds { get; set; }
+
         public override object Clone()
         {
             var result = base.Clone() as ProductSearchCriteria;

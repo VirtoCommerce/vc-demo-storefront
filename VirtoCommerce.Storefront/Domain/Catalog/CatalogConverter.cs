@@ -183,6 +183,11 @@ namespace VirtoCommerce.Storefront.Domain
                 result.Terms.Add(string.Concat("vendor:", criteria.VendorId));
             }
 
+            if (!criteria.ObjectIds.IsNullOrEmpty())
+            {
+                result.ObjectIds = criteria.ObjectIds.ToArray();
+            }
+            
             return result;
         }
 
