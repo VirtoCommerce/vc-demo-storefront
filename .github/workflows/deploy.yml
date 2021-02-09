@@ -19,7 +19,7 @@ on:
       appDescriptionBranch:
         description: 'ArgoCd branch'
         required: true
-        default: 'develop'
+        default: 'dev'
 
 
 jobs:
