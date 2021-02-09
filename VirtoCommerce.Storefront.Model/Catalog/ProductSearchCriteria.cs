@@ -55,6 +55,8 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         public ICollection<string> ObjectIds { get; set; }
 
+        public bool SelectOnlyPurchasedProducts { get; set; }
+
         public override object Clone()
         {
             var result = base.Clone() as ProductSearchCriteria;
@@ -86,6 +88,9 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             ResponseGroup = EnumUtility.SafeParse(queryString.Get("resp_group"), ItemResponseGroup.Default);
             // terms=name1:value1,value2,value3;name2:value1,value2,value3
             Terms = (queryString.GetValues("terms") ?? Array.Empty<string>()).SelectMany(x => x.ToTerms()).ToList();
+
+            bool.TryParse(queryString.Get("select_only_purchased_products"), out var selectOnlyPurchasedProducts);
+            SelectOnlyPurchasedProducts = selectOnlyPurchasedProducts;
         }
 
         public override string ToString()

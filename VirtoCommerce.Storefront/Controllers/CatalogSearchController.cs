@@ -66,10 +66,8 @@ namespace VirtoCommerce.Storefront.Controllers
 
             var criteria = (ProductSearchCriteria) WorkContext.CurrentProductSearchCriteria.Clone();
             criteria.Outline = category.Outline; // should we simply take it from current category?
-
-            bool.TryParse(WorkContext.QueryString.Get("select_only_purchased_product"), out var selectOnlyPurchasedProducts);
-
-            if (selectOnlyPurchasedProducts && WorkContext.CurrentUser.IsRegisteredUser)
+            
+            if (criteria.SelectOnlyPurchasedProducts && WorkContext.CurrentUser.IsRegisteredUser)
             {
                 var customerOrders = await _customerOrderService.SearchOrdersAsync(
                     new OrderSearchCriteria
