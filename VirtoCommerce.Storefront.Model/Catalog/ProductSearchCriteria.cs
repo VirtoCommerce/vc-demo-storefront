@@ -55,7 +55,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
 
         public ICollection<string> ObjectIds { get; set; }
 
-        public bool SelectOnlyPurchasedProducts { get; set; }
+        public bool IsSelectOnlyPurchasedProducts { get; set; }
 
         public override object Clone()
         {
@@ -89,8 +89,8 @@ namespace VirtoCommerce.Storefront.Model.Catalog
             // terms=name1:value1,value2,value3;name2:value1,value2,value3
             Terms = (queryString.GetValues("terms") ?? Array.Empty<string>()).SelectMany(x => x.ToTerms()).ToList();
 
-            bool.TryParse(queryString.Get("select_only_purchased_products"), out var selectOnlyPurchasedProducts);
-            SelectOnlyPurchasedProducts = selectOnlyPurchasedProducts;
+            bool.TryParse(queryString.Get("select_only_purchased_products"), out var isSelectOnlyPurchasedProducts);
+            IsSelectOnlyPurchasedProducts = isSelectOnlyPurchasedProducts;
         }
 
         public override string ToString()
