@@ -72,7 +72,7 @@ jobs:
       run: | 
         do {
           Start-Sleep -s 15
-          $statusBage = (Invoke-WebRequest -Uri "https://argo.govirto.com/api/badge?name=webstore-develop").Content
+          $statusBage = (Invoke-WebRequest -Uri "https://argo.govirto.com/api/badge?name=webstore-dev").Content
           
           $syncedAndHealthy = $statusBage.Contains('>Healthy<') -and $statusBage.Contains('>Synced<')
           if (-not $syncedAndHealthy) {
