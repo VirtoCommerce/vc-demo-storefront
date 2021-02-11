@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using PagedList.Core;
 using VirtoCommerce.Storefront.Model.Common;
 
@@ -81,7 +82,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
             get
             {
                 Part retVal = null;
-                if (!_pagedList.IsFirstPage)
+                if (!_pagedList.IsFirstPage && Parts.Any())
                 {
                     retVal = Parts[Math.Min(Parts.Count - 1, Math.Max(0, CurrentPage - 2))];
                 }
