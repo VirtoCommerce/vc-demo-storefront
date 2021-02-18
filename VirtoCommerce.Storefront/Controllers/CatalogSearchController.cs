@@ -1,13 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
-using PagedList.Core;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using PagedList.Core;
 using VirtoCommerce.Storefront.Common;
 using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Order;
+using VirtoCommerce.Storefront.Model.Order.Services;
 using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers
@@ -16,11 +18,18 @@ namespace VirtoCommerce.Storefront.Controllers
     public class CatalogSearchController : StorefrontControllerBase
     {
         private readonly ICatalogService _searchService;
+        private readonly ICustomerOrderService _customerOrderService;
 
-        public CatalogSearchController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, ICatalogService searchService)
+        public CatalogSearchController(
+            IWorkContextAccessor workContextAccessor,
+            IStorefrontUrlBuilder urlBuilder,
+            ICatalogService searchService,
+            ICustomerOrderService customerOrderService
+            )
             : base(workContextAccessor, urlBuilder)
         {
             _searchService = searchService;
+            _customerOrderService = customerOrderService;
         }
 
         /// GET search
@@ -55,8 +64,30 @@ namespace VirtoCommerce.Storefront.Controllers
             WorkContext.CurrentPageSeo = category.SeoInfo.JsonClone();
             WorkContext.CurrentPageSeo.Slug = category.Url;
 
-            var criteria = WorkContext.CurrentProductSearchCriteria.Clone() as ProductSearchCriteria;
+            var criteria = (ProductSearchCriteria) WorkContext.CurrentProductSearchCriteria.Clone();
             criteria.Outline = category.Outline; // should we simply take it from current category?
+            
+            if (criteria.IsSelectOnlyPurchasedProducts && WorkContext.CurrentUser.IsRegisteredUser)
+            {
+                var customerOrders = await _customerOrderService.SearchOrdersAsync(
+                    new OrderSearchCriteria
+                    {
+                        CustomerId = WorkContext.CurrentUser.Id,
+                        StoreIds = new [] { WorkContext.CurrentStore.Id },
+                        Sort = "CreatedDate:DESC",
+                        PageSize = 5, // Actually this field is Take field
+                    });
+
+                criteria.ObjectIds = customerOrders
+                    .SelectMany(x =>
+                    {
+                        var result = x.Items.Select(i => i.ProductId).ToList();
+                        result.AddRange(x.ConfiguredGroups.Select(cg => cg.ProductId));
+
+                        return result;
+                    })
+                    .ToArray();
+            }
 
             category.Products = new MutablePagedList<Product>((pageNumber, pageSize, sortInfos, @params) =>
             {
