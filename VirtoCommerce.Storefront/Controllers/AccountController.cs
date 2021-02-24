@@ -72,6 +72,19 @@ namespace VirtoCommerce.Storefront.Controllers
             return View("customers/account", WorkContext);
         }
 
+        [HttpGet("b4")]
+        public async Task<ActionResult> GetAccount2()
+        {
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, OnlyRegisteredUserAuthorizationRequirement.PolicyName);
+            if (!authorizationResult.Succeeded)
+            {
+                return Challenge();
+            }
+
+            // Customer should be already populated in WorkContext middle-ware
+            return View("customers/account_b4", WorkContext);
+        }
+
         [HttpGet("order/{number}")]
         public async Task<ActionResult> GetOrderDetails(string number)
         {
