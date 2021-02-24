@@ -388,12 +388,10 @@ namespace VirtoCommerce.Storefront
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseForwardedHeaders();
             }
             else
             {
                 app.UseExceptionHandler("/error/500");
-                app.UseForwardedHeaders();
                 app.UseHsts();
             }
             // Do not write telemetry to debug output 
