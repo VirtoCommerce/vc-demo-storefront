@@ -169,12 +169,10 @@ namespace VirtoCommerce.Storefront.Controllers
 
                     return StoreFrontRedirect("~/account");
                 }
-                else
+
+                foreach (var error in result.Errors)
                 {
-                    foreach (var error in result.Errors)
-                    {
-                        WorkContext.Form.Errors.Add(new FormError { Code = error.Code?.PascalToKebabCase(), Description = error.Description });
-                    }
+                    WorkContext.Form.Errors.Add(new FormError { Code = error.Code?.PascalToKebabCase(), Description = error.Description });
                 }
             }
 
