@@ -34,6 +34,7 @@ namespace VirtoCommerce.Storefront.Controllers
         private readonly StorefrontOptions _options;
         private readonly INotifications _platformNotificationApi;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IdentityOptions _identityOptions;
 
         private readonly string[] _firstNameClaims = { ClaimTypes.GivenName, "urn:github:name", ClaimTypes.Name };
 
@@ -44,7 +45,8 @@ namespace VirtoCommerce.Storefront.Controllers
             IEventPublisher publisher,
             INotifications platformNotificationApi,
             IAuthorizationService authorizationService,
-            IOptions<StorefrontOptions> options)
+            IOptions<StorefrontOptions> options,
+            IOptions<IdentityOptions> identityOptions)
             : base(workContextAccessor, urlBuilder)
         {
             _urlBuilder = urlBuilder;
@@ -53,6 +55,7 @@ namespace VirtoCommerce.Storefront.Controllers
             _options = options.Value;
             _platformNotificationApi = platformNotificationApi;
             _authorizationService = authorizationService;
+            _identityOptions = identityOptions.Value;
         }
 
         // GET: /account
@@ -129,8 +132,11 @@ namespace VirtoCommerce.Storefront.Controllers
                     user = await _signInManager.UserManager.FindByNameAsync(user.UserName);
                     await _publisher.Publish(new UserRegisteredEvent(WorkContext, user, registration));
 
-                    await _signInManager.SignInAsync(user, isPersistent: true);
-                    await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                    if (!_identityOptions.SignIn.RequireConfirmedEmail)
+                    {
+                        await _signInManager.SignInAsync(user, isPersistent: true);
+                        await _publisher.Publish(new UserLoginEvent(WorkContext, user));
+                    }
 
                     // Send new user registration notification
                     var registrationEmailNotification = new RegistrationEmailNotification(WorkContext.CurrentStore.Id, WorkContext.CurrentLanguage)
@@ -256,10 +262,26 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpGet("confirmemail")]
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string token)
+        public async Task<ActionResult> ConfirmEmail(string userId, string token)
         {
-            var result = await _signInManager.UserManager.ConfirmEmailAsync(WorkContext.CurrentUser, token);
+            if (string.IsNullOrEmpty(userId))
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserNotFound());
+                return View("error", WorkContext);
+            }
+
+            var user = await _signInManager.UserManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                WorkContext.Form.Errors.Add(SecurityErrorDescriber.UserNotFound());
+                return View("error", WorkContext);
+            }
+
+            var result = await _signInManager.UserManager.ConfirmEmailAsync(user, token);
+
             var viewName = result.Succeeded ? "confirmation-done" : "error";
+
             return View(viewName);
         }
 
@@ -597,7 +619,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
                 if (string.IsNullOrEmpty(phoneNumber))
                 {
-                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.OperationFailed());
+                    WorkContext.Form.Errors.Add(SecurityErrorDescriber.PhoneNumberNotFound());
                     return View("customers/forgot_password", WorkContext);
                 }
 
@@ -634,7 +656,7 @@ namespace VirtoCommerce.Storefront.Controllers
                 return View(successViewName, WorkContext);
             }
 
-            WorkContext.Form.Errors.Add(new FormError { Description = sendingResult.ErrorMessage });
+            WorkContext.Form.Errors.Add(SecurityErrorDescriber.ErrorSendNotification(sendingResult.ErrorMessage));
             return View("customers/forgot_password", WorkContext);
         }
 
