@@ -383,15 +383,15 @@ namespace VirtoCommerce.Storefront
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseForwardedHeaders();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseForwardedHeaders();
             }
             else
             {
                 app.UseExceptionHandler("/error/500");
-                app.UseForwardedHeaders();
                 app.UseHsts();
             }
             // Do not write telemetry to debug output 
