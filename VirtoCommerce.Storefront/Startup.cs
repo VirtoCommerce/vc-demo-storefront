@@ -8,6 +8,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -264,6 +265,7 @@ namespace VirtoCommerce.Storefront
             services.ConfigureApplicationCookie(options =>
             {
                 Configuration.GetSection("CookieAuthenticationOptions").Bind(options);
+                options.Cookie.HttpOnly = false;
                 options.EventsType = typeof(CustomCookieAuthenticationEvents);
             });
 
