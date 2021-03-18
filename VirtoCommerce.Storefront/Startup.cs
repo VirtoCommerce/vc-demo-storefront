@@ -63,7 +63,6 @@ using VirtoCommerce.Storefront.Model.Subscriptions.Services;
 using VirtoCommerce.Storefront.Model.Tax.Services;
 using VirtoCommerce.Storefront.Routing;
 using VirtoCommerce.Tools;
-using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace VirtoCommerce.Storefront
 {
@@ -264,6 +263,7 @@ namespace VirtoCommerce.Storefront
             services.ConfigureApplicationCookie(options =>
             {
                 Configuration.GetSection("CookieAuthenticationOptions").Bind(options);
+                options.Cookie.HttpOnly = false;
                 options.EventsType = typeof(CustomCookieAuthenticationEvents);
             });
 
