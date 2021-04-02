@@ -583,20 +583,19 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
             return Ok(login);
         }
-
-
+        
         private string ValidateAndGetLogin(string token)
         {
             var handler = new JwtSecurityTokenHandler();
 
             var validationParameters = new TokenValidationParameters
             {
-                ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
                     _configuration.GetSection("ExternalAuthorizationOptions")["SecurityKey"])),
                 ValidIssuer = _configuration.GetSection("ExternalAuthorizationOptions")["Issuer"],
                 ValidAudience = _configuration.GetSection("ExternalAuthorizationOptions")["Audience"],
 
+                ValidateIssuerSigningKey = true,
                 ValidateAudience = true,
                 ValidateIssuer = true,
                 ValidateLifetime = true
