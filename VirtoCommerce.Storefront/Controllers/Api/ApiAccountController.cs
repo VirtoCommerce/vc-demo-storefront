@@ -560,8 +560,11 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult> Login([FromForm(Name = "access_token")] string accessToken)
+        public async Task<ActionResult> Login()
         {
+            var accessToken = HttpContext.Request.Form[
+                _configuration.GetSection("ExternalAuthorizationOptions")["TokenFieldName"]];
+
             if (string.IsNullOrWhiteSpace(accessToken))
             {
                 return BadRequest();
