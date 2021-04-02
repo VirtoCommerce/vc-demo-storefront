@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Common;
@@ -31,15 +35,17 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly IMemberService _memberService;
         private readonly INotifications _platformNotificationApi;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IConfiguration _configuration;
 
         public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, UserManager<User> userManager, SignInManager<User> signInManager, IAuthorizationService authorizationService,
-        IMemberService memberService, IEventPublisher publisher, INotifications platformNotificationApi)
+        IMemberService memberService, IEventPublisher publisher, INotifications platformNotificationApi, IConfiguration configuration)
             : base(workContextAccessor, urlBuilder)
         {
             _userManager = userManager;
             _memberService = memberService;
             _publisher = publisher;
             _platformNotificationApi = platformNotificationApi;
+            _configuration = configuration;
             _authorizationService = authorizationService;
             _signInManager = signInManager;
         }
@@ -552,5 +558,50 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
         }
 
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<ActionResult> Login([FromForm(Name = "access_token")] string accessToken)
+        {
+            if (string.IsNullOrWhiteSpace(accessToken))
+            {
+                return BadRequest();
+            }
+
+            var login = ValidateAndGetLogin(accessToken);
+
+            var user = !string.IsNullOrWhiteSpace(login) ? await _signInManager.UserManager.FindByNameAsync(login) : null;
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            await _signInManager.SignInAsync(user, true);
+
+            return Ok(login);
+        }
+
+
+        private string ValidateAndGetLogin(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
+                    _configuration.GetSection("ExternalAuthorizationOptions")["SecurityKey"])),
+                ValidIssuer = _configuration.GetSection("ExternalAuthorizationOptions")["Issuer"],
+                ValidAudience = _configuration.GetSection("ExternalAuthorizationOptions")["Audience"],
+
+                ValidateAudience = true,
+                ValidateIssuer = true,
+                ValidateLifetime = true
+            };
+
+            handler.ValidateToken(token, validationParameters, out var validToken);
+
+            return (validToken as JwtSecurityToken)?.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
+        }
     }
 }
