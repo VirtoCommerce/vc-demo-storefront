@@ -557,53 +557,5 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             return new UpdatePhoneNumberResult { Succeeded = result.Succeeded };
 
         }
-
-        [HttpPost("login")]
-        [AllowAnonymous]
-        public async Task<ActionResult> Login()
-        {
-            var accessToken = HttpContext.Request.Form[
-                _configuration.GetSection("ExternalAuthorizationOptions")["TokenFieldName"]];
-
-            if (string.IsNullOrWhiteSpace(accessToken))
-            {
-                return BadRequest();
-            }
-
-            var login = ValidateAndGetLogin(accessToken);
-
-            var user = !string.IsNullOrWhiteSpace(login) ? await _signInManager.UserManager.FindByNameAsync(login) : null;
-
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
-            await _signInManager.SignInAsync(user, true);
-
-            return Ok(login);
-        }
-        
-        private string ValidateAndGetLogin(string token)
-        {
-            var handler = new JwtSecurityTokenHandler();
-
-            var validationParameters = new TokenValidationParameters
-            {
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
-                    _configuration.GetSection("ExternalAuthorizationOptions")["SecurityKey"])),
-                ValidIssuer = _configuration.GetSection("ExternalAuthorizationOptions")["Issuer"],
-                ValidAudience = _configuration.GetSection("ExternalAuthorizationOptions")["Audience"],
-
-                ValidateIssuerSigningKey = true,
-                ValidateAudience = true,
-                ValidateIssuer = true,
-                ValidateLifetime = true
-            };
-
-            handler.ValidateToken(token, validationParameters, out var validToken);
-
-            return (validToken as JwtSecurityToken)?.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
-        }
     }
 }
