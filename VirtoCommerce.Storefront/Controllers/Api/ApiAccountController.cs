@@ -1,14 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using VirtoCommerce.Storefront.AutoRestClients.NotificationsModuleApi;
 using VirtoCommerce.Storefront.Domain;
 using VirtoCommerce.Storefront.Domain.Common;
@@ -35,17 +31,15 @@ namespace VirtoCommerce.Storefront.Controllers.Api
         private readonly IMemberService _memberService;
         private readonly INotifications _platformNotificationApi;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IConfiguration _configuration;
 
         public ApiAccountController(IWorkContextAccessor workContextAccessor, IStorefrontUrlBuilder urlBuilder, UserManager<User> userManager, SignInManager<User> signInManager, IAuthorizationService authorizationService,
-        IMemberService memberService, IEventPublisher publisher, INotifications platformNotificationApi, IConfiguration configuration)
+        IMemberService memberService, IEventPublisher publisher, INotifications platformNotificationApi)
             : base(workContextAccessor, urlBuilder)
         {
             _userManager = userManager;
             _memberService = memberService;
             _publisher = publisher;
             _platformNotificationApi = platformNotificationApi;
-            _configuration = configuration;
             _authorizationService = authorizationService;
             _signInManager = signInManager;
         }
