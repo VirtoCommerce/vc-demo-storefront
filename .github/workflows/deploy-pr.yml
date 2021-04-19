@@ -17,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-      IMAGE_NAME: "demo-storefront"
       ARTIFACT_KEY: "docker.pkg.github.com/virtocommerce/vc-storefront/storefront"
 
     steps:
@@ -57,4 +56,4 @@ jobs:
 
     - name: Deploy to dev test
       run: |
-        echo "docker.pkg.github.com/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}"
+        echo "${{ steps.artifactLink.outputs.artifactUrl }}"
