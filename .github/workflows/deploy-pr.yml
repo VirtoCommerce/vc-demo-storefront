@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      IMAGE_NAME: "demo-storefront"
       ARTIFACT_KEY: "docker.pkg.github.com/virtocommerce/vc-storefront/storefront"
 
     steps:
@@ -46,10 +47,10 @@ jobs:
         taskNumber: "${{ steps.artifactLink.outputs.demoTaskNumber }}"
         cmPath: "webstore-app/resources/kustomization.yaml"
 
-    # - name: Deploy to Dev
-    #   if: github.event.action == 'closed' && github.event.pull_request.merged == true
-    #   uses: benc-uk/workflow-dispatch@v1
-    #   with:
-    #     workflow: Theme deployment
-    #     token: ${{ secrets.REPO_TOKEN }}
-    #     inputs: '{ "blobUrl": "${{ steps.artifactLink.outputs.artifactUrl }}", "artifactVersion": "PR-${{ github.event.pull_request.number }}", "key": "${{ env.ARTIFACT_KEY}}" }'
+    - name: Invoke VC image deployment workflow
+      if: ${{(github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master')}}
+      uses: benc-uk/workflow-dispatch@v1
+      with:
+        workflow: VC image deployment
+        token: ${{ secrets.REPO_TOKEN }}
+        inputs: '{ "baseImageName": "docker.pkg.github.com/virtocommerce/vc-storefront/storefront", "artifactLink": "docker.pkg.github.com/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}"}'

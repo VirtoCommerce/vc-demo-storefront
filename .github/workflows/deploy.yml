@@ -1,4 +1,5 @@
 # v0.1
+
 name: VC image deployment
 on:
   workflow_dispatch:
@@ -6,11 +7,8 @@ on:
       baseImageName:
         description: 'Base kustomize image name'
         required: true
-      imageName:
-        description: 'Deploying image name'
-        required: true
-      artifactVersion: 
-        description: 'Full artifact build number'
+      artifactLink: 
+        description: 'Full link to artifact docker image'
         required: true
       appDescriptionRepo:
         description: 'ArgoCd repository'
@@ -20,7 +18,6 @@ on:
         description: 'ArgoCd branch'
         required: true
         default: 'dev'
-
 
 jobs:
   cd:
@@ -46,10 +43,9 @@ jobs:
     - name: Update kustomize
       shell: pwsh
       run: |
-        $REPOSITORY = "docker.pkg.github.com/$('${{ github.repository }}'.ToLower())"
         cd ${{ github.workspace }}
         cd ./webstore-app/resources
-        kustomize edit set image ${{ github.event.inputs.baseImageName }}=$REPOSITORY/${{ github.event.inputs.imageName }}:${{ github.event.inputs.artifactVersion }}
+        kustomize edit set image ${{ github.event.inputs.baseImageName }}=${{ github.event.inputs.artifactLink }}
 
     - uses: VirtoCommerce/vc-github-actions/setup-git-credentials-github@master
       with:
