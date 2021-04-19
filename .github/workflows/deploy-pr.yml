@@ -33,6 +33,7 @@ jobs:
         artifactKey: ${{ env.ARTIFACT_KEY}}
         artifactUrl: "${{ steps.artifactLink.outputs.artifactUrl }}"
         taskNumber: "${{ steps.artifactLink.outputs.qaTaskNumber }}"
+        cmPath: "webstore-app/resources/kustomization.yaml"
 
     - name: Create deploy PR in Demo
       if: github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy-demo')
@@ -43,6 +44,7 @@ jobs:
         artifactKey: ${{ env.ARTIFACT_KEY}}
         artifactUrl: "${{ steps.artifactLink.outputs.artifactUrl }}"
         taskNumber: "${{ steps.artifactLink.outputs.demoTaskNumber }}"
+        cmPath: "webstore-app/resources/kustomization.yaml"
 
     # - name: Deploy to Dev
     #   if: github.event.action == 'closed' && github.event.pull_request.merged == true
