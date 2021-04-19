@@ -1,6 +1,6 @@
 # v1.0
 
-name: Deploy Theme to environments
+name: Deploy Storefront to environments
 on: 
   pull_request:
     paths-ignore:
