@@ -51,4 +51,3 @@ jobs:
     #     workflow: Theme deployment
     #     token: ${{ secrets.REPO_TOKEN }}
     #     inputs: '{ "blobUrl": "${{ steps.artifactLink.outputs.artifactUrl }}", "artifactVersion": "PR-${{ github.event.pull_request.number }}", "key": "${{ env.ARTIFACT_KEY}}" }'
-
