@@ -51,13 +51,15 @@ jobs:
         cd ./webstore-app/resources
         kustomize edit set image ${{ github.event.inputs.baseImageName }}=$REPOSITORY/${{ github.event.inputs.imageName }}:${{ github.event.inputs.artifactVersion }}
 
+    - uses: VirtoCommerce/vc-github-actions/setup-git-credentials-github@master
+      with:
+        githubToken: ${{ secrets.REPO_TOKEN }}
+
     - name: Commit kustomize change
       shell: pwsh
       run: |
         if(git status --porcelain |Where {$_ -notmatch '^\?\?'}) # uncommitted changes exist
         {
-          git config --global user.name 'vc-ci'
-          git config user.email --global  'ci@virtocommerce.com'
           git commit -am 'Automated update ${{ github.repository }} to ${{ github.event.inputs.artifactVersion }}'
           git push
         }
