@@ -1,6 +1,6 @@
 # v1.0
 
-name: Deploy Theme to environments
+name: Deploy Storefront to environments
 on: 
   pull_request:
     paths-ignore:
@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      ARTIFACT_KEY: "docker.pkg.github.com/virtocommerce/vc-storefront/storefront"
 
     steps:
     - name: Gets artifact link
@@ -25,29 +26,30 @@ jobs:
 
     - name: Create deploy PR in QA
       if: github.event.action != 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy-qa') && !contains(github.event.pull_request.labels.*.name, 'deploy-demo')
-      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@master
+      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-1275
       with:
         deployRepo: "vc-webstore-deploy"
         deployBranch: "qa"
-        artifactKey: "B2B_THEME_URL"
+        artifactKey: ${{ env.ARTIFACT_KEY}}
         artifactUrl: "${{ steps.artifactLink.outputs.artifactUrl }}"
         taskNumber: "${{ steps.artifactLink.outputs.qaTaskNumber }}"
+        cmPath: "webstore-app/resources/kustomization.yaml"
 
     - name: Create deploy PR in Demo
       if: github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy-demo')
-      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@master
+      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-1275
       with:
         deployRepo: "vc-webstore-deploy"
         deployBranch: "master"
-        artifactKey: "B2B_THEME_URL"
+        artifactKey: ${{ env.ARTIFACT_KEY}}
         artifactUrl: "${{ steps.artifactLink.outputs.artifactUrl }}"
         taskNumber: "${{ steps.artifactLink.outputs.demoTaskNumber }}"
+        cmPath: "webstore-app/resources/kustomization.yaml"
 
-    - name: Deploy to Dev
-      if: github.event.action == 'closed' && github.event.pull_request.merged == true
-      uses: benc-uk/workflow-dispatch@v1
-      with:
-        workflow: Theme deployment
-        token: ${{ secrets.REPO_TOKEN }}
-        inputs: '{ "blobUrl": "${{ steps.artifactLink.outputs.artifactUrl }}", "artifactVersion": "PR-${{ github.event.pull_request.number }}", "key": "B2B_THEME_URL"  }'
-
+    # - name: Deploy to dev
+    #   if: github.event.action == 'closed' && github.event.pull_request.merged == true
+    #   uses: benc-uk/workflow-dispatch@v1
+    #   with:
+    #     workflow: VC image deployment
+    #     token: ${{ secrets.REPO_TOKEN }}
+    #     inputs: '{ "baseImageName": "docker.pkg.github.com/virtocommerce/vc-storefront/storefront", "artifactLink": "${{ steps.artifactLink.outputs.artifactUrl }}" }'
