@@ -1,0 +1,55 @@
+# v1.0
+
+name: Deploy Storefront to environments
+on: 
+  pull_request:
+    paths-ignore:
+      - '.github/**'
+      - 'docs/**'
+      - 'build/**'
+      - 'README.md'
+      - 'LICENSE'
+    branches: [dev]
+    types: [labeled, closed]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      ARTIFACT_KEY: "docker.pkg.github.com/virtocommerce/vc-storefront/storefront"
+
+    steps:
+    - name: Gets artifact link
+      id: artifactLink
+      uses: VirtoCommerce/vc-github-actions/get-artifact-link@master
+
+    - name: Create deploy PR in QA
+      if: github.event.action != 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy-qa') && !contains(github.event.pull_request.labels.*.name, 'deploy-demo')
+      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@master
+      with:
+        deployRepo: "vc-webstore-deploy"
+        deployBranch: "qa"
+        artifactKey: ${{ env.ARTIFACT_KEY}}
+        artifactUrl: "${{ steps.artifactLink.outputs.artifactUrl }}"
+        taskNumber: "${{ steps.artifactLink.outputs.qaTaskNumber }}"
+        cmPath: "webstore-app/resources/kustomization.yaml"
+
+    - name: Create deploy PR in Demo
+      if: github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy-demo')
+      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@master
+      with:
+        deployRepo: "vc-webstore-deploy"
+        deployBranch: "master"
+        artifactKey: ${{ env.ARTIFACT_KEY}}
+        artifactUrl: "${{ steps.artifactLink.outputs.artifactUrl }}"
+        taskNumber: "${{ steps.artifactLink.outputs.demoTaskNumber }}"
+        cmPath: "webstore-app/resources/kustomization.yaml"
+
+    # - name: Deploy to dev
+    #   if: github.event.action == 'closed' && github.event.pull_request.merged == true
+    #   uses: benc-uk/workflow-dispatch@v1
+    #   with:
+    #     workflow: VC image deployment
+    #     token: ${{ secrets.REPO_TOKEN }}
+    #     inputs: '{ "baseImageName": "docker.pkg.github.com/virtocommerce/vc-storefront/storefront", "artifactLink": "${{ steps.artifactLink.outputs.artifactUrl }}" }'

@@ -1,4 +1,4 @@
-# v1.1.2.vc-demo-storefront
+# v1.1.4.vc-demo-storefront
 name: Storefront CI
 
 # Controls when the action will run. Triggers the workflow on push or pull request
@@ -30,6 +30,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       NUGET_KEY: ${{ secrets.NUGET_KEY }}
       BLOB_SAS: ${{ secrets.BLOB_TOKEN }}
+      IMAGE_NAME: "demo-storefront"
       PUBLISH_TO_DOCKER: "false"
       UPDATE_LATEST_TAG: "true"
       VERSION_SUFFIX: ""
@@ -37,10 +38,11 @@ jobs:
     steps:
 
     - name: Set variables
-      if: ${{ github.event_name == 'workflow_dispatch' }}
+      if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request' }}
       run: |
-        echo "PUBLISH_TO_DOCKER=false" >> $GITHUB_ENV
         echo "UPDATE_LATEST_TAG=false" >> $GITHUB_ENV 
+      #  echo "PUBLISH_TO_DOCKER=false" >> $GITHUB_ENV
+        
 
     - name: Set up JDK 11 for dotnet-sonarscanner #Sonar stop accepting Java versions less than 11
       uses: actions/setup-java@v1
@@ -106,20 +108,20 @@ jobs:
       run: vc-build Compress -skip Clean+Restore+Compile+Test
 
     - name: Build Docker Image
-      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
+      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
       id: dockerBuild
       uses: VirtoCommerce/vc-github-actions/build-docker-image@master
       with:
         tag: ${{ steps.image.outputs.taggedVersion }}
-        imageName: "demo-storefront"
+        imageName: ${{ env.IMAGE_NAME }}
         dockerFiles: "https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile"
 
-    - name: Publish to Blob
-      if: ${{ github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
-      id: blobRelease
-      uses: VirtoCommerce/vc-github-actions/publish-blob-release@master
-      with:
-        blobSAS: ${{ secrets.BLOB_TOKEN }}
+    # - name: Publish to Blob
+    #   if: ${{ github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
+    #   id: blobRelease
+    #   uses: VirtoCommerce/vc-github-actions/publish-blob-release@master
+    #   with:
+    #     blobSAS: ${{ secrets.BLOB_TOKEN }}
 
     - name: Publish Github Release
       if: ${{ github.ref == 'refs/heads/master' }}
@@ -128,7 +130,7 @@ jobs:
       uses: VirtoCommerce/vc-github-actions/publish-github-release@master
 
     - name: Docker Login
-      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
+      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
       uses: azure/docker-login@v1
       with:
         login-server: docker.pkg.github.com
@@ -136,7 +138,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Publish Docker Image
-      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
+      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
       uses: VirtoCommerce/vc-github-actions/publish-docker-image@master
       with:
           image: ${{ steps.dockerBuild.outputs.imageName }}
@@ -146,10 +148,16 @@ jobs:
           docker_hub: ${{ env.PUBLISH_TO_DOCKER }}
           update_latest: ${{ env.UPDATE_LATEST_TAG }}
 
+    - name: Add link to PR
+      if: ${{ github.event_name == 'pull_request' }}
+      uses: VirtoCommerce/vc-github-actions/publish-artifact-link@master
+      with:
+        artifactUrl: "docker.pkg.github.com/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}"
+
     - name: Invoke VC image deployment workflow
       if: ${{ github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master')}}
       uses: benc-uk/workflow-dispatch@v1
       with:
         workflow: VC image deployment
         token: ${{ secrets.REPO_TOKEN }}
-        inputs: '{ "baseImageName": "docker.pkg.github.com/virtocommerce/vc-storefront/storefront", "imageName": "demo-storefront", "artifactVersion": "${{ steps.image.outputs.taggedVersion }}"}'
+        inputs: '{ "baseImageName": "docker.pkg.github.com/virtocommerce/vc-storefront/storefront", "artifactLink": ""docker.pkg.github.com/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}"}" }'
