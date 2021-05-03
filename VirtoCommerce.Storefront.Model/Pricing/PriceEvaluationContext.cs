@@ -49,8 +49,6 @@ namespace VirtoCommerce.Storefront.Model.Pricing
             yield return Quantity;
             yield return CertainDate;
 
-            //Remove user for equality because marketing promotions very rarely depend on concrete customer and exclude  user from  cache key can have significant affect to performance
-            //yield return CustomerId;
             yield return string.Join('&', ProductIds ?? Array.Empty<string>());
             yield return string.Join('&', PricelistIds ?? Array.Empty<string>());
             yield return string.Join('&', UserGroups ?? Array.Empty<string>());
