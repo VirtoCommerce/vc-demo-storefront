@@ -1,8 +1,6 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+using System.Linq;
 
 namespace VirtoCommerce.Storefront.Model.Common
 {
@@ -19,10 +17,12 @@ namespace VirtoCommerce.Storefront.Model.Common
         /// <param name="items">The items to add to the collection.</param>
         /// <returns>The collection.</returns>
         /// <exception cref="System.ArgumentNullException">An <see cref="System.ArgumentNullException"/> is thrown if <paramref name="collection"/> or <paramref name="items"/> is <see langword="null"/>.</exception>
-		public static ICollection<T> AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
+        public static ICollection<T> AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
-            if (collection == null) throw new System.ArgumentNullException("collection");
-            if (items == null) throw new System.ArgumentNullException("items");
+            if (collection == null)
+                throw new System.ArgumentNullException("collection");
+            if (items == null)
+                throw new System.ArgumentNullException("items");
 
             foreach (var each in items)
             {
