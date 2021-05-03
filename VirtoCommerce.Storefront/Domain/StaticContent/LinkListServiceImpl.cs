@@ -53,7 +53,7 @@ namespace VirtoCommerce.Storefront.Domain
                     result.AddRange(listsDto.Select(x => x.ToMenuLinkList()));
                 }
 
-                result = result.GroupBy(x => x.Name).Select(x => x.FindWithLanguage(language)).Where(x => x != null).ToList().ToList();
+                result = result.GroupBy(x => x.Name).Select(x => x.FindWithLanguage(language)).Where(x => x != null).ToList();
 
                 var allMenuLinks = result.SelectMany(x => x.MenuLinks).ToList();
                 var productLinks = allMenuLinks.OfType<ProductMenuLink>().ToList();
