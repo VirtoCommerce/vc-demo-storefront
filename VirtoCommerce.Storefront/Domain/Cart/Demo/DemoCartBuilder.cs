@@ -79,7 +79,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
         {
             EnsureCartExists();
 
-            var result = await new AddCartItemValidator(Cart).ValidateAsync(addCartItem, ruleSet: Cart.ValidationRuleSet);
+            var result = await new AddCartItemValidator(Cart).ValidateAsync(addCartItem, options => options.IncludeRuleSets(Cart.ValidationRuleSet));
 
             if (result.IsValid)
             {
@@ -126,7 +126,7 @@ namespace VirtoCommerce.Storefront.Domain.Cart.Demo
 
             foreach (var group in cart.ConfiguredGroups)
             {
-                var newGroup = (ConfiguredGroup) group.Clone();
+                var newGroup = (ConfiguredGroup)group.Clone();
                 newGroup.Id = Guid.NewGuid().ToString("N");
 
                 Cart.ConfiguredGroups.Add(newGroup);
