@@ -5,7 +5,6 @@ using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Tax;
-using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
 using taxDto = VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain

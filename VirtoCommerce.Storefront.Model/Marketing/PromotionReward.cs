@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Marketing

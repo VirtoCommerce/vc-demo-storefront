@@ -1,5 +1,5 @@
-using PagedList.Core;
 using System.Threading.Tasks;
+using PagedList.Core;
 using VirtoCommerce.Storefront.Model.Catalog;
 
 namespace VirtoCommerce.Storefront.Model.Services
