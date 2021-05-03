@@ -188,9 +188,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         {
             return input.IsNullOrWhiteSpace()
                 ? input
-                : Regex.Replace(input, @"(\r?\n)", String.Empty);
-
-            //: Regex.Replace(input, Environment.NewLine, string.Empty);
+                : Regex.Replace(input, @"(\r?\n)", string.Empty);
         }
 
         /// <summary>
@@ -479,7 +477,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object Plus(object input, object operand)
         {
-           
+
             return DoMathsOperation(input, operand, Expression.Add);
         }
 
@@ -502,7 +500,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object Times(object input, object operand)
         {
-           
+
             return DoMathsOperation(input, operand, Expression.Multiply);
 
         }
@@ -551,7 +549,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             {
                 //Swallow any exception 
             }
-        }       
+        }
     }
 
     /// <summary>
