@@ -1,7 +1,7 @@
 
 namespace VirtoCommerce.Storefront.Model.Order
 {
-    public class OrderStatuses
+    public static class OrderStatuses
     {
         public const string PaidOrderStatus = "Paid";
         public const string CompletedOrderStatus = "Completed";
