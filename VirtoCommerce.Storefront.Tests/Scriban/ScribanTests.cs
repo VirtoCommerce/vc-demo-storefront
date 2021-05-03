@@ -1,13 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Scriban;
-using Scriban.Parsing;
 using Scriban.Runtime;
-using VirtoCommerce.LiquidThemeEngine.Scriban;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
 using Xunit;
@@ -121,7 +115,7 @@ namespace VirtoCommerce.Storefront.Tests.Scriban
         public string Upper { get; set; }
 
     }
-    public class MyFunctions
+    public static class MyFunctions
     {
         public static string T(object input, params object[] variables)
         {
