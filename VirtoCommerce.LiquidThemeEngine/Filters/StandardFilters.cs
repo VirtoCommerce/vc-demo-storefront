@@ -286,17 +286,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 return input.ToString();
             }
 
-            //try
-            {
-                input = input.ToString().Replace(@string, replacement);
-                //input = Regex.Replace(input, @string, replacement);
-            }
-            //catch (Exception)
-            {
 
-            }
+            input = input.ToString()?.Replace(@string, replacement);
 
-            return input.ToString();
+            return input?.ToString();
         }
         /// <summary>
         /// Replace the first occurence of a string with another
