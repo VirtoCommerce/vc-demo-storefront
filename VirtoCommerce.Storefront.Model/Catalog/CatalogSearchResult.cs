@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -25,7 +24,7 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public IMutablePagedList<Product> Products { get; set; }
         // Represent bucket, aggregated data based on a search query resulted by current search criteria CurrentCatalogSearchCriteria(example color 33, gr
         public IList<Aggregation> Aggregations { get; set; } = new List<Aggregation>();
-    
+
         public IEnumerable<Breadcrumb> GetBreadcrumbs()
         {
             if (Category != null)
