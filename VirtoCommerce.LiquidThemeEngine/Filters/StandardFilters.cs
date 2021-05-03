@@ -2,12 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.Xml.XPath;
 using Scriban;
 using VirtoCommerce.Storefront.Model.Common;
 
@@ -723,20 +721,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
 
             return 0;
-        }
-
-        private static double Evaluate(string expression)
-        {
-            var xsltExpression =
-                string.Format("number({0})",
-                    new Regex(@"([\+\-\*])").Replace(expression, " ${1} ")
-                                            .Replace("/", " div ")
-                                            .Replace("%", " mod "));
-
-            return (double)new XPathDocument
-                (new StringReader("<r/>"))
-                    .CreateNavigator()
-                    .Evaluate(xsltExpression);
         }
     }
 
