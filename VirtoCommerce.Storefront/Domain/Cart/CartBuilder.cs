@@ -134,7 +134,8 @@ namespace VirtoCommerce.Storefront.Domain
         {
             EnsureCartExists();
 
-            var result = await new AddCartItemValidator(Cart).ValidateAsync(addCartItem, ruleSet: Cart.ValidationRuleSet);
+            var result = await new AddCartItemValidator(Cart).ValidateAsync(addCartItem, options => options.IncludeRuleSets(Cart.ValidationRuleSet));
+
             if (result.IsValid)
             {
                 var lineItem = addCartItem.Product.ToLineItem(Cart.Language, addCartItem.Quantity);
@@ -503,7 +504,7 @@ namespace VirtoCommerce.Storefront.Domain
         public async Task ValidateAsync()
         {
             EnsureCartExists();
-            var result = await new CartValidator(_cartService).ValidateAsync(Cart, ruleSet: Cart.ValidationRuleSet);
+            var result = await new CartValidator(_cartService).ValidateAsync(Cart, options => options.IncludeRuleSets(Cart.ValidationRuleSet));
             Cart.IsValid = result.IsValid;
         }
 
@@ -608,7 +609,7 @@ namespace VirtoCommerce.Storefront.Domain
             return Task.FromResult((object)null);
         }
 
-        protected virtual async Task ChangeItemQuantityAsync(LineItem lineItem, int quantity)
+        protected virtual Task ChangeItemQuantityAsync(LineItem lineItem, int quantity)
         {
             if (lineItem != null && !lineItem.IsReadOnly)
             {
@@ -634,6 +635,8 @@ namespace VirtoCommerce.Storefront.Domain
                     Cart.Items.Remove(lineItem);
                 }
             }
+
+            return Task.CompletedTask;
         }
 
         protected virtual async Task AddLineItemAsync(LineItem lineItem)
@@ -655,7 +658,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public virtual async Task ChangeItemPriceAsync(LineItem lineItem, ChangeCartItemPrice changePrice)
         {
-            await new ChangeCartItemPriceValidator(Cart).ValidateAndThrowAsync(changePrice, ruleSet: Cart.ValidationRuleSet);
+            await new ChangeCartItemPriceValidator(Cart).ValidateAsync(changePrice, options => options.IncludeRuleSets(Cart.ValidationRuleSet).ThrowOnFailures());
             var newPriceMoney = new Money(changePrice.NewPrice, Cart.Currency);
             lineItem.ListPrice = newPriceMoney;
             lineItem.SalePrice = newPriceMoney;
