@@ -366,11 +366,6 @@ namespace VirtoCommerce.Storefront.Domain
                 retVal.DynamicProperties = payment.DynamicProperties.Select(ToOrderDynamicPropertyDto).ToList();
             }
 
-            //if (payment.GatewayCode != null)
-            //{
-            //    var a = retVal.GatewayCode;
-            //}
-
             return retVal;
         }
         public static orderDto.BankCardInfo ToBankCardInfoDto(this BankCardInfo model)
