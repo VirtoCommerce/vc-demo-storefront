@@ -642,7 +642,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
 
             var propertyInfo = type.GetProperty(member);
-            return propertyInfo != null && propertyInfo.CanRead ? true : false;
+            return propertyInfo != null && propertyInfo.CanRead;
         }
 
         public static object Send(this object value, string member, object[] parameters = null)
