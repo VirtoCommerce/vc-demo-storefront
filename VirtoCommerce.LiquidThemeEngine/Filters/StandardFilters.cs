@@ -734,9 +734,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 {
                     yield return item;
                 }
-                else if (item is IEnumerable)
+                else if (item is IEnumerable enumerableItem)
                 {
-                    foreach (var subitem in Flatten((IEnumerable)item))
+                    foreach (var subitem in Flatten(enumerableItem))
                     {
                         yield return subitem;
                     }
