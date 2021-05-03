@@ -304,9 +304,7 @@ namespace VirtoCommerce.Storefront.Model
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-            }
+
         }
 
         public object Clone()
