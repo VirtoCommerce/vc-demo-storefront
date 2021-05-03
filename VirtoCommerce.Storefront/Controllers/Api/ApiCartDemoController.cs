@@ -50,7 +50,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 var cartBuilder = await LoadOrCreateCartAsync();
                 var cart = _cartBuilder.Cart;
                 var currency = WorkContext.CurrentCurrency;
-             
+
                 var firstItem = items.First();
 
                 var configuredProductId = firstItem.ConfiguredProductId;
@@ -58,7 +58,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 
                 // case with the configured product adding
                 if (configuredProductId != null)
-                {                   
+                {
                     configuredGroup = cart.ConfiguredGroups?.FirstOrDefault(x => (x.ProductId == configuredProductId)
                                                             && x.Items.OrderBy(x => x.ProductId).Select(x => x.ProductId).SequenceEqual(items.OrderBy(i => i.ProductId).Select(i => i.ProductId).ToArray())
                                       );
@@ -78,7 +78,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                         configuredGroup.Quantity += Math.Max(1, firstItem.Quantity);
                     }
                 }
-                
+
                 foreach (var item in items)
                 {
                     item.ConfiguredGroupId = configuredGroup?.Id;
@@ -86,7 +86,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                     await cartBuilder.AddItemAsync(item);
                 }
 
-                var validationResult = await new CartDemoValidator().ValidateAsync(cart, ruleSet: "default,strict");
+                var validationResult = await new CartDemoValidator().ValidateAsync(cart, options => options.IncludeRuleSets("default", "strict"));
 
                 if (validationResult.IsValid)
                 {
