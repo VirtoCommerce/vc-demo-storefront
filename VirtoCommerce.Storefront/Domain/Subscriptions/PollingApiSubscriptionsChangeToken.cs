@@ -13,7 +13,7 @@ namespace VirtoCommerce.Storefront.Domain.Subscriptions
         private readonly ISubscriptionModule _subscriptionApi;
         private static DateTime _previousChangeTimeUtcStatic;
         private static DateTime _lastCheckedTimeUtcStatic;
-        private DateTime _previousChangeTimeUtc;
+        private readonly DateTime _previousChangeTimeUtc;
         private readonly TimeSpan _pollingInterval;
         private static readonly object _lock = new object();
 
