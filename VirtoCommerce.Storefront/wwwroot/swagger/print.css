@@ -416,9 +416,8 @@
             font-size: .85em;
             line-height: 1.2em;
             overflow: auto;
-            max-height: 200px;
-            cursor: pointer;
             max-height: none;
+            cursor: pointer;
         }
 
         .swagger-section .swagger-ui-wrap .model-signature ul.signature-nav {
