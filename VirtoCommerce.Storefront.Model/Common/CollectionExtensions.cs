@@ -20,9 +20,14 @@ namespace VirtoCommerce.Storefront.Model.Common
         public static ICollection<T> AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
             if (collection == null)
-                throw new System.ArgumentNullException("collection");
+            {
+                throw new System.ArgumentNullException(nameof(collection));
+            }
+
             if (items == null)
-                throw new System.ArgumentNullException("items");
+            {
+                throw new System.ArgumentNullException(nameof(items));
+            }
 
             foreach (var each in items)
             {
@@ -40,7 +45,9 @@ namespace VirtoCommerce.Storefront.Model.Common
         public static void AddDistinct<T>(this ICollection<T> obj, IEqualityComparer<T> comparer, params T[] items)
         {
             if (obj == null)
-                throw new ArgumentNullException("obj");
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
 
             if (items != null)
             {
@@ -58,7 +65,9 @@ namespace VirtoCommerce.Storefront.Model.Common
         public static void Replace<T>(this ICollection<T> obj, IEnumerable<T> newItems)
         {
             if (obj == null)
-                throw new ArgumentNullException("obj");
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
 
             obj.Clear();
             obj.AddRange(newItems);
