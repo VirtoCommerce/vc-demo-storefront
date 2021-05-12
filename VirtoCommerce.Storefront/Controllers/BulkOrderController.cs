@@ -130,14 +130,19 @@ namespace VirtoCommerce.Storefront.Controllers
             var addedSkus = new List<string>();
             foreach (var bulkOrderItem in bulkOrderItems)
             {
-                if (foundSkusProductsWithVariationsMap.TryGetValue(bulkOrderItem.Sku, out var product) &&
-                    await _cartBuilder.AddItemAsync(new Model.Cart.AddCartItem
+                if (foundSkusProductsWithVariationsMap.TryGetValue(bulkOrderItem.Sku, out var product))
+                {
+
+                    var isItemAdded = await _cartBuilder.AddItemAsync(new Model.Cart.AddCartItem
                     {
                         Product = product,
                         Quantity = bulkOrderItem.Quantity,
-                    }))
-                {
-                    addedSkus.Add(product.Sku);
+                    });
+
+                    if (isItemAdded)
+                    {
+                        addedSkus.Add(product.Sku);
+                    }
                 }
             }
             await _cartBuilder.SaveAsync();
