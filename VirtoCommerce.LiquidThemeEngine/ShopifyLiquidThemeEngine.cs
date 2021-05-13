@@ -361,7 +361,7 @@ namespace VirtoCommerce.LiquidThemeEngine
 
                 JObject result;
                 var baseThemeSettings = new JObject();
-                var currentThemeSettings = result = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
+                var currentThemeSettings = InnerGetAllSettings(_themeBlobProvider, CurrentThemeSettingPath);
 
                 //Try to load settings from base theme path and merge them with resources for local theme
                 if ((_options.MergeBaseSettings || currentThemeSettings == null) && !string.IsNullOrEmpty(BaseThemeSettingPath))

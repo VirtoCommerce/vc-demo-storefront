@@ -1,20 +1,20 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Bogus;
+using FluentValidation;
+using FluentValidation.Validators;
 using Moq;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Cart.Services;
+using VirtoCommerce.Storefront.Model.Cart.ValidationErrors;
 using VirtoCommerce.Storefront.Model.Cart.Validators;
 using VirtoCommerce.Storefront.Model.Catalog;
-using inventory = VirtoCommerce.Storefront.Model.Inventory;
 using VirtoCommerce.Storefront.Model.Common;
-using FluentValidation;
 using Xunit;
-using Bogus;
-using System;
-using System.Linq;
-using FluentValidation.Validators;
-using VirtoCommerce.Storefront.Model.Cart.ValidationErrors;
+using inventory = VirtoCommerce.Storefront.Model.Inventory;
 
 namespace VirtoCommerce.Storefront.Tests.ShopingCart
 {
@@ -31,9 +31,9 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
         static readonly Randomizer Rand = new Randomizer();
         static readonly Faker Faker = new Faker();
         static readonly IEnumerable<ShippingMethod> ShippingMethods = GetShippingMethods();
-        
 
-        [Fact]       
+
+        [Fact]
         public async Task ValidateCart_RuleSetDefault_Valid()
         {
             //Arrange
@@ -42,7 +42,8 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             //Act
             var validator = new CartValidator(cartService.Object);
             var cart = GetValidCart();
-            var result = await validator.ValidateAsync(cart, ruleSet: "default" );
+            var result = await validator.ValidateAsync(cart, options => options.IncludeRuleSets("default"));
+
 
             //Assertion
             Assert.True(result.IsValid);
@@ -58,25 +59,25 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
 
             //Arrange
             var cartService = new Moq.Mock<ICartService>();
-            
+
             //Act
             var validator = new CartValidator(cartService.Object);
             var cart = GetInvalidCart();
-            var result = await validator.ValidateAsync(cart, ruleSet: "default");
+            var result = await validator.ValidateAsync(cart, options => options.IncludeRuleSets("default"));
 
             //Assertion
             Assert.False(result.IsValid);
             //Assert.NotEmpty(cart.ValidationErrors);
             Assert.NotEmpty(result.Errors);
             Assert.Equal(4, result.Errors.Count);
-            
+
             Assert.Collection(result.Errors, x => { Assert.Equal(nameof(cart.Name), x.PropertyName); Assert.Equal(nameof(NotNullValidator), x.ErrorCode); }
                                            , x => { Assert.Equal(nameof(cart.Name), x.PropertyName); Assert.Equal(nameof(NotEmptyValidator), x.ErrorCode); }
                                            , x => { Assert.Equal(nameof(cart.CustomerId), x.PropertyName); Assert.Equal(nameof(NotNullValidator), x.ErrorCode); }
                                            , x => { Assert.Equal(nameof(cart.CustomerId), x.PropertyName); Assert.Equal(nameof(NotEmptyValidator), x.ErrorCode); }
                               );
         }
-        
+
         [Fact]
         public async Task ValidateShipment_RuleSetStrict_Valid()
         {
@@ -88,7 +89,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             //Act
             var validator = new CartShipmentValidator(cart, cartService.Object);
             var shipmentForValidation = cart.Shipments[0];
-            var result = await validator.ValidateAsync(shipmentForValidation, ruleSet: "strict");
+            var result = await validator.ValidateAsync(shipmentForValidation, options => options.IncludeRuleSets("strict"));
 
             //Assertion
             Assert.True(result.IsValid);
@@ -113,10 +114,10 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
 
             //Act
             var validator = new CartShipmentValidator(cart, cartService.Object);
-            var result = await validator.ValidateAsync(unavailableShipment, ruleSet: "strict");
+            var result = await validator.ValidateAsync(unavailableShipment, options => options.IncludeRuleSets("strict"));
 
             //Assertion
-            Assert.False(result.IsValid);            
+            Assert.False(result.IsValid);
             Assert.Single(result.Errors);
 
             Assert.Collection(result.Errors, x =>
@@ -139,13 +140,13 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             var cartService = new Moq.Mock<ICartService>();
             cartService.Setup(x => x.GetAvailableShippingMethodsAsync(It.IsAny<ShoppingCart>())).Returns(Task.FromResult(ShippingMethods));
             var cart = GetValidCart();
-            var shipment = Faker.PickRandom( cart.Shipments );
-            shipment.Price = new Money(shipment.Price.Amount+1m, Usd);
+            var shipment = Faker.PickRandom(cart.Shipments);
+            shipment.Price = new Money(shipment.Price.Amount + 1m, Usd);
             cart.Shipments.Add(shipment);
 
             //Act
             var validator = new CartShipmentValidator(cart, cartService.Object);
-            var result = await validator.ValidateAsync(shipment, ruleSet: "strict");
+            var result = await validator.ValidateAsync(shipment, options => options.IncludeRuleSets("strict"));
 
             //Assertion
             Assert.False(result.IsValid);
@@ -170,8 +171,8 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             //Arrange            
             var cart = GetValidCart();
 
-            var item = Faker.PickRandom( cart.Items );
-            
+            var item = Faker.PickRandom(cart.Items);
+
             var newItemPrice = new ChangeCartItemPrice
             {
                 LineItemId = item.Id,
@@ -181,17 +182,17 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             //Act
             var validator = new ChangeCartItemPriceValidator(cart);
 
-            var result = await validator.ValidateAsync(newItemPrice, ruleSet: "default");
+            var result = await validator.ValidateAsync(newItemPrice, options => options.IncludeRuleSets("default"));
             //Assertion
             Assert.True(result.IsValid);
-            Assert.Empty(result.Errors);            
+            Assert.Empty(result.Errors);
         }
 
         [Fact]
         public async Task ValidateChangePriceItem_RuleSetDefault_Invalid()
         {
             //Arrange            
-            var cart = GetValidCart();            
+            var cart = GetValidCart();
 
             var newItemPrice = new ChangeCartItemPrice
             {
@@ -202,7 +203,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             //Act
             var validator = new ChangeCartItemPriceValidator(cart);
 
-            var result = await validator.ValidateAsync(newItemPrice, ruleSet: "default");
+            var result = await validator.ValidateAsync(newItemPrice, options => options.IncludeRuleSets("default"));
             //Assertion
             Assert.False(result.IsValid);
             Assert.NotEmpty(result.Errors);
@@ -230,7 +231,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             //Act
             var validator = new ChangeCartItemPriceValidator(cart);
 
-            var result = await validator.ValidateAsync(newItemPrice, ruleSet: "strict");
+            var result = await validator.ValidateAsync(newItemPrice, options => options.IncludeRuleSets("strict"));
             //Assertion
             Assert.True(result.IsValid);
             Assert.Empty(result.Errors);
@@ -252,7 +253,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             //Act
             var validator = new ChangeCartItemPriceValidator(cart);
 
-            var result = await validator.ValidateAsync(newItemPrice, ruleSet: "strict");
+            var result = await validator.ValidateAsync(newItemPrice, options => options.IncludeRuleSets("strict"));
             //Assertion
             Assert.False(result.IsValid);
             Assert.NotEmpty(result.Errors);
@@ -269,18 +270,18 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
         {
             //Arrange            
             var cart = GetValidCart();
-                       
+
             var testAddItem = new Faker<AddCartItem>()
                 .RuleFor(x => x.Id, f => f.Random.Guid().ToString())
                 .RuleFor(x => x.Quantity, f => f.Random.Int(1, InStockQuantity))
                 .RuleFor(x => x.Product, f => new Product(Usd, Language.InvariantLanguage));
 
-            var addItem = testAddItem.Generate();           
+            var addItem = testAddItem.Generate();
 
             //Act
             var validator = new AddCartItemValidator(cart);
 
-            var result = await validator.ValidateAsync(addItem, ruleSet: "default");
+            var result = await validator.ValidateAsync(addItem, options => options.IncludeRuleSets("default"));
             //Assertion
             Assert.True(result.IsValid);
             Assert.Empty(result.Errors);
@@ -297,11 +298,11 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             {
                 Quantity = 0
             };
-                
+
             //Act
             var validator = new AddCartItemValidator(cart);
 
-            var result = await validator.ValidateAsync(addItem, ruleSet: "default");
+            var result = await validator.ValidateAsync(addItem, options => options.IncludeRuleSets("default"));
             //Assertion
             Assert.False(result.IsValid);
             Assert.NotEmpty(result.Errors);
@@ -329,13 +330,13 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             //Act
             var validator = new AddCartItemValidator(cart);
 
-            var result = await validator.ValidateAsync(addItem, ruleSet: "strict");
+            var result = await validator.ValidateAsync(addItem, options => options.IncludeRuleSets("strict"));
             //Assertion
             Assert.True(result.IsValid);
             Assert.Empty(result.Errors);
         }
 
-        
+
         [Fact]
         public async Task ValidateAddItem_RuleSetStrict_PriceError()
         {
@@ -347,7 +348,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             var testAddItem = new Faker<AddCartItem>()
                 .RuleFor(x => x.Id, f => f.Random.Guid().ToString())
                 .RuleFor(x => x.Quantity, f => f.Random.Int(1, InStockQuantity))
-                .RuleFor(x => x.Price, f=> f.Random.Decimal(MIN_PRICE, productPrice.Amount-1))
+                .RuleFor(x => x.Price, f => f.Random.Decimal(MIN_PRICE, productPrice.Amount - 1))
                 .RuleFor(x => x.Product, f => GenTestProduct(productPrice));
 
             var addItem = testAddItem.Generate();
@@ -355,7 +356,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             //Act
             var validator = new AddCartItemValidator(cart);
 
-            var result = await validator.ValidateAsync(addItem, ruleSet: "strict");
+            var result = await validator.ValidateAsync(addItem, options => options.IncludeRuleSets("strict"));
             //Assertion
             Assert.False(result.IsValid);
             Assert.NotEmpty(result.Errors);
@@ -375,7 +376,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
 
             var testAddItem = new Faker<AddCartItem>()
                 .RuleFor(x => x.Id, f => f.Random.Guid().ToString())
-                .RuleFor(x => x.Quantity, f => f.Random.Int(InStockQuantity+1, InStockQuantity*2))                
+                .RuleFor(x => x.Quantity, f => f.Random.Int(InStockQuantity + 1, InStockQuantity * 2))
                 .RuleFor(x => x.Product, f => GenTestProduct(productPrice));
 
             var addItem = testAddItem.Generate();
@@ -383,7 +384,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             //Act
             var validator = new AddCartItemValidator(cart);
 
-            var result = await validator.ValidateAsync(addItem, ruleSet: "strict");
+            var result = await validator.ValidateAsync(addItem, options => options.IncludeRuleSets("strict"));
             //Assertion
             Assert.False(result.IsValid);
             Assert.NotEmpty(result.Errors);
@@ -396,15 +397,15 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
         {
             //Arrange            
             var cart = GetValidCart();
-            var item = Faker.PickRandom(cart.Items);  
+            var item = Faker.PickRandom(cart.Items);
 
             //Act
             var validator = new CartLineItemValidator(cart);
-            var result = await validator.ValidateAsync(item, ruleSet: "strict");
+            var result = await validator.ValidateAsync(item, options => options.IncludeRuleSets("strict"));
 
             //Assertion
             Assert.True(result.IsValid);
-            Assert.Empty(result.Errors);            
+            Assert.Empty(result.Errors);
         }
 
 
@@ -417,7 +418,8 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             //Arrange            
             var cart = GetValidCart();
             var item = Faker.PickRandom(cart.Items);
-            switch (scenario) {
+            switch (scenario)
+            {
                 case "Product_null":
                     item.Product = null;
                     break;
@@ -428,11 +430,11 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
                     item.Product.IsBuyable = false;
                     break;
             }
-            
+
 
             //Act
             var validator = new CartLineItemValidator(cart);
-            var result = await validator.ValidateAsync(item, ruleSet: "strict");
+            var result = await validator.ValidateAsync(item, options => options.IncludeRuleSets("strict"));
 
             //Assertion
             Assert.False(result.IsValid);
@@ -454,7 +456,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
 
             //Act
             var validator = new CartLineItemValidator(cart);
-            var result = await validator.ValidateAsync(item, ruleSet: "strict");
+            var result = await validator.ValidateAsync(item, options => options.IncludeRuleSets("strict"));
 
             //Assertion
             Assert.False(result.IsValid);
@@ -472,12 +474,12 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             var cart = GetValidCart();
             var item = Faker.PickRandom(cart.Items);
 
-            item.SalePrice = new Money(item.SalePrice.Amount/2m, Usd);
+            item.SalePrice = new Money(item.SalePrice.Amount / 2m, Usd);
 
 
             //Act
             var validator = new CartLineItemValidator(cart);
-            var result = await validator.ValidateAsync(item, ruleSet: "strict");
+            var result = await validator.ValidateAsync(item, options => options.IncludeRuleSets("strict"));
 
             //Assertion
             Assert.False(result.IsValid);
@@ -495,15 +497,15 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
                 .RuleFor(i => i.Id, f => f.Random.Guid().ToString())
                 .RuleFor(i => i.ListPrice, f => new Money(f.Random.Decimal(MIN_PRICE, MAX_PRICE), Usd))
                 .RuleFor(i => i.SalePrice, (f, i) => i.ListPrice)
-                .RuleFor(i => i.Product, (f, i) => GenTestProduct( i.ListPrice ))
+                .RuleFor(i => i.Product, (f, i) => GenTestProduct(i.ListPrice))
             ;
 
-           
+
             var testShipments = new Faker<Shipment>()
                 .CustomInstantiator(f => new Shipment(Usd))
                 .RuleFor(s => s.ShipmentMethodCode, f => f.PickRandom(ShipmentMehodCodes))
-                .RuleFor(s => s.ShipmentMethodOption, (f, s) => ShippingMethods.FirstOrDefault(x=>x.ShipmentMethodCode == s.ShipmentMethodCode).OptionName)
-                .RuleFor(s => s.Price, (f,s) => ShippingMethods.FirstOrDefault(x => x.ShipmentMethodCode == s.ShipmentMethodCode).Price);
+                .RuleFor(s => s.ShipmentMethodOption, (f, s) => ShippingMethods.FirstOrDefault(x => x.ShipmentMethodCode == s.ShipmentMethodCode).OptionName)
+                .RuleFor(s => s.Price, (f, s) => ShippingMethods.FirstOrDefault(x => x.ShipmentMethodCode == s.ShipmentMethodCode).Price);
 
             var testCart = new Faker<ShoppingCart>()
                 .CustomInstantiator(f => new ShoppingCart(Usd, Language.InvariantLanguage))
@@ -522,7 +524,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
             var testCart = new Faker<ShoppingCart>()
                 .CustomInstantiator(f => new ShoppingCart(Usd, Language.InvariantLanguage))
                 .RuleFor(c => c.Name, f => null)
-                .RuleFor(c => c.CustomerId, f => null);                
+                .RuleFor(c => c.CustomerId, f => null);
 
             var cart = testCart.Generate();
             return cart;
@@ -532,7 +534,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
         {
             var shippingMethods = new List<ShippingMethod>();
 
-            foreach(var code in ShipmentMehodCodes)
+            foreach (var code in ShipmentMehodCodes)
             {
                 var method = new ShippingMethod
                 {
@@ -543,7 +545,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
                 shippingMethods.Add(method);
             }
 
-            return shippingMethods;           
+            return shippingMethods;
         }
 
         private static Product GenTestProduct(Money productPrice)
@@ -562,7 +564,7 @@ namespace VirtoCommerce.Storefront.Tests.ShopingCart
                 IsBuyable = true,
                 IsAvailable = true,
                 IsInStock = true,
-                
+
                 TrackInventory = true,
 
                 Inventory = inventory,

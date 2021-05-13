@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
-using VirtoCommerce.Storefront.Model.Common.Specifications;
 using VirtoCommerce.Storefront.Model.Catalog.Demo;
+using VirtoCommerce.Storefront.Model.Common.Specifications;
 
 namespace VirtoCommerce.Storefront.Model.Catalog
 {

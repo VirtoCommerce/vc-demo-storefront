@@ -69,7 +69,6 @@ namespace VirtoCommerce.Storefront
     public class Startup
     {
         public static readonly string SwaggerDocName = "v1";
-        private static string oauth2SchemeName = "oauth2";
 
         public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnviroment)
         {
@@ -87,7 +86,7 @@ namespace VirtoCommerce.Storefront
             services.AddResponseCaching();
 
             services.Configure<StorefrontOptions>(Configuration.GetSection("VirtoCommerce"));
-            
+
             //The IHttpContextAccessor service is not registered by default
             //https://github.com/aspnet/Hosting/issues/793
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

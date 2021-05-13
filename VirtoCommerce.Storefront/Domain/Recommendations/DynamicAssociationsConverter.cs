@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using VirtoCommerce.Storefront.Model.Recommendations;
 using dto = VirtoCommerce.Storefront.AutoRestClients.DynamicAssociationsModuleModuleApi.Models;
 

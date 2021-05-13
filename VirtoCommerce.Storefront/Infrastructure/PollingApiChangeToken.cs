@@ -11,7 +11,7 @@ namespace VirtoCommerce.Storefront.Infrastructure
         private readonly ICacheModule _cacheApi;
         private static DateTime _previousChangeTimeUtcStatic;
         private static DateTime _lastCheckedTimeUtcStatic;
-        private DateTime _previousChangeTimeUtc;
+        private readonly DateTime _previousChangeTimeUtc;
         private readonly TimeSpan _pollingInterval;
         private static object _lock = new object();
 

@@ -309,7 +309,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 paymentPlan.Id = cartBuilder.Cart.Id;
 
                 await _subscriptionService.UpdatePaymentPlanAsync(paymentPlan);
-                // await _cartBuilder.SaveAsync();
                 cartBuilder.Cart.PaymentPlan = paymentPlan;
             }
             return Ok();
@@ -327,7 +326,6 @@ namespace VirtoCommerce.Storefront.Controllers.Api
             {
                 var cartBuilder = await LoadOrCreateCartAsync();
                 await _subscriptionService.DeletePlansByIdsAsync(new[] { cartBuilder.Cart.Id });
-                // await _cartBuilder.SaveAsync();
                 cartBuilder.Cart.PaymentPlan = null;
             }
             return Ok();

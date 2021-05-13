@@ -1,6 +1,6 @@
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using VirtoCommerce.Storefront.Model;
 
 namespace VirtoCommerce.Storefront.Domain

@@ -2,12 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.Xml.XPath;
 using Scriban;
 using VirtoCommerce.Storefront.Model.Common;
 
@@ -188,9 +186,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         {
             return input.IsNullOrWhiteSpace()
                 ? input
-                : Regex.Replace(input, @"(\r?\n)", String.Empty);
-
-            //: Regex.Replace(input, Environment.NewLine, string.Empty);
+                : Regex.Replace(input, @"(\r?\n)", string.Empty);
         }
 
         /// <summary>
@@ -288,17 +284,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 return input.ToString();
             }
 
-            //try
-            {
-                input = input.ToString().Replace(@string, replacement);
-                //input = Regex.Replace(input, @string, replacement);
-            }
-            //catch (Exception)
-            {
 
-            }
+            input = input.ToString()?.Replace(@string, replacement);
 
-            return input.ToString();
+            return input?.ToString();
         }
         /// <summary>
         /// Replace the first occurence of a string with another
@@ -408,8 +397,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             switch (format)
             {
                 case "long":
-                    //TODO: define which way to use. IMHO using modern style is more prefered
-                    //format = "%d %b %Y %X";
                     format = "f";
                     break;
             }
@@ -479,7 +466,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object Plus(object input, object operand)
         {
-           
+
             return DoMathsOperation(input, operand, Expression.Add);
         }
 
@@ -502,7 +489,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
         /// <returns></returns>
         public static object Times(object input, object operand)
         {
-           
+
             return DoMathsOperation(input, operand, Expression.Multiply);
 
         }
@@ -551,7 +538,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             {
                 //Swallow any exception 
             }
-        }       
+        }
     }
 
     /// <summary>
@@ -653,7 +640,7 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
             }
 
             var propertyInfo = type.GetProperty(member);
-            return propertyInfo != null && propertyInfo.CanRead ? true : false;
+            return propertyInfo != null && propertyInfo.CanRead;
         }
 
         public static object Send(this object value, string member, object[] parameters = null)
@@ -735,20 +722,6 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
 
             return 0;
         }
-
-        private static double Evaluate(string expression)
-        {
-            var xsltExpression =
-                string.Format("number({0})",
-                    new Regex(@"([\+\-\*])").Replace(expression, " ${1} ")
-                                            .Replace("/", " div ")
-                                            .Replace("%", " mod "));
-
-            return (double)new XPathDocument
-                (new StringReader("<r/>"))
-                    .CreateNavigator()
-                    .Evaluate(xsltExpression);
-        }
     }
 
     internal static class EnumerableExtensionMethods
@@ -761,9 +734,9 @@ namespace VirtoCommerce.LiquidThemeEngine.Filters
                 {
                     yield return item;
                 }
-                else if (item is IEnumerable)
+                else if (item is IEnumerable enumerableItem)
                 {
-                    foreach (var subitem in Flatten((IEnumerable)item))
+                    foreach (var subitem in Flatten(enumerableItem))
                     {
                         yield return subitem;
                     }

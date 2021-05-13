@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Specialized;
 using VirtoCommerce.Storefront.Model.Common;
 

@@ -13,7 +13,7 @@ namespace VirtoCommerce.Storefront.Filters
     /// </summary>
     public class AngularAntiforgeryCookieResultFilter : ResultFilterAttribute
     {
-        private IAntiforgery antiforgery;
+        private readonly IAntiforgery antiforgery;
         public AngularAntiforgeryCookieResultFilter(IAntiforgery antiforgery)
         {
             this.antiforgery = antiforgery;

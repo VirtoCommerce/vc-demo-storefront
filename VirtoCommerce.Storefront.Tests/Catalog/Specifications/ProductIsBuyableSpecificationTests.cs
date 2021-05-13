@@ -1,10 +1,10 @@
 using System;
-using Xunit;
 using Bogus;
+using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Catalog.Demo;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model;
+using Xunit;
 
 namespace VirtoCommerce.Storefront.Tests.Catalog.Specifications
 {

@@ -65,7 +65,7 @@ namespace VirtoCommerce.Storefront.Domain
                         {
                             productSearchCriteria.CopyFrom(params2);
                         }
-                        //criteria.CategoryId = category.Id;
+
                         if (string.IsNullOrEmpty(productSearchCriteria.SortBy) && !sortInfos2.IsNullOrEmpty())
                         {
                             productSearchCriteria.SortBy = SortInfo.ToString(sortInfos2);

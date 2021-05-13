@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Web;
 
 namespace DotLiquid.ViewEngine.Exceptions
 {
@@ -29,7 +26,7 @@ namespace DotLiquid.ViewEngine.Exceptions
             return String.Format("Line: {0}\n\rCompiler error: {1}", SassLine, _innerException != null ? _innerException.ToString() : "");
         }
 
-        private Exception _innerException;
+        private readonly Exception _innerException;
 
         public SaasCompileException(string filename, string sass, Exception innerException) : base("Failed to compile sass file \"" + filename + "\"")
         {

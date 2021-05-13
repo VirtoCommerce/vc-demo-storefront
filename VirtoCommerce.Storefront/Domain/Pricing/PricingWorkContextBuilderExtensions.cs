@@ -1,12 +1,11 @@
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using VirtoCommerce.Storefront.Model.Pricing.Services;
-using VirtoCommerce.Storefront.Model.Pricing;
+using Microsoft.Extensions.DependencyInjection;
 using PagedList.Core;
 using VirtoCommerce.Storefront.Model.Common;
+using VirtoCommerce.Storefront.Model.Pricing;
+using VirtoCommerce.Storefront.Model.Pricing.Services;
 
 namespace VirtoCommerce.Storefront.Domain
 {

@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using VirtoCommerce.Storefront.Model.Common.Specifications;
 
 namespace VirtoCommerce.Storefront.Model.Catalog.Specifications

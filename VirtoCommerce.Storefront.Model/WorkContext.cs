@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Cart;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Inventory;
 using VirtoCommerce.Storefront.Model.Order;
 using VirtoCommerce.Storefront.Model.Pricing;
@@ -307,9 +304,7 @@ namespace VirtoCommerce.Storefront.Model
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-            }
+
         }
 
         public object Clone()

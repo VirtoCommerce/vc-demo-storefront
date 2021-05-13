@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
+using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Order;
 using VirtoCommerce.Storefront.Model.Order.Demo;
-using VirtoCommerce.Storefront.Model.Common;
 using orderDto = VirtoCommerce.Storefront.AutoRestClients.OrdersModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain

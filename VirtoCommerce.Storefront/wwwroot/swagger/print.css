@@ -416,7 +416,7 @@
             font-size: .85em;
             line-height: 1.2em;
             overflow: auto;
-            max-height: 200px;
+            max-height: none;
             cursor: pointer;
         }
 
@@ -519,7 +519,7 @@
         }
 
     .swagger-section .swagger-ui-wrap .body-textarea {
-        width: 300px;
+        width: 100px;
         height: 100px;
         border: 1px solid #aaa;
     }
@@ -551,7 +551,7 @@
             }
 
     .swagger-section .swagger-ui-wrap input.parameter {
-        width: 300px;
+        width: 100px;
         border: 1px solid #aaa;
     }
 
@@ -750,7 +750,7 @@
                 .swagger-section .swagger-ui-wrap ul#resources li.resource div.heading ul.options {
                     overflow: hidden;
                     padding: 0;
-                    display: block;
+                    display: none;
                     clear: none;
                     float: right;
                     margin: 14px 10px 0 0;
@@ -921,6 +921,7 @@
                     -khtml-border-bottom-right-radius: 6px;
                     border-bottom-right-radius: 6px;
                     margin: 0 0 20px;
+                    display: block !important;
                 }
 
                     .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation div.content h4 {
@@ -1351,11 +1352,6 @@
         padding: 10px 0;
     }
 
-    .swagger-section .api-popup-dialog .api-popup-title {
-        font-size: 24px;
-        padding: 10px 0;
-    }
-
     .swagger-section .api-popup-dialog .error-msg {
         padding-left: 5px;
         padding-bottom: 5px;
@@ -1396,26 +1392,6 @@
     display: none;
 }
 
-.swagger-section .swagger-ui-wrap .model-signature pre {
-    max-height: none;
-}
-
-.swagger-section .swagger-ui-wrap .body-textarea {
-    width: 100px;
-}
-
-.swagger-section .swagger-ui-wrap input.parameter {
-    width: 100px;
-}
-
-.swagger-section .swagger-ui-wrap ul#resources li.resource div.heading ul.options {
-    display: none;
-}
-
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints {
     display: block !important;
 }
-
-    .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation div.content {
-        display: block !important;
-    }

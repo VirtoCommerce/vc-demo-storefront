@@ -1,13 +1,9 @@
-using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi;
+using Microsoft.Extensions.Caching.Memory;
 using VirtoCommerce.Storefront.AutoRestClients.TaxModuleApi;
-using VirtoCommerce.Storefront.Caching;
-using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common.Caching;

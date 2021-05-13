@@ -1,6 +1,6 @@
-using PagedList.Core;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using PagedList.Core;
 using VirtoCommerce.Storefront.Model.Common;
 using VirtoCommerce.Storefront.Model.Stores;
 

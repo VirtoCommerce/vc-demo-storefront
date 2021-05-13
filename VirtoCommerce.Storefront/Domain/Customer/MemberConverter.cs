@@ -8,15 +8,14 @@ using VirtoCommerce.Storefront.Model.Customer;
 using VirtoCommerce.Storefront.Model.Security;
 using VirtoCommerce.Storefront.Model.Stores;
 using coreDto = VirtoCommerce.Storefront.AutoRestClients.CoreModuleApi.Models;
-using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 using customerDto = VirtoCommerce.Storefront.AutoRestClients.CustomerModuleApi.Models;
+using platformDto = VirtoCommerce.Storefront.AutoRestClients.PlatformModuleApi.Models;
 
 namespace VirtoCommerce.Storefront.Domain
 {
 
     public static partial class MemberConverter
     {
-        private static readonly char[] _nameSeparator = { ' ' };
 
         public static DynamicProperty ToDynamicProperty(this customerDto.DynamicObjectProperty propertyDto)
         {
@@ -83,7 +82,7 @@ namespace VirtoCommerce.Storefront.Domain
 
                 if (vendorDto.DynamicProperties != null)
                 {
-                    result.DynamicProperties = new MutablePagedList<DynamicProperty>(vendorDto.DynamicProperties.Select(ToDynamicProperty).ToList());                     
+                    result.DynamicProperties = new MutablePagedList<DynamicProperty>(vendorDto.DynamicProperties.Select(ToDynamicProperty).ToList());
                 }
             }
 

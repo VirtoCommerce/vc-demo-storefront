@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using VirtoCommerce.Storefront.Model.Catalog;
-using VirtoCommerce.Storefront.Model.Common;
 
 namespace VirtoCommerce.Storefront.Model.Cart
 {

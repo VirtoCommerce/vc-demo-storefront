@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="Tags\" />
     <Folder Include="Util\" />
   </ItemGroup>
 

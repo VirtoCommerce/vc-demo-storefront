@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Stores;
 

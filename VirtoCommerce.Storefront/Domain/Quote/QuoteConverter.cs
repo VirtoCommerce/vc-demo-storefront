@@ -180,9 +180,8 @@ namespace VirtoCommerce.Storefront.Domain
 
                 Type = (AddressType)Enum.Parse(typeof(AddressType), addressDto.AddressType, true)
             };
-            return retVal;
 
-            //return addressDto.JsonConvert<coreDto.Address>().ToAddress();
+            return retVal;
         }
 
         public virtual quoteDto.QuoteAddress ToQuoteAddressDto(Address address)
@@ -209,7 +208,6 @@ namespace VirtoCommerce.Storefront.Domain
             };
 
             return result;
-            //return address.ToCoreAddressDto().JsonConvert<quoteDto.Address>();
         }
 
         public virtual QuoteRequest ToQuoteRequest(quoteDto.QuoteRequest quoteRequestDto, Currency currency, Language language)
@@ -272,11 +270,6 @@ namespace VirtoCommerce.Storefront.Domain
             if (quoteRequestDto.Items != null)
             {
                 result.Items = quoteRequestDto.Items.Select(i => ToQuoteItem(i, currency)).ToList();
-            }
-
-            // TODO
-            if (quoteRequestDto.ShipmentMethod != null)
-            {
             }
 
             if (quoteRequestDto.TaxDetails != null)

@@ -99,13 +99,6 @@ namespace VirtoCommerce.Storefront.Model.Cart
         /// </summary>
         public string OrganizationId { get; set; }
 
-        ///// Gets or sets the shopping cart coupon
-        ///// </summary>
-        ///// <value>
-        ///// Coupon object
-        ///// </value>
-        //public Coupon Coupon { get; set; }
-
         /// <summary>
         /// Gets or sets the flag of shopping cart is recurring
         /// </summary>
