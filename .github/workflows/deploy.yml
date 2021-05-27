@@ -1,19 +1,22 @@
-# v0.2
+# v1.0
 
-name: VC image deployment
+name: VC deployment
 on:
   workflow_dispatch:
     inputs:
-      baseImageName:
-        description: 'Base kustomize image name'
+      artifactKey:
+        description: 'Module Id or base kustomize image name'
         required: true
       artifactLink: 
-        description: 'Full link to artifact docker image'
+        description: 'Full link to artifact docker image or artifact download url'
+        required: true
+      appName:
+        description: 'ArgoCd application name'
         required: true
       appDescriptionRepo:
         description: 'ArgoCd repository'
         required: true
-        default: 'VirtoCommerce/vc-webstore-deploy'
+        default: 'vc-webstore-deploy'
       appDescriptionBranch:
         description: 'ArgoCd branch'
         required: true
@@ -41,8 +44,8 @@ jobs:
       with:
         deployRepo: ${{ github.event.inputs.appDescriptionRepo }}
         deployBranch: ${{ github.event.inputs.appDescriptionBranch }}
-        artifactKey: ${{ github.event.inputs.moduleId }}
-        artifactUrl: ${{ github.event.inputs.blobUrl }}
+        artifactKey: ${{ github.event.inputs.artifactKey }}
+        artifactUrl: ${{ github.event.inputs.artifactLink }}
         taskNumber: "undefined"
         forceCommit: "true"
 
@@ -52,7 +55,7 @@ jobs:
       run: | 
         do {
           Start-Sleep -s 15
-          $statusBage = (Invoke-WebRequest -Uri "https://argo.govirto.com/api/badge?name=webstore-dev").Content
+          $statusBage = (Invoke-WebRequest -Uri "https://argo.govirto.com/api/badge?name=${{ github.event.inputs.appName }}").Content
           
           $syncedAndHealthy = $statusBage.Contains('>Healthy<') -and $statusBage.Contains('>Synced<')
           if (-not $syncedAndHealthy) {
