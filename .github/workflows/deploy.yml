@@ -60,6 +60,7 @@ jobs:
           }
         }
         while (-not $syncedAndHealthy)
+
     - name: BUILD_STATE::successful
       if: success()
       run: echo "BUILD_STATE=successful" >> $GITHUB_ENV
