@@ -22,6 +22,9 @@ on:
 jobs:
   cd:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+
     steps: 
     
     - name: Start deployment
@@ -33,36 +36,15 @@ jobs:
         env: Development
         no_override: false
 
-    - name: Checkout ArgoCD repository
-      uses: actions/checkout@v2
+    - name: Update deployment-cm
+      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-1269
       with:
-        token: ${{ secrets.REPO_TOKEN }}
-        repository: "${{ github.event.inputs.appDescriptionRepo }}"
-        ref: "${{ github.event.inputs.appDescriptionBranch }}"
-
-    - name: Update kustomize
-      shell: pwsh
-      run: |
-        cd ${{ github.workspace }}
-        cd ./webstore-app/resources
-        kustomize edit set image ${{ github.event.inputs.baseImageName }}=${{ github.event.inputs.artifactLink }}
-
-    - uses: VirtoCommerce/vc-github-actions/setup-git-credentials-github@master
-      with:
-        githubToken: ${{ secrets.REPO_TOKEN }}
-
-    - name: Commit kustomize change
-      shell: pwsh
-      run: |
-        if(git status --porcelain |Where {$_ -notmatch '^\?\?'}) # uncommitted changes exist
-        {
-          git commit -am 'Automated update ${{ github.repository }} to ${{ github.event.inputs.artifactVersion }}'
-          git push
-        }
-        else 
-        {
-          Write-Output 'Nothing to commit, working tree clean'
-        }
+        deployRepo: ${{ github.event.inputs.appDescriptionRepo }}
+        deployBranch: ${{ github.event.inputs.appDescriptionBranch }}
+        artifactKey: ${{ github.event.inputs.moduleId }}
+        artifactUrl: ${{ github.event.inputs.blobUrl }}
+        taskNumber: "undefined"
+        forceCommit: "true"
 
     - name: Wait for environment is up
       shell: pwsh
