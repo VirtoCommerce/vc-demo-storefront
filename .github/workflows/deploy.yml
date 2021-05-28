@@ -1,6 +1,6 @@
 # v1.0
 
-name: VC deployment
+name: VC image deployment
 on:
   workflow_dispatch:
     inputs:
