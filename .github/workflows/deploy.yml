@@ -21,6 +21,9 @@ on:
         description: 'ArgoCd branch'
         required: true
         default: 'dev'
+      cmPath:
+        description: "Path to config map or kustomize file in repository"
+        required: true
 
 jobs:
   cd:
@@ -48,6 +51,7 @@ jobs:
         artifactUrl: ${{ github.event.inputs.artifactLink }}
         taskNumber: "undefined"
         forceCommit: "true"
+        cmPath: ${{ github.event.inputs.cmPath }}
 
     - name: Wait for environment is up
       shell: pwsh
