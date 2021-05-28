@@ -1,0 +1,15 @@
+# v1.0
+
+name: test-get-deploy-param
+on: 
+  workflow_dispatch:
+  push:
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Read deployment config
+      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-1834
+      id: deployConfig
