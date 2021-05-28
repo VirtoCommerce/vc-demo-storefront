@@ -13,5 +13,5 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
     steps:
     - name: Read deployment config
-      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-1834
+      uses: VirtoCommerce/vc-github-actions/get-deploy-param@VDS-1834
       id: deployConfig
