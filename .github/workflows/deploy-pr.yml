@@ -18,6 +18,10 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       ARTIFACT_KEY: "docker.pkg.github.com/virtocommerce/vc-storefront/storefront"
+      DEPLOY_REPO: "vc-webstore-deploy"
+      DEPLOY_BRANCH_QA: "qa"
+      DEPLOY_BRANCH_PROD: "master"
+      CM_PATH: "webstore-app/resources/kustomization.yaml"
 
     steps:
     - name: Gets artifact link
@@ -26,25 +30,25 @@ jobs:
 
     - name: Create deploy PR in QA
       if: github.event.action != 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy-qa') && !contains(github.event.pull_request.labels.*.name, 'deploy-demo')
-      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@master
+      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-1269
       with:
-        deployRepo: "vc-webstore-deploy"
-        deployBranch: "qa"
-        artifactKey: ${{ env.ARTIFACT_KEY}}
-        artifactUrl: "${{ steps.artifactLink.outputs.artifactUrl }}"
-        taskNumber: "${{ steps.artifactLink.outputs.qaTaskNumber }}"
-        cmPath: "webstore-app/resources/kustomization.yaml"
+        deployRepo: ${{ env.DEPLOY_REPO }}
+        deployBranch: ${{ env.DEPLOY_BRANCH_QA }}
+        artifactKey: ${{ env.ARTIFACT_KEY }}
+        artifactUrl: ${{ steps.artifactLink.outputs.artifactUrl }}
+        taskNumber: ${{ steps.artifactLink.outputs.qaTaskNumber }}
+        cmPath: ${{ env.CM_PATH }}
 
     - name: Create deploy PR in Demo
       if: github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy-demo')
-      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@master
+      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-1269
       with:
-        deployRepo: "vc-webstore-deploy"
-        deployBranch: "master"
-        artifactKey: ${{ env.ARTIFACT_KEY}}
-        artifactUrl: "${{ steps.artifactLink.outputs.artifactUrl }}"
-        taskNumber: "${{ steps.artifactLink.outputs.demoTaskNumber }}"
-        cmPath: "webstore-app/resources/kustomization.yaml"
+        deployRepo: ${{ env.DEPLOY_REPO }}
+        deployBranch: ${{ env.DEPLOY_BRANCH_PROD }}
+        artifactKey: ${{ env.ARTIFACT_KEY }}
+        artifactUrl: ${{ steps.artifactLink.outputs.artifactUrl }}
+        taskNumber: ${{ steps.artifactLink.outputs.demoTaskNumber }}
+        cmPath: ${{ env.CM_PATH }}
 
     # - name: Deploy to dev
     #   if: github.event.action == 'closed' && github.event.pull_request.merged == true

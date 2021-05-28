@@ -1,27 +1,36 @@
-# v0.2
+# v1.0
 
-name: VC image deployment
+name: VC deployment
 on:
   workflow_dispatch:
     inputs:
-      baseImageName:
-        description: 'Base kustomize image name'
+      artifactKey:
+        description: 'Module Id or base kustomize image name'
         required: true
       artifactLink: 
-        description: 'Full link to artifact docker image'
+        description: 'Full link to artifact docker image or artifact download url'
+        required: true
+      appName:
+        description: 'ArgoCd application name'
         required: true
       appDescriptionRepo:
         description: 'ArgoCd repository'
         required: true
-        default: 'VirtoCommerce/vc-webstore-deploy'
+        default: 'vc-webstore-deploy'
       appDescriptionBranch:
         description: 'ArgoCd branch'
         required: true
         default: 'dev'
+      cmPath:
+        description: "Path to config map or kustomize file in repository"
+        required: true
 
 jobs:
   cd:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+
     steps: 
     
     - name: Start deployment
@@ -33,36 +42,16 @@ jobs:
         env: Development
         no_override: false
 
-    - name: Checkout ArgoCD repository
-      uses: actions/checkout@v2
+    - name: Update deployment-cm
+      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-1269
       with:
-        token: ${{ secrets.REPO_TOKEN }}
-        repository: "${{ github.event.inputs.appDescriptionRepo }}"
-        ref: "${{ github.event.inputs.appDescriptionBranch }}"
-
-    - name: Update kustomize
-      shell: pwsh
-      run: |
-        cd ${{ github.workspace }}
-        cd ./webstore-app/resources
-        kustomize edit set image ${{ github.event.inputs.baseImageName }}=${{ github.event.inputs.artifactLink }}
-
-    - uses: VirtoCommerce/vc-github-actions/setup-git-credentials-github@master
-      with:
-        githubToken: ${{ secrets.REPO_TOKEN }}
-
-    - name: Commit kustomize change
-      shell: pwsh
-      run: |
-        if(git status --porcelain |Where {$_ -notmatch '^\?\?'}) # uncommitted changes exist
-        {
-          git commit -am 'Automated update ${{ github.repository }} to ${{ github.event.inputs.artifactVersion }}'
-          git push
-        }
-        else 
-        {
-          Write-Output 'Nothing to commit, working tree clean'
-        }
+        deployRepo: ${{ github.event.inputs.appDescriptionRepo }}
+        deployBranch: ${{ github.event.inputs.appDescriptionBranch }}
+        artifactKey: ${{ github.event.inputs.artifactKey }}
+        artifactUrl: ${{ github.event.inputs.artifactLink }}
+        taskNumber: "undefined"
+        forceCommit: "true"
+        cmPath: ${{ github.event.inputs.cmPath }}
 
     - name: Wait for environment is up
       shell: pwsh
@@ -70,7 +59,7 @@ jobs:
       run: | 
         do {
           Start-Sleep -s 15
-          $statusBage = (Invoke-WebRequest -Uri "https://argo.govirto.com/api/badge?name=webstore-dev").Content
+          $statusBage = (Invoke-WebRequest -Uri "https://argo.govirto.com/api/badge?name=${{ github.event.inputs.appName }}").Content
           
           $syncedAndHealthy = $statusBage.Contains('>Healthy<') -and $statusBage.Contains('>Synced<')
           if (-not $syncedAndHealthy) {
@@ -78,6 +67,7 @@ jobs:
           }
         }
         while (-not $syncedAndHealthy)
+
     - name: BUILD_STATE::successful
       if: success()
       run: echo "BUILD_STATE=successful" >> $GITHUB_ENV
