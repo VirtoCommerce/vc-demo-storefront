@@ -9,6 +9,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
     steps:
     - name: Read deployment config
       uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-1834
