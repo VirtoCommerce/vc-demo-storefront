@@ -1,9 +1,17 @@
 {
     "artifactKey": "docker.pkg.github.com/virtocommerce/vc-storefront/storefront",
-    "deployAppName": "webstore-dev",
     "deployRepo": "vc-webstore-deploy",
-    "deployBranchDev": "dev",
-    "deployBranchQa": "qa",
-    "deployBranchProd": "master",
+    "dev": {
+        "deployAppName": "webstore-dev",
+        "deployBranchDev": "dev"
+    },
+    "qa": {
+        "deployAppName": "webstore-qa",
+        "deployBranchDev": "qa"
+    },
+    "prod": {
+        "deployAppName": "webstore-demo",
+        "deployBranchDev": "master"
+    },
     "cmPath": "webstore-app/resources/kustomization.yaml"
 }
