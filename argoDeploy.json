@@ -3,15 +3,15 @@
     "deployRepo": "vc-webstore-deploy",
     "dev": {
         "deployAppName": "webstore-dev",
-        "deployBranchDev": "dev"
+        "deployBranch": "dev"
     },
     "qa": {
         "deployAppName": "webstore-qa",
-        "deployBranchDev": "qa"
+        "deployBranch": "qa"
     },
     "prod": {
         "deployAppName": "webstore-demo",
-        "deployBranchDev": "master"
+        "deployBranch": "master"
     },
     "cmPath": "webstore-app/resources/kustomization.yaml"
 }
