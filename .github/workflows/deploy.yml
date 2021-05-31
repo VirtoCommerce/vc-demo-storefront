@@ -23,6 +23,8 @@ jobs:
     - name: Read deployment config
       uses: VirtoCommerce/vc-github-actions/get-deploy-param@VDS-1834
       id: deployConfig
+      with:
+        envName: ${{ github.event.inputs.deployBranch }}
 
     - name: Start deployment
       uses: bobheadxi/deployments@master
@@ -37,7 +39,7 @@ jobs:
       uses: VirtoCommerce/vc-github-actions/create-deploy-pr@master
       with:
         deployRepo: ${{ steps.deployConfig.outputs.deployRepo }}
-        deployBranch: ${{ github.event.inputs.deployBranch }}
+        deployBranch: ${{ steps.deployConfig.outputs.deployBranch }}
         artifactKey: ${{ steps.deployConfig.outputs.artifactKey }}
         artifactUrl: ${{ github.event.inputs.artifactUrl }}
         taskNumber: "undefined"
