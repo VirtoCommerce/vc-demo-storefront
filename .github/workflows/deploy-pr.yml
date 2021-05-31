@@ -33,7 +33,7 @@ jobs:
       uses: VirtoCommerce/vc-github-actions/create-deploy-pr@master
       with:
         deployRepo: ${{ steps.deployConfig.outputs.deployRepo }}
-        deployBranch: ${{ steps.deployConfig.outputs.deployBranchQa }}
+        deployBranch: ${{ fromJSON(steps.deployConfig.outputs.deployConfig).qa.deployBranch }}
         artifactKey: ${{ steps.deployConfig.outputs.artifactKey }}
         artifactUrl: ${{ steps.artifactLink.outputs.artifactUrl }}
         taskNumber: ${{ steps.artifactLink.outputs.qaTaskNumber }}
@@ -44,7 +44,7 @@ jobs:
       uses: VirtoCommerce/vc-github-actions/create-deploy-pr@master
       with:
         deployRepo: ${{ steps.deployConfig.outputs.deployRepo }}
-        deployBranch: ${{ steps.deployConfig.outputs.deployBranchProd }}
+        deployBranch: ${{ fromJSON(steps.deployConfig.outputs.deployConfig).prod.deployBranch }}
         artifactKey: ${{ steps.deployConfig.outputs.artifactKey }}
         artifactUrl: ${{ steps.artifactLink.outputs.artifactUrl }}
         taskNumber: ${{ steps.artifactLink.outputs.demoTaskNumber }}
