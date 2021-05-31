@@ -15,3 +15,7 @@ jobs:
     - name: Read deployment config
       uses: VirtoCommerce/vc-github-actions/get-deploy-param@VDS-1834
       id: deployConfig
+
+    - name: Test output
+      shell: bash
+      run: echo "${{ steps.deployConfig.outputs.deployConfig}}"
