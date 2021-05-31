@@ -18,4 +18,4 @@ jobs:
 
     - name: Test output
       shell: bash
-      run: echo "${{ steps.deployConfig.outputs.deployConfig.dev}}"
+      run: echo "${{ fromJSON(steps.deployConfig.outputs.deployConfig.dev)}}"
