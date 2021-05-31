@@ -17,43 +17,35 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-      ARTIFACT_KEY: "docker.pkg.github.com/virtocommerce/vc-storefront/storefront"
-      DEPLOY_REPO: "vc-webstore-deploy"
-      DEPLOY_BRANCH_QA: "qa"
-      DEPLOY_BRANCH_PROD: "master"
-      CM_PATH: "webstore-app/resources/kustomization.yaml"
 
     steps:
+
+    - name: Read deployment config
+      uses: VirtoCommerce/vc-github-actions/get-deploy-param@VDS-1834
+      id: deployConfig
+
     - name: Gets artifact link
       id: artifactLink
       uses: VirtoCommerce/vc-github-actions/get-artifact-link@master
 
     - name: Create deploy PR in QA
       if: github.event.action != 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy-qa') && !contains(github.event.pull_request.labels.*.name, 'deploy-demo')
-      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-1269
+      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@master
       with:
-        deployRepo: ${{ env.DEPLOY_REPO }}
-        deployBranch: ${{ env.DEPLOY_BRANCH_QA }}
-        artifactKey: ${{ env.ARTIFACT_KEY }}
+        deployRepo: ${{ steps.deployConfig.outputs.deployRepo }}
+        deployBranch: ${{ fromJSON(steps.deployConfig.outputs.deployConfig).qa.deployBranch }}
+        artifactKey: ${{ steps.deployConfig.outputs.artifactKey }}
         artifactUrl: ${{ steps.artifactLink.outputs.artifactUrl }}
         taskNumber: ${{ steps.artifactLink.outputs.qaTaskNumber }}
-        cmPath: ${{ env.CM_PATH }}
+        cmPath: ${{ steps.deployConfig.outputs.cmPath }}
 
     - name: Create deploy PR in Demo
       if: github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy-demo')
-      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-1269
+      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@master
       with:
-        deployRepo: ${{ env.DEPLOY_REPO }}
-        deployBranch: ${{ env.DEPLOY_BRANCH_PROD }}
-        artifactKey: ${{ env.ARTIFACT_KEY }}
+        deployRepo: ${{ steps.deployConfig.outputs.deployRepo }}
+        deployBranch: ${{ fromJSON(steps.deployConfig.outputs.deployConfig).prod.deployBranch }}
+        artifactKey: ${{ steps.deployConfig.outputs.artifactKey }}
         artifactUrl: ${{ steps.artifactLink.outputs.artifactUrl }}
         taskNumber: ${{ steps.artifactLink.outputs.demoTaskNumber }}
-        cmPath: ${{ env.CM_PATH }}
-
-    # - name: Deploy to dev
-    #   if: github.event.action == 'closed' && github.event.pull_request.merged == true
-    #   uses: benc-uk/workflow-dispatch@v1
-    #   with:
-    #     workflow: VC image deployment
-    #     token: ${{ secrets.REPO_TOKEN }}
-    #     inputs: '{ "baseImageName": "docker.pkg.github.com/virtocommerce/vc-storefront/storefront", "artifactLink": "${{ steps.artifactLink.outputs.artifactUrl }}" }'
+        cmPath: ${{ steps.deployConfig.outputs.cmPath }}

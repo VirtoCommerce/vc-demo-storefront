@@ -4,26 +4,13 @@ name: VC deployment
 on:
   workflow_dispatch:
     inputs:
-      artifactKey:
-        description: 'Module Id or base kustomize image name'
-        required: true
-      artifactLink: 
+      artifactUrl: 
         description: 'Full link to artifact docker image or artifact download url'
         required: true
-      appName:
-        description: 'ArgoCd application name'
-        required: true
-      appDescriptionRepo:
-        description: 'ArgoCd repository'
-        required: true
-        default: 'vc-webstore-deploy'
-      appDescriptionBranch:
-        description: 'ArgoCd branch'
+      deployBranch: 
+        description: 'ArgoCd branch name'
         required: true
         default: 'dev'
-      cmPath:
-        description: "Path to config map or kustomize file in repository"
-        required: true
 
 jobs:
   cd:
@@ -32,7 +19,13 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
 
     steps: 
-    
+
+    - name: Read deployment config
+      uses: VirtoCommerce/vc-github-actions/get-deploy-param@VDS-1834
+      id: deployConfig
+      with:
+        envName: ${{ github.event.inputs.deployBranch }}
+
     - name: Start deployment
       uses: bobheadxi/deployments@master
       id: deployment
@@ -43,15 +36,15 @@ jobs:
         no_override: false
 
     - name: Update deployment-cm
-      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-1269
+      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@master
       with:
-        deployRepo: ${{ github.event.inputs.appDescriptionRepo }}
-        deployBranch: ${{ github.event.inputs.appDescriptionBranch }}
-        artifactKey: ${{ github.event.inputs.artifactKey }}
-        artifactUrl: ${{ github.event.inputs.artifactLink }}
+        deployRepo: ${{ steps.deployConfig.outputs.deployRepo }}
+        deployBranch: ${{ steps.deployConfig.outputs.deployBranch }}
+        artifactKey: ${{ steps.deployConfig.outputs.artifactKey }}
+        artifactUrl: ${{ github.event.inputs.artifactUrl }}
         taskNumber: "undefined"
         forceCommit: "true"
-        cmPath: ${{ github.event.inputs.cmPath }}
+        cmPath: ${{ steps.deployConfig.outputs.cmPath }}
 
     - name: Wait for environment is up
       shell: pwsh
@@ -59,7 +52,7 @@ jobs:
       run: | 
         do {
           Start-Sleep -s 15
-          $statusBage = (Invoke-WebRequest -Uri "https://argo.govirto.com/api/badge?name=${{ github.event.inputs.appName }}").Content
+          $statusBage = (Invoke-WebRequest -Uri "https://argo.govirto.com/api/badge?name=${{ steps.deployConfig.outputs.deployAppName }}").Content
           
           $syncedAndHealthy = $statusBage.Contains('>Healthy<') -and $statusBage.Contains('>Synced<')
           if (-not $syncedAndHealthy) {
