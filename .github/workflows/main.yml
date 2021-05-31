@@ -160,4 +160,4 @@ jobs:
       with:
         workflow: VC deployment
         token: ${{ secrets.REPO_TOKEN }}
-        inputs: '{ "artifactKey": "docker.pkg.github.com/virtocommerce/vc-storefront/storefront", "artifactLink": "docker.pkg.github.com/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}" , "appName": "webstore-dev", "cmPath": "webstore-app/resources/kustomization.yaml"}'
+        inputs: '{ "artifactUrl": "docker.pkg.github.com/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}" }'
