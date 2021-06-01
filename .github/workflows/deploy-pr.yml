@@ -21,10 +21,12 @@ jobs:
     steps:
 
     - name: Read deployment config
+      if: github.event.action == 'labeled'
       uses: VirtoCommerce/vc-github-actions/get-deploy-param@VDS-1834
       id: deployConfig
 
     - name: Gets artifact link
+      if: github.event.action == 'labeled'
       id: artifactLink
       uses: VirtoCommerce/vc-github-actions/get-artifact-link@master
 
