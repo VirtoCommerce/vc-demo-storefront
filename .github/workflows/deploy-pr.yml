@@ -3,12 +3,12 @@
 name: Deploy Storefront to environments
 on: 
   pull_request:
-    paths-ignore:
-      - '.github/**'
-      - 'docs/**'
-      - 'build/**'
-      - 'README.md'
-      - 'LICENSE'
+    # paths-ignore:
+    #   - '.github/**'
+    #   - 'docs/**'
+    #   - 'build/**'
+    #   - 'README.md'
+    #   - 'LICENSE'
     branches: [dev]
     types: [labeled, closed]
 
