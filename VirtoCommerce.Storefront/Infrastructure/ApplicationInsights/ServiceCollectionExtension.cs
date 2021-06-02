@@ -10,7 +10,7 @@ namespace VirtoCommerce.Storefront.Infrastructure.ApplicationInsights
     {
         public static void AddApplicationInsightsExtensions(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<ITelemetryInitializer, UserTelemetryInitializer>();
+            services.AddSingleton<ITelemetryInitializer, DemoUserTelemetryInitializer>();
             services.Configure<SnapshotCollectorConfiguration>(configuration.GetSection(nameof(SnapshotCollectorConfiguration)));
             services.AddSingleton<ITelemetryProcessorFactory>(sp => new SnapshotCollectorTelemetryProcessorFactory(sp));
         }
