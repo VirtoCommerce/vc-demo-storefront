@@ -351,6 +351,8 @@ namespace VirtoCommerce.Storefront.Domain
                 // VP-3582: We need to store all product outlines to use them for promotion evaluation
                 Outlines = productDto.Outlines.GetOutlinePaths(store.Catalog),
                 SeoPath = productDto.Outlines.GetSeoPath(store, currentLanguage, null),
+                StartDate = productDto.StartDate,
+                EndDate = productDto.EndDate,
             };
             result.Url = "/" + (result.SeoPath ?? "product/" + result.Id);
 
