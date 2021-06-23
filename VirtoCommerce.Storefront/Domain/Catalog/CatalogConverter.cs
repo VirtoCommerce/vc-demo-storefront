@@ -287,7 +287,8 @@ namespace VirtoCommerce.Storefront.Domain
                 Url = imageDto.Url.RemoveLeadingUriScheme(),
                 SortOrder = imageDto.SortOrder,
                 Group = imageDto.Group,
-                LanguageCode = imageDto.LanguageCode
+                LanguageCode = imageDto.LanguageCode,
+                AbsoluteUrl = imageDto.Url,
             };
 
             return result;
