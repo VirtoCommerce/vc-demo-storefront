@@ -10,6 +10,8 @@ namespace VirtoCommerce.Storefront.Model
         /// </summary>
         public string Url { get; set; }
 
+        public string AbsoluteUrl { get; set; }
+
         public string FullSizeImageUrl { get; set; }
 
         /// <summary>
