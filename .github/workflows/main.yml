@@ -114,8 +114,8 @@ jobs:
       #  dockerFiles: "https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile"
 
     - name: Publish to Blob
-       uses: VirtoCommerce/vc-github-actions/publish-blob-release@master
-       with:
+      uses: VirtoCommerce/vc-github-actions/publish-blob-release@master
+      with:
         blobSAS: ${{ secrets.BLOB_TOKEN }}
 
   #  - name: Publish Github Release
