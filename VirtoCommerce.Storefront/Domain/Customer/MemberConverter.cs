@@ -135,6 +135,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new Contact
             {
                 Id = contactDto.Id,
+                OuterId = contactDto.OuterId,
                 Name = contactDto.Name,
                 MemberType = contactDto.MemberType,
                 UserGroups = contactDto.Groups,
@@ -195,6 +196,7 @@ namespace VirtoCommerce.Storefront.Domain
             var result = new Organization
             {
                 Id = organizaionDto.Id,
+                OuterId = organizaionDto.OuterId,
                 Name = organizaionDto.Name,
                 MemberType = organizaionDto.MemberType,
                 UserGroups = organizaionDto.Groups,
@@ -229,6 +231,7 @@ namespace VirtoCommerce.Storefront.Domain
             var retVal = new customerDto.Contact
             {
                 Id = customer.Id,
+                OuterId = customer.OuterId,
                 Name = customer.Name,
                 FirstName = customer.FirstName,
                 FullName = customer.FullName,
@@ -302,6 +305,7 @@ namespace VirtoCommerce.Storefront.Domain
             var retVal = new customerDto.Organization
             {
                 Id = org.Id,
+                OuterId = org.OuterId,
                 Name = org.Name,
                 MemberType = "Organization"
             };

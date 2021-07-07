@@ -8,6 +8,7 @@ namespace VirtoCommerce.Storefront.Model.Customer
 {
     public class Member : Entity
     {
+        public string OuterId { get; set; }
         public IList<string> PhoneNumbers { get; set; } = new List<string>();
         public string Email
         {
