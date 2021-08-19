@@ -1,4 +1,4 @@
-# v1.4.1.vc-demo-storefront fix docker.pkg.github.com
+# v2.1.vc-demo-storefront Trunk base development
 name: Storefront CI
 
 on:
@@ -10,7 +10,11 @@ on:
       - 'build/**'
       - 'README.md'
       - 'LICENSE'
-    branches: [ master, dev ]
+      - 'Directory.Build.props'
+      - 'src/*/module.manifest'
+      - 'package.json'
+
+    branches: [ master ]
   pull_request:
     paths-ignore:
       - '.github/**'
@@ -18,7 +22,11 @@ on:
       - 'build/**'
       - 'README.md'
       - 'LICENSE'
-    branches: [ master, dev ]
+      - 'Directory.Build.props'
+      - 'src/*/module.manifest'
+      - 'package.json'
+
+    branches: [ master ]
 
 jobs:
   ci:
@@ -46,11 +54,6 @@ jobs:
       with:
         java-version: 1.11
 
-    - name: Set up .net Core 3.1.x for vc-build #GitHib Actions migrates to .net Core 5.x. To vc-build work properly need to manually install .net Core 3.1.x
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '3.1.x'
-
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
@@ -60,6 +63,17 @@ jobs:
 
     - name: Install dotnet-sonarscanner
       run: dotnet tool install --global dotnet-sonarscanner
+
+    - name: Setup Git Credentials
+      uses: VirtoCommerce/vc-github-actions/setup-git-credentials-github@master
+      with: 
+        githubToken: ${{ secrets.REPO_TOKEN }}
+
+    - name: Set version up
+      uses: VirtoCommerce/vc-github-actions/set-version-up@master
+      with:
+        githubToken: ${{ secrets.REPO_TOKEN }}
+        versionLabel: 'minor'
 
     - name: Get Image Version
       uses: VirtoCommerce/vc-github-actions/get-image-version@master
@@ -76,7 +90,7 @@ jobs:
     - name: Set release-alpha variables
       if: ${{ github.event_name == 'workflow_dispatch' }}
       run: |
-        echo "VERSION_SUFFIX=${{ steps.image.outputs.fullSuffix }}" >> $GITHUB_ENV
+          echo "VERSION_SUFFIX=${{ steps.image.outputs.fullSuffix }}" >> $GITHUB_ENV
 
     - name: Add version suffix
       if: ${{ github.ref != 'refs/heads/master' }}
@@ -105,7 +119,7 @@ jobs:
       run: vc-build Compress -skip Clean+Restore+Compile+Test
 
     - name: Build Docker Image
-      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
+      if: ${{ github.ref == 'refs/heads/master' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
       id: dockerBuild
       uses: VirtoCommerce/vc-github-actions/build-docker-image@master
       with:
@@ -114,7 +128,7 @@ jobs:
         dockerFiles: "https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile"
 
     # - name: Publish to Blob
-    #   if: ${{ github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
+    #   if: ${{ github.ref == 'refs/heads/master' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
     #   id: blobRelease
     #   uses: VirtoCommerce/vc-github-actions/publish-blob-release@master
     #   with:
@@ -127,7 +141,7 @@ jobs:
       uses: VirtoCommerce/vc-github-actions/publish-github-release@master
 
     - name: Docker Login
-      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
+      if: ${{ github.ref == 'refs/heads/master' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
       uses: azure/docker-login@v1
       with:
         login-server: ghcr.io
@@ -135,7 +149,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Publish Docker Image
-      if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
+      if: ${{ github.ref == 'refs/heads/master' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master') }}
       uses: VirtoCommerce/vc-github-actions/publish-docker-image@master
       with:
           image: ${{ steps.dockerBuild.outputs.imageName }}
@@ -152,7 +166,7 @@ jobs:
         artifactUrl: "ghcr.io/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.taggedVersion }}"
 
     - name: Invoke VC image deployment workflow
-      if: ${{ github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master')}}
+      if: ${{ github.ref == 'refs/heads/master' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master')}}
       uses: benc-uk/workflow-dispatch@v1
       with:
         workflow: VC deployment
