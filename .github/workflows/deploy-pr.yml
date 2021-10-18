@@ -1,4 +1,4 @@
-# v1.0
+# v1.1
 
 name: Deploy to environments
 on: 
@@ -9,6 +9,7 @@ on:
       - 'build/**'
       - 'README.md'
       - 'LICENSE'
+      - '**/argoDeploy.json'
     branches: [dev]
     types: [labeled, closed]
 
@@ -41,13 +42,13 @@ jobs:
         taskNumber: ${{ steps.artifactLink.outputs.qaTaskNumber }}
         cmPath: ${{ steps.deployConfig.outputs.cmPath }}
 
-    - name: Create deploy PR in Demo
-      if: github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy-demo')
-      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@master
-      with:
-        deployRepo: ${{ steps.deployConfig.outputs.deployRepo }}
-        deployBranch: ${{ fromJSON(steps.deployConfig.outputs.deployConfig).prod.deployBranch }}
-        artifactKey: ${{ steps.deployConfig.outputs.artifactKey }}
-        artifactUrl: ${{ steps.artifactLink.outputs.artifactUrl }}
-        taskNumber: ${{ steps.artifactLink.outputs.demoTaskNumber }}
-        cmPath: ${{ steps.deployConfig.outputs.cmPath }}
+    # - name: Create deploy PR in Demo
+    #   if: github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy-demo')
+    #   uses: VirtoCommerce/vc-github-actions/create-deploy-pr@master
+    #   with:
+    #     deployRepo: ${{ steps.deployConfig.outputs.deployRepo }}
+    #     deployBranch: ${{ fromJSON(steps.deployConfig.outputs.deployConfig).prod.deployBranch }}
+    #     artifactKey: ${{ steps.deployConfig.outputs.artifactKey }}
+    #     artifactUrl: ${{ steps.artifactLink.outputs.artifactUrl }}
+    #     taskNumber: ${{ steps.artifactLink.outputs.demoTaskNumber }}
+    #     cmPath: ${{ steps.deployConfig.outputs.cmPath }}
