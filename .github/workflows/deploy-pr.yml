@@ -27,7 +27,7 @@ jobs:
       id: deployConfig
       with:
         envName: 'qa'
-        deployConfigPath: '.deployment/module/argoDeploy.json'
+        deployConfigPath: '.deployment/demo-storefront/argoDeploy.json'
 
 
     - name: Gets artifact link
